@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RealRisk - Plataforma de Oportunidades Imobiliarias</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">RealRisk</div>
+          <div class="brand-region">Orlando, FL</div>
+        </div>
+      </div>
+
+      <div class="topbar-search">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="searchInput" type="text" placeholder="Buscar por endereco, cidade ou ZIP..." autocomplete="off" />
+      </div>
+
+      <div class="topbar-actions">
+        <button id="watchlistBtn" class="icon-btn" aria-label="Watchlist" title="Watchlist">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          <span class="watchlist-count" id="watchlistCount">0</span>
+        </button>
+        <div class="user-avatar" title="Usuario">LL</div>
+      </div>
+    </header>
+
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-label">Oportunidades visiveis</div>
+        <div class="stat-value" id="statTotal">-</div>
+        <div class="stat-sub">de <span id="statAll">-</span> totais</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Nivel 1 (Ouro)</div>
+        <div class="stat-value" id="statTier1">-</div>
+        <div class="stat-sub"><span id="statTier1Pct">-</span> do filtrado</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">ROI medio</div>
+        <div class="stat-value" id="statRoi">-</div>
+        <div class="stat-sub">apos reforma</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">$/sqft medio</div>
+        <div class="stat-value" id="statPpsf">-</div>
+        <div class="stat-sub">preco de aquisicao</div>
+      </div>
+    </section>
+
+    <main class="content">
+
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">Filtros</div>
+
+          <div class="filter-group">
+            <label class="filter-label">Nivel</label>
+            <div class="chip-row">
+              <button class="chip chip-tier-1 active" data-tier="1"><span class="dot"></span>Nivel 1</button>
+              <button class="chip chip-tier-2 active" data-tier="2"><span class="dot"></span>Nivel 2</button>
+              <button class="chip chip-tier-3 active" data-tier="3"><span class="dot"></span>Nivel 3</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Faixa de preco</label>
+            <div class="range-row">
+              <input id="priceMin" type="number" placeholder="Min $" min="0" step="10000" />
+              <span>-</span>
+              <input id="priceMax" type="number" placeholder="Max $" min="0" step="10000" />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">ROI minimo</label>
+            <div class="slider-row">
+              <input id="roiMin" type="range" min="0" max="30" step="1" value="0" />
+              <span id="roiMinValue" class="slider-value">0%</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Cidade</label>
+            <select id="cityFilter">
+              <option value="">Todas</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Riscos</label>
+            <label class="checkbox"><input type="checkbox" id="floodFreeOnly" /> Apenas zona Flood X</label>
+            <label class="checkbox"><input type="checkbox" id="strOnly" /> Apenas STR permitido</label>
+          </div>
+
+          <button class="btn-secondary" id="clearFilters">Limpar filtros</button>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-title">Calibracao de criterios</div>
+
+          <div class="filter-group">
+            <div class="weight-row">
+              <label>Score financeiro (ROI)</label>
+              <span id="weightFinValue" class="slider-value">60%</span>
+            </div>
+            <input id="weightFin" type="range" min="0" max="100" step="5" value="60" />
+          </div>
+
+          <div class="filter-group">
+            <div class="weight-row">
+              <label>Score de risco</label>
+              <span id="weightRiskValue" class="slider-value">40%</span>
+            </div>
+            <input id="weightRisk" type="range" min="0" max="100" step="5" value="40" />
+          </div>
+
+          <div class="weights-help">Total fixo em 100%. Ajustar um move o outro.</div>
+        </div>
+      </aside>
+
+      <section class="main-panel">
+
+        <div class="panel-toolbar">
+          <div class="view-toggle" id="viewToggle">
+            <button class="active" data-view="cards">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              Cards
+            </button>
+            <button data-view="map">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+              Mapa
+            </button>
+            <button data-view="list">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Lista
+            </button>
+          </div>
+
+          <div class="sort-control">
+            <label>Ordenar por</label>
+            <select id="sortBy">
+              <option value="score">Score total (maior)</option>
+              <option value="roi">ROI estimado (maior)</option>
+              <option value="price-asc">Preco (menor)</option>
+              <option value="price-desc">Preco (maior)</option>
+              <option value="profit">Lucro estimado (maior)</option>
+              <option value="dom">Days on Market (maior)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="cardsView" class="view active">
+          <div class="cards-grid" id="cardsGrid"></div>
+          <div class="empty-state" id="cardsEmpty" hidden>
+            <p>Nenhuma oportunidade atende aos filtros atuais.</p>
+            <button class="btn-secondary" onclick="document.getElementById('clearFilters').click()">Limpar filtros</button>
+          </div>
+        </div>
+
+        <div id="mapView" class="view">
+          <div id="map"></div>
+        </div>
+
+        <div id="listView" class="view">
+          <div class="table-wrap">
+            <table class="data-table" id="dataTable">
+              <thead>
+                <tr>
+                  <th class="sortable" data-sort="address">Endereco</th>
+                  <th class="sortable" data-sort="city">Cidade</th>
+                  <th class="sortable num" data-sort="price">Preco</th>
+                  <th class="sortable num" data-sort="ppsf">$/sqft</th>
+                  <th class="sortable num" data-sort="roi">ROI</th>
+                  <th class="sortable num" data-sort="profit">Lucro</th>
+                  <th>Riscos</th>
+                  <th class="sortable" data-sort="tier">Nivel</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="detailModal" hidden>
+    <div class="modal-overlay" data-close></div>
+    <div class="modal-panel" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close aria-label="Fechar">&times;</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="data.js"></script>
+  <script src="scoring.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
