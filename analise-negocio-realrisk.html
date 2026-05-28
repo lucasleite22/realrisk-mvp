@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RealRisk - Analise de Negocio e Proposta de Sociedade</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --surface-2: #f5f4f1;
+    --surface-3: #ebe9e3;
+    --border: #e7e5e0;
+    --border-strong: #d4d2cc;
+    --text: #1c1b18;
+    --text-muted: #6b6a65;
+    --text-soft: #9b9a94;
+    --accent: #c96442;
+    --accent-soft: #f0e1d8;
+    --accent-dark: #8a4327;
+    --tier-1-bg: #faeeda;
+    --tier-1-text: #854f0b;
+    --tier-2-bg: #e1f5ee;
+    --tier-2-text: #0f6e56;
+    --tier-3-bg: #e6f1fb;
+    --tier-3-text: #0c447c;
+    --ok: #0f6e56;
+    --warn: #854f0b;
+    --bad: #a32d2d;
+    --font-display: Georgia, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 22px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 40px;
+    max-width: 720px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    font-size: 13px;
+    color: var(--text-soft);
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-meta-item strong {
+    color: var(--text);
+    display: block;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  /* ===== SECTIONS ===== */
+  section {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-of-type { border-bottom: 0; }
+
+  .section-number {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  p { margin-bottom: 16px; }
+
+  .lead {
+    font-size: 19px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  strong { font-weight: 600; color: var(--text); }
+
+  /* ===== CALLOUTS ===== */
+  .pull-quote {
+    margin: 32px 0;
+    padding: 24px 32px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--text);
+    font-style: italic;
+  }
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+
+  .callout.accent {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .callout-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  /* ===== STATS ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+
+  .stat-card.accent {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .stat-card-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .stat-card-value {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .stat-card-sub {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 4px;
+  }
+
+  /* ===== TABLES ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    background: var(--surface-2);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  th.num { text-align: right; }
+
+  tr.total td {
+    border-top: 2px solid var(--border-strong);
+    border-bottom: 0;
+    font-weight: 600;
+    background: var(--surface);
+  }
+
+  /* ===== LISTS ===== */
+  ul, ol {
+    margin: 16px 0 24px 24px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    line-height: 1.7;
+  }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .feature-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .feature-card h4 {
+    margin-top: 0;
+    font-size: 15px;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 0;
+  }
+
+  /* ===== COMPARISON TABLE ===== */
+  .compare-table th:first-child, .compare-table td:first-child {
+    background: var(--surface-2);
+    font-weight: 500;
+  }
+
+  .compare-table .check { color: var(--ok); font-size: 16px; }
+  .compare-table .x { color: var(--bad); font-size: 16px; }
+  .compare-table .partial { color: var(--warn); font-size: 16px; }
+
+  /* ===== ROADMAP ===== */
+  .roadmap {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0;
+    margin: 32px 0;
+    border-left: 2px solid var(--border);
+    padding-left: 0;
+  }
+
+  .roadmap-block {
+    display: contents;
+  }
+
+  .roadmap-phase {
+    padding: 24px 16px 24px 24px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .roadmap-phase::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 28px;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+  }
+
+  .roadmap-content {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .roadmap-content h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .roadmap-content ul {
+    margin: 8px 0 0 20px;
+    font-size: 14px;
+  }
+
+  .roadmap-content li { margin-bottom: 4px; }
+
+  /* ===== RISK MATRIX ===== */
+  .risk-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-bottom: 0;
+    background: var(--surface);
+  }
+
+  .risk-row:last-child { border-bottom: 1px solid var(--border); }
+  .risk-row.header {
+    background: var(--surface-2);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .risk-row > div {
+    padding: 16px 20px;
+    border-right: 1px solid var(--border);
+  }
+
+  .risk-row > div:last-child { border-right: 0; }
+
+  .risk-level {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+
+  .risk-high { background: #fcebeb; color: var(--bad); }
+  .risk-med { background: var(--tier-1-bg); color: var(--warn); }
+  .risk-low { background: var(--tier-2-bg); color: var(--ok); }
+
+  /* ===== REVENUE BARS ===== */
+  .revenue-stack {
+    margin: 24px 0;
+  }
+
+  .revenue-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 100px;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  .revenue-bar {
+    height: 32px;
+    background: var(--accent);
+    border-radius: 4px;
+    position: relative;
+  }
+
+  .revenue-bar.r2 { background: #d97a5c; }
+  .revenue-bar.r3 { background: #e89177; }
+  .revenue-bar.r4 { background: #f4ad97; }
+  .revenue-bar.r5 { background: #f8c8b7; }
+
+  /* ===== AGENT ===== */
+  .agent-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+
+  .agent-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .agent-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+
+  .agent-role {
+    font-size: 12px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .agent-card h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .agent-card ul {
+    margin: 0 0 0 16px;
+    font-size: 14px;
+  }
+
+  .agent-card li { margin-bottom: 4px; }
+
+  /* ===== ASK ===== */
+  .ask-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+
+  .ask-card {
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .ask-card h3 {
+    margin-top: 0;
+    color: var(--accent);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ===== TOC ===== */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 40px 0;
+  }
+
+  .toc-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .toc ol {
+    columns: 2;
+    column-gap: 32px;
+    margin: 0 0 0 24px;
+  }
+
+  .toc li { font-size: 14px; margin-bottom: 6px; }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .toc a:hover { color: var(--accent); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 80px 0 40px;
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { font-size: 12px; }
+    .hero { padding: 40px 0; }
+    .hero h1 { font-size: 36px; }
+    section { padding: 30px 0; page-break-inside: avoid; }
+    .toc, .pull-quote { page-break-inside: avoid; }
+  }
+
+  @media (max-width: 720px) {
+    .hero h1 { font-size: 36px; }
+    h2 { font-size: 26px; }
+    .agent-pair, .ask-grid { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
+    .roadmap { grid-template-columns: 100px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <span class="hero-tag">Analise de Negocio + Proposta de Sociedade</span>
+    <h1>RealRisk</h1>
+    <p class="hero-subtitle">Uma plataforma de inteligencia de investimento imobiliario para o mercado da Florida que une 40 anos de rede com a precisao de engenharia de risco e IA.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <strong>Documento preparado por</strong>
+        Lucas Leite Castro
+      </div>
+      <div class="hero-meta-item">
+        <strong>Apresentado a</strong>
+        Jales socio fundador
+      </div>
+      <div class="hero-meta-item">
+        <strong>Data</strong>
+        Maio de 2026
+      </div>
+      <div class="hero-meta-item">
+        <strong>Status</strong>
+        MVP funcional
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <div class="toc-title">Indice</div>
+    <ol>
+      <li><a href="#resumo">Resumo executivo</a></li>
+      <li><a href="#tese">A tese</a></li>
+      <li><a href="#problema">O problema</a></li>
+      <li><a href="#solucao">A solucao: RealRisk</a></li>
+      <li><a href="#funciona">Como funciona na pratica</a></li>
+      <li><a href="#receita">Modelo de receita</a></li>
+      <li><a href="#projecao">Projecao financeira (3 anos)</a></li>
+      <li><a href="#caso">Caso real: Kissimmee Pkwy</a></li>
+      <li><a href="#time">Por que somos o time certo</a></li>
+      <li><a href="#competicao">Vantagem competitiva</a></li>
+      <li><a href="#riscos">Analise de riscos</a></li>
+      <li><a href="#roadmap">Roadmap 12 meses</a></li>
+      <li><a href="#sociedade">Estrutura societaria proposta</a></li>
+      <li><a href="#ask">O ask</a></li>
+      <li><a href="#proximos">Proximos passos imediatos</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== 1. RESUMO EXECUTIVO ===== -->
+  <section id="resumo">
+    <span class="section-number">01</span>
+    <h2>Resumo executivo</h2>
+    <p class="lead">A RealRisk e uma plataforma que multiplica em 10x a capacidade do seu negocio imobiliario atual. Voce continua sendo o protagonista, com sua rede e experiencia. Eu construo a infraestrutura de tecnologia, engenharia de risco e visualizacao que filtra centenas de oportunidades por semana e entrega so as melhores, prontas para sua validacao final.</p>
+
+    <p>Em vez de uma startup paralela que compete por sua atencao, proponho uma <strong>extensao do que voce ja faz</strong>, equipada com instrumentos que nenhum corretor solo tem. O resultado: voce fecha mais deals com a mesma rede, com analise tecnica mais profunda e com novos servicos recorrentes (comunidade paga, inspecao, due diligence juridica, gestao de obra com equity) que geram receita previsivel.</p>
+
+    <p>O MVP esta funcional. A projecao realista para o Ano 1 e de <strong>USD 47.000 em receita</strong>, escalando para <strong>USD 150-200k no Ano 2</strong> e <strong>USD 350-500k no Ano 3</strong>, sem contar o equity nos deals reformados (potencial de USD 80-100k por projeto bem-sucedido). O ticket de entrada para mim e zero, alinhado por equity em projetos especificos.</p>
+
+    <div class="pull-quote">
+      "Voce ja encontra deals pela sua rede e expertise. Isso e insubstituivel. O que falta e estrutura para escalar sem perder qualidade. Esse e o meu papel."
+    </div>
+  </section>
+
+  <!-- ===== 2. A TESE ===== -->
+  <section id="tese">
+    <span class="section-number">02</span>
+    <h2>A tese</h2>
+    <p class="lead">Tres forcas convergem em 2026 para criar uma janela rara no mercado da Florida.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-label">Mercado de flip US</div>
+        <div class="stat-card-value">~270k</div>
+        <div class="stat-card-sub">deals/ano, ~USD 70bi em volume</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Florida como pais</div>
+        <div class="stat-card-value">#2</div>
+        <div class="stat-card-sub">estado em volume de flips (atras do Texas)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Orlando metro</div>
+        <div class="stat-card-value">2.7M</div>
+        <div class="stat-card-sub">populacao, crescimento de +1.8% ao ano</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Margem media flip FL</div>
+        <div class="stat-card-value">15-22%</div>
+        <div class="stat-card-sub">ROI bruto antes de servicos</div>
+      </div>
+    </div>
+
+    <h3>Por que agora</h3>
+    <p>O mercado de flip na Florida atravessa o momento mais sofisticado da sua historia. A crise de seguros de 2023-2024 transformou flood zone, idade do roof e classificacao de wind insurance em variaveis financeiras criticas. Investidores que entram cego nesses fatores perdem 5-8% de ROI silenciosamente. Quem analisa bem ganha vantagem estrutural.</p>
+
+    <p>Ao mesmo tempo, o numero de investidores estrangeiros (especialmente brasileiros) que querem entrar no mercado da Florida cresceu significativamente apos a pandemia. Eles tem capital mas faltam tres coisas: <strong>presenca local confiavel</strong>, <strong>analise tecnica isenta</strong> e <strong>gestao de execucao</strong>. Os tres pilares que nos juntos podemos oferecer.</p>
+
+    <h3>Por que nos</h3>
+    <p>A combinacao de 40 anos de rede americana com engenharia de risco e visualizacao 3D arquitetonica e <strong>extremamente dificil de replicar</strong>. Concorrentes brasileiros tem tecnologia mas nao tem rede. Concorrentes americanos tem rede mas pensam local-first, sem instrumentos para investidor estrangeiro. Estamos em um cruzamento singular.</p>
+
+    <div class="callout accent">
+      <div class="callout-label">Insight estrategico</div>
+      <p style="margin: 0;">Nao estamos criando uma plataforma para competir com sua operacao. Estamos criando o sistema que torna sua operacao escalavel. A diferenca importa: o seu nome continua sendo o ativo principal.</p>
+    </div>
+  </section>
+
+  <!-- ===== 3. O PROBLEMA ===== -->
+  <section id="problema">
+    <span class="section-number">03</span>
+    <h2>O problema</h2>
+    <p class="lead">Existem tres problemas reais. Resolver os tres juntos cria um produto que ninguem mais oferece.</p>
+
+    <h3>Problema 1: limite de tempo do corretor experiente</h3>
+    <p>Voce conhece o mercado mas a busca por oportunidades e linear. Olhar 100 imoveis por semana e impossivel manualmente. A maioria dos bons deals e perdida por timing, nao por falta de capacidade analitica. Hoje, sua taxa de "olhar/fechar" e limitada pelo numero de horas no seu dia.</p>
+
+    <h3>Problema 2: investidor estrangeiro cego no mercado FL</h3>
+    <p>Brasileiros que querem investir na Florida entram com medo de quatro coisas concretas: liens ocultos, flood zone, custos reais de reforma e regras de short-term rental por jurisdicao. Sem ninguem de confianca dando essas respostas, eles desistem ou cometem erros caros. Hoje, a opcao deles e confiar 100% no agente local, sem segunda opiniao tecnica.</p>
+
+    <h3>Problema 3: ausencia de instrumentos analiticos compartilhaveis</h3>
+    <p>Quando voce avalia um deal mentalmente, o conhecimento fica com voce. Nao gera ativo institucional, nao pode ser auditado, nao escala para uma equipe (seus filhos, por exemplo). Voce e seu proprio sistema. Genial mas nao replicavel.</p>
+
+    <div class="callout">
+      <div class="callout-label">Resumo</div>
+      <p style="margin: 0;">Hoje, voce tem o ativo mais raro do mercado (rede + experiencia) mas distribuido em um formato que nao escala. A RealRisk transforma esse ativo intangivel em um sistema replicavel sem perder o seu DNA.</p>
+    </div>
+  </section>
+
+  <!-- ===== 4. A SOLUCAO ===== -->
+  <section id="solucao">
+    <span class="section-number">04</span>
+    <h2>A solucao: RealRisk</h2>
+    <p class="lead">Uma plataforma de quatro camadas que transforma dados brutos do mercado em deals validados, prontos para sua decisao final.</p>
+
+    <div class="card-grid">
+      <div class="feature-card">
+        <div class="feature-card-icon">01</div>
+        <h4>Camada de dados</h4>
+        <p>Ingestao automatica de listings (Zillow, Realtor, MLS via parceria) + enriquecimento com dados especificos da FL (flood zone, HOA, permit history, comparables).</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">02</div>
+        <h4>Engine de scoring</h4>
+        <p>Tres camadas de criterios: financeiros (ROI, $/sqft, payback), mercado (DOM, comps, demanda) e especificos da Florida (flood, roof, HVAC, STR). Pesos calibraveis em tempo real.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">03</div>
+        <h4>Camada visual</h4>
+        <p>Dashboard interativo com tres modos (cards, mapa, lista), relatorio tecnico por imovel e visualizacao 3D do pos-reforma (diferencial unico, via parceria com arquiteto).</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">04</div>
+        <h4>Camada de servicos</h4>
+        <p>Quatro produtos derivados: assinatura da comunidade (recorrente), inspecao tecnica, due diligence juridica e gestao de obra com equity. Cada um e uma fonte de receita.</p>
+      </div>
+    </div>
+
+    <h3>O que ja existe (MVP funcional)</h3>
+    <p>O sistema esta no ar em HTML/JS, com dataset de 20 imoveis reais da regiao de Orlando, filtros funcionais, mapa interativo, calibracao de pesos e modal de detalhe. Pode ser demonstrado em qualquer laptop ou celular agora mesmo. Ele e a prova de que isso nao e ideia em PowerPoint, e produto rodando.</p>
+  </section>
+
+  <!-- ===== 5. COMO FUNCIONA ===== -->
+  <section id="funciona">
+    <span class="section-number">05</span>
+    <h2>Como funciona na pratica</h2>
+    <p class="lead">A jornada de um deal, do primeiro sinal ate o fechamento da venda.</p>
+
+    <h3>Para o investidor (cliente final)</h3>
+    <ol>
+      <li><strong>Acesso a comunidade</strong> - paga mensalidade, entra no dashboard, ve as oportunidades classificadas em tempo real.</li>
+      <li><strong>Identifica interesse</strong> - escolhe um deal nivel 1 ou 2, clica em "sinalizar interesse" - o sistema bloqueia o deal por 7 dias para outros membros.</li>
+      <li><strong>Encomenda validacoes</strong> - contrata inspecao tecnica e due diligence juridica (servicos opcionais), recebe relatorios em 5-7 dias.</li>
+      <li><strong>Decisao</strong> - decide ofertar ou desistir. Se ofertar, pode contratar nossa gestao da obra (com equity de 20%) ou executar por conta propria.</li>
+      <li><strong>Acompanhamento</strong> - acompanha milestones da reforma no dashboard, ve o ARV se aproximar do target em tempo real.</li>
+      <li><strong>Saida</strong> - venda gerenciada pela plataforma, distribuicao de lucros conforme contrato.</li>
+    </ol>
+
+    <h3>Para nos (operacao interna)</h3>
+    <ol>
+      <li><strong>Maquina de Oportunidades</strong> - automatizada via Zillow scraper + Realtor API + parceria com brokers locais (sua rede). Roda 24/7.</li>
+      <li><strong>Validacao tecnica de cada oportunidade</strong> - eu rodo a analise de risco; voce avalia rede e contexto local; deal so vai para a comunidade quando ambos aprovam.</li>
+      <li><strong>Servico de inspecao</strong> - parceria com inspetor licenciado local; eu valido o escopo tecnico; entregamos relatorio assinado em conjunto.</li>
+      <li><strong>Due diligence juridica</strong> - parceria com title company / advogado FL; relatorio sai sob nossa marca com cobertura legal do parceiro.</li>
+      <li><strong>Gestao de obra</strong> - voce indica empreiteiros; eu monto cronograma, controle de qualidade e gestao de extras; relatorios visuais 3D documentam o antes/depois.</li>
+    </ol>
+  </section>
+
+  <!-- ===== 6. MODELO DE RECEITA ===== -->
+  <section id="receita">
+    <span class="section-number">06</span>
+    <h2>Modelo de receita</h2>
+    <p class="lead">Cinco fontes de receita que se reforcam mutuamente. A comunidade alimenta os servicos avulsos; os servicos avulsos qualificam clientes para gestao com equity.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th class="num">Preco</th>
+          <th>Recorrencia</th>
+          <th>Margem</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Assinatura da comunidade</strong><br><span style="color:var(--text-muted); font-size:13px;">Acesso ao dashboard + alertas + discussoes</span></td>
+          <td class="num">USD 1.200/ano</td>
+          <td>Recorrente</td>
+          <td>~90%</td>
+        </tr>
+        <tr>
+          <td><strong>Relatorio de inspecao tecnica</strong><br><span style="color:var(--text-muted); font-size:13px;">Vistoria + diagnostico + estimativa de CAPEX</span></td>
+          <td class="num">USD 950</td>
+          <td>Por projeto</td>
+          <td>~50% (apos custo do parceiro)</td>
+        </tr>
+        <tr>
+          <td><strong>Due diligence juridica/ambiental</strong><br><span style="color:var(--text-muted); font-size:13px;">Title search, liens, flood, zoning, permit history</span></td>
+          <td class="num">USD 1.800</td>
+          <td>Por projeto</td>
+          <td>~45% (apos custo do title co. / advogado)</td>
+        </tr>
+        <tr>
+          <td><strong>Taxa de setup de gestao</strong><br><span style="color:var(--text-muted); font-size:13px;">Custo simbolico de entrada na gestao com equity</span></td>
+          <td class="num">USD 1.000</td>
+          <td>Por projeto</td>
+          <td>~95%</td>
+        </tr>
+        <tr>
+          <td><strong>Equity em projeto reformado</strong><br><span style="color:var(--text-muted); font-size:13px;">Participacao no lucro de venda apos reforma</span></td>
+          <td class="num">20% do lucro</td>
+          <td>Na saida</td>
+          <td>~95% (overhead operacional)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Distribuicao da receita do Ano 1 (cenario realista)</h3>
+    <div class="revenue-stack">
+      <div class="revenue-row">
+        <div>Equity em projetos (2 deals)</div>
+        <div><div class="revenue-bar" style="width: 100%;"></div></div>
+        <div class="num">USD 22.000</div>
+      </div>
+      <div class="revenue-row">
+        <div>Assinaturas (15 membros)</div>
+        <div><div class="revenue-bar r2" style="width: 82%;"></div></div>
+        <div class="num">USD 18.000</div>
+      </div>
+      <div class="revenue-row">
+        <div>Inspecoes/juridico (5 avulsos)</div>
+        <div><div class="revenue-bar r3" style="width: 32%;"></div></div>
+        <div class="num">USD 7.000</div>
+      </div>
+      <div class="revenue-row total" style="grid-template-columns: 200px 1fr 100px; padding-top: 12px; border-top: 1px solid var(--border-strong); font-weight: 600;">
+        <div>Total Ano 1</div>
+        <div></div>
+        <div class="num">USD 47.000</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Logica de crescimento</div>
+      <p style="margin: 0;">A receita recorrente da comunidade e o lastro. Os servicos avulsos sao o motor de margem alta. O equity em projetos e a alavanca de upside. As tres camadas se reforcam: o membro da comunidade vira cliente de avulsos; o cliente de avulsos vira investidor em gestao; o investidor em gestao gera caso de sucesso que atrai novos membros.</p>
+    </div>
+  </section>
+
+  <!-- ===== 7. PROJECAO FINANCEIRA ===== -->
+  <section id="projecao">
+    <span class="section-number">07</span>
+    <h2>Projecao financeira (3 anos)</h2>
+    <p class="lead">Tres cenarios. Conservador supoe baixa conversao de marketing organico; realista assume crescimento via rede do Jales e validacao gradual; agressivo assume parceria com 2-3 influenciadores e marketing pago.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Linha de receita</th>
+          <th class="num">Ano 1 (real.)</th>
+          <th class="num">Ano 2 (real.)</th>
+          <th class="num">Ano 3 (real.)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Assinaturas (membros)</td>
+          <td class="num">USD 18k <span style="color:var(--text-muted); font-size:12px;">(15)</span></td>
+          <td class="num">USD 60k <span style="color:var(--text-muted); font-size:12px;">(50)</span></td>
+          <td class="num">USD 144k <span style="color:var(--text-muted); font-size:12px;">(120)</span></td>
+        </tr>
+        <tr>
+          <td>Inspecoes + due diligence (projetos)</td>
+          <td class="num">USD 7k <span style="color:var(--text-muted); font-size:12px;">(5)</span></td>
+          <td class="num">USD 35k <span style="color:var(--text-muted); font-size:12px;">(25)</span></td>
+          <td class="num">USD 84k <span style="color:var(--text-muted); font-size:12px;">(60)</span></td>
+        </tr>
+        <tr>
+          <td>Equity + setup em deals (projetos)</td>
+          <td class="num">USD 22k <span style="color:var(--text-muted); font-size:12px;">(2)</span></td>
+          <td class="num">USD 104k <span style="color:var(--text-muted); font-size:12px;">(8)</span></td>
+          <td class="num">USD 270k <span style="color:var(--text-muted); font-size:12px;">(18)</span></td>
+        </tr>
+        <tr class="total">
+          <td>Total receita anual</td>
+          <td class="num">USD 47k</td>
+          <td class="num">USD 199k</td>
+          <td class="num">USD 498k</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Cenarios comparados (receita total)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cenario</th>
+          <th class="num">Ano 1</th>
+          <th class="num">Ano 2</th>
+          <th class="num">Ano 3</th>
+          <th>Premissa principal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Conservador</td>
+          <td class="num">USD 28k</td>
+          <td class="num">USD 110k</td>
+          <td class="num">USD 270k</td>
+          <td>So sua rede, sem marketing</td>
+        </tr>
+        <tr style="background: var(--accent-soft);">
+          <td><strong>Realista</strong></td>
+          <td class="num"><strong>USD 47k</strong></td>
+          <td class="num"><strong>USD 199k</strong></td>
+          <td class="num"><strong>USD 498k</strong></td>
+          <td>Sua rede + marketing organico (LinkedIn, parcerias)</td>
+        </tr>
+        <tr>
+          <td>Agressivo</td>
+          <td class="num">USD 80k</td>
+          <td class="num">USD 320k</td>
+          <td class="num">USD 850k</td>
+          <td>Marketing pago + parcerias com influenciadores</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Premissas dos calculos</h3>
+    <ul>
+      <li>Ticket medio de venda apos reforma: USD 380-450k (faixa de flip mais ativa em Orlando)</li>
+      <li>Lucro medio por deal: USD 75-90k</li>
+      <li>Equity de 20% representa USD 15-18k por projeto + USD 1k de setup</li>
+      <li>Churn de assinaturas: ~15% ao ano (premissa conservadora)</li>
+      <li>Custo operacional anual: USD 8-12k (infra, ferramentas, parcerias terceirizadas)</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">Importante</div>
+      <p style="margin: 0;">Essas projecoes nao incluem o potencial dos projetos que voce ja tem em pipeline (incluindo o RV resort). Se um unico deal grande dele entrar como caso de sucesso da plataforma, o Ano 2 pode pular para o cenario agressivo.</p>
+    </div>
+  </section>
+
+  <!-- ===== 8. CASO REAL ===== -->
+  <section id="caso">
+    <span class="section-number">08</span>
+    <h2>Caso real: 3120 Kissimmee Pkwy</h2>
+    <p class="lead">Imovel real no nosso dataset MVP. Vamos rodar o ciclo completo da plataforma como se fosse um deal de verdade.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-label">Localizacao</div>
+        <div class="stat-card-value" style="font-size:18px; font-weight:600; font-family: var(--font-body);">Kissimmee, FL</div>
+        <div class="stat-card-sub">ZIP 34744 - STR permitido</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Configuracao</div>
+        <div class="stat-card-value" style="font-size:18px; font-weight:600; font-family: var(--font-body);">4/2 - 1.800 sqft</div>
+        <div class="stat-card-sub">Construida em 2005</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Preco pedido</div>
+        <div class="stat-card-value">USD 310k</div>
+        <div class="stat-card-sub">Days on Market: 8</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-card-label">Classificacao</div>
+        <div class="stat-card-value">Nivel 1</div>
+        <div class="stat-card-sub">Score total: 88/100</div>
+      </div>
+    </div>
+
+    <h3>Calculo da viabilidade</h3>
+    <table>
+      <tbody>
+        <tr><td>Preco de aquisicao</td><td class="num">USD 310.000</td></tr>
+        <tr><td>Closing costs (~5%)</td><td class="num">USD 15.500</td></tr>
+        <tr><td>CAPEX estimado da inspecao</td><td class="num">USD 28.000</td></tr>
+        <tr><td><strong>Investimento total (all-in)</strong></td><td class="num"><strong>USD 353.500</strong></td></tr>
+        <tr><td>ARV estimado (apos reforma)</td><td class="num">USD 445.000</td></tr>
+        <tr style="background: var(--tier-2-bg);"><td><strong>Lucro bruto estimado</strong></td><td class="num"><strong>USD 91.500</strong></td></tr>
+        <tr><td>ROI esperado</td><td class="num"><strong>25.9%</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Receita gerada pela plataforma neste deal</h3>
+    <table>
+      <tbody>
+        <tr><td>Setup de gestao</td><td class="num">USD 1.000</td></tr>
+        <tr><td>Equity (20% do lucro bruto)</td><td class="num">USD 18.300</td></tr>
+        <tr><td>Inspecao tecnica (se contratada)</td><td class="num">USD 950</td></tr>
+        <tr><td>Due diligence juridica (se contratada)</td><td class="num">USD 1.800</td></tr>
+        <tr class="total"><td><strong>Receita total da plataforma neste deal</strong></td><td class="num"><strong>USD 22.050</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Riscos identificados (camada Florida)</h3>
+    <ul>
+      <li><strong>Flood zone X</strong> - sem risco de inundacao, seguro padrao baixo</li>
+      <li><strong>Roof de 2 anos</strong> - excelente, sem despesa de troca por 18-20 anos</li>
+      <li><strong>HVAC de 7 anos</strong> - meia vida util, monitorar</li>
+      <li><strong>STR permitido</strong> - viavel como Airbnb se a estrategia mudar para hold (proximidade Disney/Universal)</li>
+    </ul>
+
+    <div class="callout accent">
+      <div class="callout-label">Por que este deal nao acontece sem a plataforma</div>
+      <p style="margin: 0;">Um investidor brasileiro olhando no Zillow ve preco e fotos. Nao ve que o STR e permitido (Kissimmee zoning especifico). Nao calcula que roof novo elimina USD 18-25k de risco. Nao tem comparacao com 30 outros deals na mesma faixa. Sem a plataforma, esse deal ou e perdido ou e fechado no escuro. Conosco, ele se transforma em uma decisao informada.</p>
+    </div>
+  </section>
+
+  <!-- ===== 9. TIME ===== -->
+  <section id="time">
+    <span class="section-number">09</span>
+    <h2>Por que somos o time certo</h2>
+    <p class="lead">Duas pessoas com competencias complementares e nao redundantes. Nenhum dos dois consegue construir isto sozinho. Juntos, temos uma vantagem que ninguem mais consegue replicar.</p>
+
+    <div class="agent-pair">
+      <div class="agent-card">
+        <div class="agent-name">Jales</div>
+        <div class="agent-role">Socio fundador - Operacao FL</div>
+        <p style="font-size:14px; color:var(--text-muted);">Corretor licenciado na Florida com 40 anos de mercado. Residente americano. Tres filhos jovens em formacao com potencial de virar equipe de operacao da plataforma no chao.</p>
+        <h4>O que ele traz</h4>
+        <ul>
+          <li>Rede de 40 anos com brokers, contractors, inspetores e advogados</li>
+          <li>Acesso a MLS local (impossivel sem licenca)</li>
+          <li>Credibilidade de mercado e capacidade de fechar deals que estrangeiros nao conseguem</li>
+          <li>Visao territorial do que vale e nao vale por bairro</li>
+          <li>Pipeline de projetos ja em andamento (incluindo RV resort)</li>
+          <li>Capacidade futura de envolver os 3 filhos como operacao</li>
+        </ul>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-name">Lucas</div>
+        <div class="agent-role">Socio fundador - Plataforma e analise</div>
+        <p style="font-size:14px; color:var(--text-muted);">Engenheiro com experiencia em analise de risco, modelagem financeira e visualizacao arquitetonica 3D. Construiu o MVP funcional ja em operacao.</p>
+        <h4>O que eu trago</h4>
+        <ul>
+          <li>Plataforma tecnologica ja desenvolvida e rodando</li>
+          <li>Engenharia de risco aplicada a real estate (inspecao tecnica isenta)</li>
+          <li>Modelagem financeira e dashboards de gestao</li>
+          <li>Parceria com arquiteto para visualizacao 3D (diferencial competitivo)</li>
+          <li>Capacidade de transformar conhecimento tacito (seu) em sistema replicavel</li>
+          <li>Foco operacional dedicado a esse projeto</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      "Sua rede sem minha tecnologia escala ate um certo limite e para. Minha tecnologia sem sua rede e mais um app generico. Juntos, e moat."
+    </div>
+  </section>
+
+  <!-- ===== 10. COMPETICAO ===== -->
+  <section id="competicao">
+    <span class="section-number">10</span>
+    <h2>Vantagem competitiva</h2>
+    <p class="lead">Existem players neste espaco, mas nenhum oferece o conjunto completo. Aqui esta a comparacao honesta.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Capacidade</th>
+          <th>Roofstock</th>
+          <th>Norada</th>
+          <th>Brokers solo</th>
+          <th>Outras plataformas BR</th>
+          <th style="background: var(--accent-soft); color: var(--accent);">RealRisk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Listings agregados FL</td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Scoring por engenharia de risco</td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Camada Florida especifica</td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="x">NAO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Visualizacao 3D pos-reforma</td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Inspecao tecnica isenta</td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Gestao de obra com equity</td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="x">NAO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Comunidade de investidores</td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Conteudo em portugues</td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="x">NAO</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="check">SIM</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Nenhum concorrente oferece o pacote completo. As plataformas americanas (Roofstock, Norada) sao boas em listing mas pensam local-first. As plataformas brasileiras tem pitch em portugues mas faltam profundidade tecnica. Os brokers solo (incluindo de FL) tem expertise mas nao escalam. Nos somos o unico player que combina presenca local + engenharia + visualizacao + servicos completos + idioma do investidor.</p>
+  </section>
+
+  <!-- ===== 11. RISCOS ===== -->
+  <section id="riscos">
+    <span class="section-number">11</span>
+    <h2>Analise de riscos</h2>
+    <p class="lead">Os riscos reais e como pretendemos mitigar cada um. Nada substitui execucao, mas saber onde estao os perigos diminui drasticamente a chance de pegar surpresa.</p>
+
+    <div class="risk-row header">
+      <div>Risco</div>
+      <div>Mitigacao</div>
+      <div>Probabilidade</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Mercado:</strong> esfriamento do flip na FL por queda de demanda<span class="risk-level risk-med">Medio</span></div>
+      <div>Diversificar entre flip rapido (Nivel 1) e hold para aluguel (Nivel 3). Manter foco em sub-mercados em alta (Lake Nona, Doctor Phillips).</div>
+      <div>Media</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Tecnico:</strong> infraestrutura de IA / scraping bloqueada por mudancas no Zillow<span class="risk-level risk-med">Medio</span></div>
+      <div>Diversificar fontes (Zillow + Realtor + MLS via Jales). MLS direto via licenca dele elimina a maior parte do risco.</div>
+      <div>Media</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Execucao:</strong> nao conseguir 15 membros pagantes no Ano 1<span class="risk-level risk-med">Medio</span></div>
+      <div>Estrategia de seeding com sua rede direta + 2 cases de sucesso documentados antes do marketing. Plano B: focar so em equity nos primeiros 6 meses.</div>
+      <div>Media</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Legal:</strong> emitir parecer juridico sem licenca FL<span class="risk-level risk-high">Alto</span></div>
+      <div>Toda due diligence sai sob marca conjunta com title company / advogado FL licenciado. Contrato de parceria formal antes do primeiro relatorio.</div>
+      <div>Baixa (se mitigado)</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Financeiro:</strong> capital de giro insuficiente em projetos com equity<span class="risk-level risk-med">Medio</span></div>
+      <div>Comecar com so 2 projetos em paralelo. Setup de USD 1k cobre custos basicos. Equity garante upside mas exige pulmao de 4-8 meses ate a saida.</div>
+      <div>Media</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Societario:</strong> conflito futuro entre socios (incluindo filhos)<span class="risk-level risk-med">Medio</span></div>
+      <div>Acordo de socios robusto desde o dia 1. Vesting de 4 anos para entradas futuras. Clausulas claras de drag-along e tag-along. Adviser juridico de M&A US.</div>
+      <div>Baixa (se mitigado)</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Reputacional:</strong> primeiro deal mal-sucedido contamina a marca<span class="risk-level risk-high">Alto</span></div>
+      <div>Selecao ultra-criteriosa nos primeiros 3 deals. Aceitar fechar menos no Ano 1 para garantir taxa de sucesso de 100% nos casos demonstrados.</div>
+      <div>Baixa (se mitigado)</div>
+    </div>
+  </section>
+
+  <!-- ===== 12. ROADMAP ===== -->
+  <section id="roadmap">
+    <span class="section-number">12</span>
+    <h2>Roadmap 12 meses</h2>
+    <p class="lead">Quatro fases sequenciais. Cada uma destrava a proxima. Nenhuma e construida especulativamente; cada uma so comeca quando a anterior valida sua hipotese.</p>
+
+    <div class="roadmap">
+      <div class="roadmap-block">
+        <div class="roadmap-phase">0-90 dias<br>Validacao</div>
+        <div class="roadmap-content">
+          <h4>Fechamento da sociedade e primeiro deal</h4>
+          <ul>
+            <li>Assinatura do acordo de socios e estrutura LLC</li>
+            <li>Refinamento do MVP com feedback inicial seu</li>
+            <li>Identificacao e fechamento do primeiro deal com gestao (alvo: USD 280-350k)</li>
+            <li>Documentacao do caso #1 (com fotos, relatorios, projecoes)</li>
+            <li>Definir parceria com title company FL e inspetor licenciado</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-block">
+        <div class="roadmap-phase">3-6 meses<br>Tracao inicial</div>
+        <div class="roadmap-content">
+          <h4>Segundo deal e primeiros membros pagantes</h4>
+          <ul>
+            <li>Fechamento do segundo deal com gestao</li>
+            <li>Lancamento da assinatura da comunidade (meta: 5-10 membros iniciais via sua rede)</li>
+            <li>Primeira venda de servico avulso (inspecao ou DD juridica)</li>
+            <li>Caso de sucesso #1 publicado (saida do primeiro deal)</li>
+            <li>Refinamento de processos baseado nos dois deals reais</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-block">
+        <div class="roadmap-phase">6-9 meses<br>Expansao</div>
+        <div class="roadmap-content">
+          <h4>Marketing organico e pipeline</h4>
+          <ul>
+            <li>15-25 membros ativos na comunidade</li>
+            <li>Pipeline de 5+ deals em diferentes estagios</li>
+            <li>Conteudo educacional em portugues (LinkedIn, Instagram)</li>
+            <li>Primeira contratacao (possivelmente filho do Jales)</li>
+            <li>Comeca planejamento de envolver mais socios operacionais</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-block">
+        <div class="roadmap-phase">9-12 meses<br>Consolidacao</div>
+        <div class="roadmap-content">
+          <h4>Estrutura escalavel</h4>
+          <ul>
+            <li>30-50 membros, 5+ deals concluidos, 3+ saidas com lucro</li>
+            <li>Equipe operacional formada (filhos do Jales + 1 terceirizado)</li>
+            <li>Possibilidade de levantar capital adicional para acelerar gestao de obras</li>
+            <li>Avaliacao do RV resort entrando como produto premium da plataforma</li>
+            <li>Revisao do acordo de socios para fase 2 (entrada formal de novos membros)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 13. ESTRUTURA SOCIETARIA ===== -->
+  <section id="sociedade">
+    <span class="section-number">13</span>
+    <h2>Estrutura societaria proposta</h2>
+    <p class="lead">Comecamos enxuto. So nos dois. Estrutura legal limpa. Expansao para os filhos vem na fase 2, com vesting e papeis claros, evitando o erro classico de "quatro socios da mesma familia desde o dia 1".</p>
+
+    <h3>Fase 1 (mes 0-12): so nos dois</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Proposta</th>
+          <th>Racional</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Equity inicial</td>
+          <td>50% Jales / 50% Lucas</td>
+          <td>Reconhece valor igual da rede (sua) e da plataforma (minha). Sem hierarquia, decisoes 50/50 forcam alinhamento.</td>
+        </tr>
+        <tr>
+          <td>Estrutura juridica</td>
+          <td>LLC nos EUA + entidade BR para servicos</td>
+          <td>LLC FL captura receitas locais e equity em deals. Entidade BR fatura desenvolvimento de plataforma e suporte tecnico.</td>
+        </tr>
+        <tr>
+          <td>Vesting</td>
+          <td>4 anos com cliff de 1 ano</td>
+          <td>Protege ambos. Se um saiu antes, nao leva equity integral. Padrao de mercado.</td>
+        </tr>
+        <tr>
+          <td>Distribuicao de lucros</td>
+          <td>50/50, com reinvestimento de 30% nos primeiros 18 meses</td>
+          <td>Retem caixa para acelerar crescimento sem dependencia de capital externo.</td>
+        </tr>
+        <tr>
+          <td>Capital inicial</td>
+          <td>USD 5-8k cada (total USD 10-16k)</td>
+          <td>Cobre custos de constituicao legal, parcerias iniciais, ferramentas de software para os primeiros 12 meses.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Fase 2 (mes 12+): expansao com vesting</h3>
+    <p>Quando comprovarmos modelo e tracao, abrimos espaco para entradas estrategicas:</p>
+    <ul>
+      <li><strong>Filho real-estate (sobrinho 1)</strong>: 5-10% com vesting de 4 anos, papel de operacao de campo (validacao presencial de imoveis, gestao de obras locais).</li>
+      <li><strong>Filhos administracao (sobrinhos 2 e 3)</strong>: 3-5% cada com vesting, papeis de back office e comercial conforme formacao.</li>
+      <li><strong>Possivel adviser juridico FL</strong>: 1-2% por aconselhamento estrategico continuo (alternativa ao retainer).</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">Por que nao incluir os filhos agora</div>
+      <p style="margin: 0;">Tres motivos. Primeiro, quatro socios desde o dia 1 cria votos de minoria automaticos e travas para decisoes rapidas. Segundo, cada filho deve ganhar equity por contribuicao demonstrada, nao por sobrenome - protege a meritocracia. Terceiro, esperar 12 meses permite ver quais filhos sao realmente engajados e capazes de operar, evitando equity desperdicado.</p>
+    </div>
+  </section>
+
+  <!-- ===== 14. O ASK ===== -->
+  <section id="ask">
+    <span class="section-number">14</span>
+    <h2>O ask</h2>
+    <p class="lead">O que precisamos definir juntos para passar da conversa para o fechamento. Nada disso requer cheque grande - requer decisao.</p>
+
+    <div class="ask-grid">
+      <div class="ask-card">
+        <h3>De voce (Jales)</h3>
+        <ul>
+          <li><strong>Compromisso de tempo</strong>: 8-12 horas/semana nos primeiros 6 meses (validacoes, rede, deals)</li>
+          <li><strong>Acesso a MLS via licenca</strong>: viabiliza dados muito superiores ao Zillow</li>
+          <li><strong>2-3 introducoes</strong>: investidores brasileiros ou americanos da sua rede que podem virar os primeiros membros pagantes</li>
+          <li><strong>USD 5-8k de capital inicial</strong>: parte do total de constituicao</li>
+          <li><strong>1-2 deals semente</strong>: oportunidades reais para serem os primeiros casos da plataforma</li>
+          <li><strong>Decisao em ate 4 semanas</strong>: timing importa para nao perder a janela atual</li>
+        </ul>
+      </div>
+
+      <div class="ask-card">
+        <h3>De mim (Lucas)</h3>
+        <ul>
+          <li><strong>Dedicacao integral</strong>: foco operacional 100% no projeto a partir do fechamento</li>
+          <li><strong>Plataforma ja construida</strong>: MVP em producao no dia 1</li>
+          <li><strong>Engenharia de risco</strong>: cada deal validado com criterio profissional</li>
+          <li><strong>Visualizacao 3D</strong>: parceria com arquiteto integrada na plataforma</li>
+          <li><strong>USD 5-8k de capital inicial</strong>: matching do seu aporte</li>
+          <li><strong>Acordo formal antes de comecar</strong>: protecao para nos dois desde o dia 1</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 15. PROXIMOS PASSOS ===== -->
+  <section id="proximos">
+    <span class="section-number">15</span>
+    <h2>Proximos passos imediatos</h2>
+    <p class="lead">Cronograma proposto para sair da conversa e entrar na execucao.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Semana</th>
+          <th>Acao</th>
+          <th>Responsavel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Revisao deste documento + ajustes mutuos</td>
+          <td>Nos dois</td>
+        </tr>
+        <tr>
+          <td>1-2</td>
+          <td>Conversa com sobrinho real-estate sobre papel operacional futuro</td>
+          <td>Jales apresenta, Lucas dialoga</td>
+        </tr>
+        <tr>
+          <td>2-3</td>
+          <td>Consulta com advogado M&A nos EUA para desenhar acordo de socios</td>
+          <td>Jales indica, Lucas conduz</td>
+        </tr>
+        <tr>
+          <td>3-4</td>
+          <td>Constituicao formal da LLC e assinatura do acordo</td>
+          <td>Advogado</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Identificacao do primeiro deal candidato a gestao</td>
+          <td>Jales + Lucas</td>
+        </tr>
+        <tr>
+          <td>5-6</td>
+          <td>Refinamento do MVP com base no feedback do mes 1</td>
+          <td>Lucas</td>
+        </tr>
+        <tr>
+          <td>6-8</td>
+          <td>Fechamento do primeiro deal com gestao</td>
+          <td>Nos dois</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout accent">
+      <div class="callout-label">A pergunta que importa</div>
+      <p style="margin: 0; font-family: var(--font-display); font-size: 18px; line-height: 1.5;">Voce ve em mim o complemento que falta para escalar o que voce ja faz?</p>
+    </div>
+
+    <p style="margin-top: 32px; color: var(--text-muted);">Se a resposta for sim, comecamos a executar o cronograma acima na proxima semana. Se for "talvez", proponho uma reuniao para destrinchar onde estao as duvidas. Se for nao, agradeco a honestidade e seguimos como familia.</p>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>RealRisk - Analise de Negocio + Proposta de Sociedade</p>
+    <p>Documento confidencial. Maio 2026.</p>
+  </div>
+</footer>
+
+</body>
+</html>
