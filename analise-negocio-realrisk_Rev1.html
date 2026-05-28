@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RealRisk - Análise de Negócio e Proposta de Sociedade</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --surface-2: #f5f4f1;
+    --surface-3: #ebe9e3;
+    --border: #e7e5e0;
+    --border-strong: #d4d2cc;
+    --text: #1c1b18;
+    --text-muted: #6b6a65;
+    --text-soft: #9b9a94;
+    --accent: #c96442;
+    --accent-soft: #f0e1d8;
+    --accent-dark: #8a4327;
+    --tier-1-bg: #faeeda;
+    --tier-1-text: #854f0b;
+    --tier-2-bg: #e1f5ee;
+    --tier-2-text: #0f6e56;
+    --tier-3-bg: #e6f1fb;
+    --tier-3-text: #0c447c;
+    --ok: #0f6e56;
+    --warn: #854f0b;
+    --bad: #a32d2d;
+    --font-display: Georgia, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 22px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 40px;
+    max-width: 720px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    font-size: 13px;
+    color: var(--text-soft);
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-meta-item strong {
+    color: var(--text);
+    display: block;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  /* ===== SECTIONS ===== */
+  section {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-of-type { border-bottom: 0; }
+
+  .section-number {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  p { margin-bottom: 16px; }
+
+  .lead {
+    font-size: 19px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  strong { font-weight: 600; color: var(--text); }
+
+  /* ===== CALLOUTS ===== */
+  .pull-quote {
+    margin: 32px 0;
+    padding: 24px 32px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--text);
+    font-style: italic;
+  }
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+
+  .callout.accent {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .callout-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  /* ===== STATS ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+
+  .stat-card.accent {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .stat-card-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .stat-card-value {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .stat-card-sub {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 4px;
+  }
+
+  /* ===== TABLES ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    background: var(--surface-2);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  th.num { text-align: right; }
+
+  tr.total td {
+    border-top: 2px solid var(--border-strong);
+    border-bottom: 0;
+    font-weight: 600;
+    background: var(--surface);
+  }
+
+  /* ===== LISTS ===== */
+  ul, ol {
+    margin: 16px 0 24px 24px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    line-height: 1.7;
+  }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .feature-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .feature-card h4 {
+    margin-top: 0;
+    font-size: 15px;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 0;
+  }
+
+  /* ===== COMPARISON TABLE ===== */
+  .compare-table th:first-child, .compare-table td:first-child {
+    background: var(--surface-2);
+    font-weight: 500;
+  }
+
+  .compare-table .check { color: var(--ok); font-size: 16px; }
+  .compare-table .x { color: var(--bad); font-size: 16px; }
+  .compare-table .partial { color: var(--warn); font-size: 16px; }
+
+  /* ===== ROADMAP ===== */
+  .roadmap {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0;
+    margin: 32px 0;
+    border-left: 2px solid var(--border);
+    padding-left: 0;
+  }
+
+  .roadmap-block {
+    display: contents;
+  }
+
+  .roadmap-phase {
+    padding: 24px 16px 24px 24px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .roadmap-phase::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 28px;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+  }
+
+  .roadmap-content {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .roadmap-content h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .roadmap-content ul {
+    margin: 8px 0 0 20px;
+    font-size: 14px;
+  }
+
+  .roadmap-content li { margin-bottom: 4px; }
+
+  /* ===== RISK MATRIX ===== */
+  .risk-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-bottom: 0;
+    background: var(--surface);
+  }
+
+  .risk-row:last-child { border-bottom: 1px solid var(--border); }
+  .risk-row.header {
+    background: var(--surface-2);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .risk-row > div {
+    padding: 16px 20px;
+    border-right: 1px solid var(--border);
+  }
+
+  .risk-row > div:last-child { border-right: 0; }
+
+  .risk-level {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+
+  .risk-high { background: #fcebeb; color: var(--bad); }
+  .risk-med { background: var(--tier-1-bg); color: var(--warn); }
+  .risk-low { background: var(--tier-2-bg); color: var(--ok); }
+
+  /* ===== REVENUE BARS ===== */
+  .revenue-stack {
+    margin: 24px 0;
+  }
+
+  .revenue-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 100px;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  .revenue-bar {
+    height: 32px;
+    background: var(--accent);
+    border-radius: 4px;
+    position: relative;
+  }
+
+  .revenue-bar.r2 { background: #d97a5c; }
+  .revenue-bar.r3 { background: #e89177; }
+  .revenue-bar.r4 { background: #f4ad97; }
+  .revenue-bar.r5 { background: #f8c8b7; }
+
+  /* ===== AGENT ===== */
+  .agent-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+
+  .agent-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .agent-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+
+  .agent-role {
+    font-size: 12px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .agent-card h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .agent-card ul {
+    margin: 0 0 0 16px;
+    font-size: 14px;
+  }
+
+  .agent-card li { margin-bottom: 4px; }
+
+  /* ===== ASK ===== */
+  .ask-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+
+  .ask-card {
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .ask-card h3 {
+    margin-top: 0;
+    color: var(--accent);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ===== TOC ===== */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 40px 0;
+  }
+
+  .toc-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .toc ol {
+    columns: 2;
+    column-gap: 32px;
+    margin: 0 0 0 24px;
+  }
+
+  .toc li { font-size: 14px; margin-bottom: 6px; }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .toc a:hover { color: var(--accent); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 80px 0 40px;
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { font-size: 12px; }
+    .hero { padding: 40px 0; }
+    .hero h1 { font-size: 36px; }
+    section { padding: 30px 0; page-break-inside: avoid; }
+    .toc, .pull-quote { page-break-inside: avoid; }
+  }
+
+  @media (max-width: 720px) {
+    .hero h1 { font-size: 36px; }
+    h2 { font-size: 26px; }
+    .agent-pair, .ask-grid { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
+    .roadmap { grid-template-columns: 100px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <span class="hero-tag">Análise de Negócio e Proposta de Sociedade</span>
+    <h1>RealRisk</h1>
+    <p class="hero-subtitle">Uma plataforma de inteligência de investimento imobiliário para o mercado da Flórida que une 40 anos de relacionamento com a precisão da engenharia de risco e inteligência artificial.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <strong>Documento preparado por</strong>
+        Lucas Leite
+      </div>
+      <div class="hero-meta-item">
+        <strong>Apresentado a</strong>
+        Jales Castro (Sócio-Fundador)
+      </div>
+      <div class="hero-meta-item">
+        <strong>Data</strong>
+        Maio de 2026
+      </div>
+      <div class="hero-meta-item">
+        <strong>Status</strong>
+        MVP Funcional
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <div class="toc-title">Índice</div>
+    <ol>
+      <li><a href="#resumo">Resumo Executivo</a></li>
+      <li><a href="#tese">A Tese</a></li>
+      <li><a href="#problema">O Problema</a></li>
+      <li><a href="#solucao">A Solução: RealRisk</a></li>
+      <li><a href="#funciona">Como Funciona na Prática</a></li>
+      <li><a href="#receita">Modelo de Receita</a></li>
+      <li><a href="#projecao">Projeção Financeira (3 anos)</a></li>
+      <li><a href="#caso">Caso Real: Kissimmee Pkwy</a></li>
+      <li><a href="#time">Por que Somos o Time Certo</a></li>
+      <li><a href="#competicao">Vantagem Competitiva</a></li>
+      <li><a href="#riscos">Análise de Riscos</a></li>
+      <li><a href="#roadmap">Roadmap de 12 Meses</a></li>
+      <li><a href="#sociedade">Estrutura Societária Proposta</a></li>
+      <li><a href="#ask">O Pedido (The Ask)</a></li>
+      <li><a href="#proximos">Próximos Passos Imediatos</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== 1. RESUMO EXECUTIVO ===== -->
+  <section id="resumo">
+    <span class="section-number">01</span>
+    <h2>Resumo Executivo</h2>
+    <p class="lead">A RealRisk é uma plataforma desenvolvida para multiplicar por dez a capacidade operacional do seu negócio imobiliário atual. Vossa excelência permanece como o protagonista estratégico através de sua rede de contatos e vasta experiência. Minha função consiste em estruturar a infraestrutura tecnológica, a engenharia de risco e as ferramentas de visualização, automatizando a filtragem de centenas de oportunidades semanais e entregando apenas os ativos de alta performance para sua validação final.</p>
+
+    <p>Em vez de criarmos uma startup paralela que concorra por sua atenção, proponho uma <strong>extensão de sua própria operação de mercado</strong>, equipada com instrumentos que corretores tradicionais não possuem. O resultado prático é a conversão de mais negócios utilizando a mesma rede, apoiada em análises técnicas profundas e na oferta de serviços de receita recorrente (comunidade paga, inspeção, devido zelo jurídico e gestão de obras via participação no resultado), gerando previsibilidade financeira.</p>
+
+    <p>O MVP encontra-se totalmente funcional. A projeção realista para o primeiro ano estima <strong>USD 47.000 em receita</strong>, escalando para valores entre <strong>USD 150k e USD 200k no segundo ano</strong>, e atingindo de <strong>USD 350k a USD 500k no terceiro ano</strong>. Esses números desconsideram a participação em ativos reformados (equity), cujo potencial de ganho estimado é de USD 80k a USD 100k por projeto bem-sucedido. O aporte inicial para o meu ingresso é nulo, estando alinhado estritamente às participações por projetos específicos.</p>
+
+    <div class="pull-quote">
+      "Sua rede de contatos e sua expertise de mercado são insubstituíveis. O objetivo desta parceria é prover a infraestrutura técnica necessária para escalar a operação com absoluto controle de qualidade."
+    </div>
+  </section>
+
+  <!-- ===== 2. A TESE ===== -->
+  <section id="tese">
+    <span class="section-number">02</span>
+    <h2>A Tese</h2>
+    <p class="lead">Três forças de mercado convergem em 2026, criando uma janela de oportunidade singular no setor imobiliário da Flórida.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-label">Mercado de Flip nos EUA</div>
+        <div class="stat-card-value">~270k</div>
+        <div class="stat-card-sub">transações/ano, movimentando ~USD 70 bi</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Flórida no Cenário Nacional</div>
+        <div class="stat-card-value">#2</div>
+        <div class="stat-card-sub">segundo maior estado em volume de flips</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Região Metropolitana de Orlando</div>
+        <div class="stat-card-value">2.7M</div>
+        <div class="stat-card-sub">habitantes, com crescimento anual de +1,8%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Margem Média de Flip na FL</div>
+        <div class="stat-card-value">15-22%</div>
+        <div class="stat-card-sub">Retorno sobre o Investimento bruto antes de taxas</div>
+      </div>
+    </div>
+
+    <h3>Por que agora?</h3>
+    <p>O mercado de revitalização imobiliária (*house flipping*) na Flórida exige, atualmente, alto nível de sofisticação técnica. A crise no setor de seguros imobiliários ocorrida entre 2023 e 2024 transformou variáveis como zonas de inundação (*flood zones*), idade do telhado e classificação de seguro contra tempestades (*wind insurance*) em fatores financeiros críticos. Investidores que negligenciam esses indicadores reduzem seu ROI silenciosamente entre 5% e 8%. A realização de uma análise técnica robusta garante vantagem competitiva estrutural.</p>
+
+    <p>Simultaneamente, o volume de investidores estrangeiros — sobretudo brasileiros — buscando alocação de capital na Flórida expandiu de forma expressiva. Embora disponham de capital, esses investidores carecem de três pilares essenciais: <strong>presença local de confiança</strong>, <strong>análise técnica isenta</strong> e <strong>gestão rigorosa de execução</strong>. Trata-se dos três diferenciais que nossa operação conjunta está apta a oferecer.</p>
+
+    <h3>Por que nós?</h3>
+    <p>A combinação de uma rede americana estruturada ao longo de 40 anos com engenharia de risco aplicada e inteligência artificial é <strong>extremamente difícil de ser replicada por concorrentes</strong>. Os players brasileiros possuem tecnologia, mas carecem de rede local. Os concorrentes americanos detêm relacionamento, porém operam com mentalidade local (*local-first*), sem os instrumentos necessários para atender o investidor internacional. Estamos posicionados em um cruzamento singular de mercado.</p>
+
+    <div class="callout accent">
+      <div class="callout-label">Insight Estratégico</div>
+      <p style="margin: 0;">Não se trata do desenvolvimento de uma plataforma para competir com sua estrutura atual, mas sim da criação do sistema que tornará a sua operação escalável. Sob essa ótica, seu nome e reputação permanecem como os principais ativos do negócio.</p>
+    </div>
+  </section>
+
+  <!-- ===== 3. O PROBLEMA ===== -->
+  <section id="problema">
+    <span class="section-number">03</span>
+    <h2>O Problema</h2>
+    <p class="lead">A operação de investimentos imobiliários enfrenta três problemas estruturais. A resolução conjunta destes gargalos cria uma oferta de valor inédita.</p>
+
+    <h3>Problema 1: Limitação de tempo do profissional sênior</h3>
+    <p>A prospecção de oportunidades ocorre de forma linear. A triagem manual de uma centena de imóveis por semana é operacionalmente inviável. Grandes oportunidades de negócios são perdidas em decorrência do tempo de resposta (*timing*), e não por déficit de capacidade analítica. Atualmente, o volume de fechamentos encontra-se limitado pelas horas disponíveis em sua agenda comercial.</p>
+
+    <h3>Problema 2: Assimetria de informação do investidor estrangeiro</h3>
+    <p>Investidores internacionais enfrentam inseguranças jurídicas e técnicas tangíveis: pendências financeiras ocultas (*liens*), enquadramento em zonas de alagamento, precificação imprecisa de reformas e restrições legais para locações de curta temporada (*short-term rentals*) por jurisdição. A ausência de uma consultoria isenta frequentemente resulta em desistências ou em erros de alto custo financeiro.</p>
+
+    <h3>Problema 3: Falta de ferramentas analíticas compartilháveis</h3>
+    <p>As avaliações efetuadas de forma intuitiva concentram o conhecimento técnico exclusivamente no profissional sênior. Essa dinâmica impede a construção de um ativo institucional auditável e inviabiliza a delegação de processos para uma equipe de colaboradores em fase de desenvolvimento.</p>
+
+    <div class="callout">
+      <div class="callout-label">Resumo do Cenário</div>
+      <p style="margin: 0;">A operação detém os ativos mais escassos do mercado: relacionamento e experiência. Contudo, eles encontram-se centralizados em um formato que impede a escala. A RealRisk atua para converter esse capital intangível em um modelo sistêmico e replicável.</p>
+    </div>
+  </section>
+
+  <!-- ===== 4. A SOLUÇÃO ===== -->
+  <section id="solucao">
+    <span class="section-number">04</span>
+    <h2>A Solução: RealRisk</h2>
+    <p class="lead">Uma arquitetura de negócios composta por quatro camadas funcionais que processa dados de mercado e os transforma em oportunidades validadas e prontas para a tomada de decisão.</p>
+
+    <div class="card-grid">
+      <div class="feature-card">
+        <div class="feature-card-icon">01</div>
+        <h4>Camada de Dados</h4>
+        <p>Coleta automatizada de listagens de imóveis integrada ao enriquecimento de dados específicos da Flórida (histórico de permissões, associações de moradores, zoneamentos e comparáveis).</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">02</div>
+        <h4>Mecanismo de Pontuação</h4>
+        <p>Métricas divididas em parâmetros financeiros, mercadológicos e geográficos. Os critérios e pesos para a nota dos investimentos são inteiramente personalizáveis e definidos no momento da criação de cada projeto.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">03</div>
+        <h4>Camada de Visualização</h4>
+        <p>Painel gerencial interativo com múltiplos modos de exibição (mapas, listas e cartões), relatórios técnicos analíticos e projeções visuais do pós-reforma como diferencial competitivo.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">04</div>
+        <h4>Camada de Serviços</h4>
+        <p>Portfólio de produtos derivados: assinaturas de comunidade, auditorias técnicas, auditorias jurídicas (*due diligence*) e gestão de execução de obras associada à participação nos lucros.</p>
+      </div>
+    </div>
+
+    <h3>Status Atual do Projeto (MVP Funcional)</h3>
+    <p>A plataforma já se encontra operacional em ambiente HTML/JS, integrada a um banco de dados semente contendo 20 imóveis reais localizados na região de Orlando. Apresenta filtros de triagem funcionais, mapa interativo, calibração dinâmica de pesos e detalhamento técnico completo por ativo, disponível para demonstração imediata.</p>
+  </section>
+
+  <!-- ===== 5. COMO FUNCIONA NA PRÁTICA ===== -->
+  <section id="funciona">
+    <span class="section-number">05</span>
+    <h2>Como Funciona na Prática</h2>
+    <p class="lead">O fluxo operacional detalhado compreende desde o rastreamento inicial da oportunidade até o desinvestimento do ativo.</p>
+
+    <h3>Jornada do Investidor (Cliente Final)</h3>
+    <ol>
+      <li><strong>Ingresso na Comunidade:</strong> O investidor realiza a adesão formal à plataforma, obtendo acesso imediato ao painel de oportunidades atualizado em tempo real.</li>
+      <li><strong>Sinalização de Interesse:</strong> Seleciona-se um ativo elegível, efetuando o bloqueio temporário de exclusividade por um período de 7 dias no sistema.</li>
+      <li><strong>Contratação de Auditorias:</strong> Solicitação facultativa dos relatórios de inspeção técnica e devido zelo jurídico, entregues em prazos de 5 a 7 dias úteis.</li>
+      <li><strong>Tomada de Decisão:</strong> Formalização da proposta de compra ou declínio do ativo. Havendo a aquisição, viabiliza-se a contratação do serviço de gestão de obras da RealRisk mediante taxa de estruturação e participação nos lucros de saída.</li>
+      <li><strong>Monitoramento de Progresso:</strong> Acompanhamento dos marcos contratuais da reforma diretamente pelo painel de controle.</li>
+      <li><strong>Desinvestimento:</strong> Execução da venda sob gestão da plataforma e distribuição proporcional dos lucros apurados.</li>
+    </ol>
+
+    <h3>Fluxo Operacional Interno</h3>
+    <ol>
+      <li><strong>Prospecção Automatizada:</strong> Varredura de dados contínua através de APIs e conexões com sistemas imobiliários e de parceiros locais.</li>
+      <li><strong>Homologação Técnica:</strong> Condução das análises de riscos de engenharia de minha parte, combinada à validação de mercado e relacionamento conduzida por você. O ativo só é disponibilizado à comunidade após aprovação de ambos.</li>
+      <li><strong>Auditoria Técnica:</strong> Vistoria realizada por inspetor licenciado, gerando um laudo assinado sob a chancela da marca.</li>
+      <li><strong>Due Diligence Jurídica:</strong> Interface analítica com empresas de títulos e escritórios de advocacia parceiros na Flórida.</li>
+      <li><strong>Gestão de Obras:</strong> Coordenação das equipes de empreiteiros sob sua indicação, acompanhada de monitoramento de cronogramas físicos e financeiros conduzidos por mim.</li>
+    </ol>
+  </section>
+
+  <!-- ===== 6. MODELO DE RECEITA ===== -->
+  <section id="receita">
+    <span class="section-number">06</span>
+    <h2>Modelo de Receita</h2>
+    <p class="lead">A estrutura financeira baseia-se em cinco fontes de receita complementares, onde a comunidade retroalimenta a venda de serviços avulsos, que por sua vez qualificam os investidores para os projetos de participação societária.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Produto / Serviço</th>
+          <th class="num">Preço Médio</th>
+          <th>Recorrência</th>
+          <th>Margem Operacional</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Assinatura da Comunidade</strong><br><span style="color:var(--text-muted); font-size:13px;">Acesso ao painel gerencial, alertas de mercado e fórum de investidores.</span></td>
+          <td class="num">USD 1.200 / ano</td>
+          <td>Anual Recorrente</td>
+          <td>~90%</td>
+        </tr>
+        <tr>
+          <td><strong>Relatório de Inspeção Técnica</strong><br><span style="color:var(--text-muted); font-size:13px;">Vistoria especializada, diagnóstico estrutural e estimativa de CAPEX.</span></td>
+          <td class="num">USD 950</td>
+          <td>Por Projeto</td>
+          <td>~50% (líquido de custos de parceiros)</td>
+        </tr>
+        <tr>
+          <td><strong>Due Diligence Jurídica e Ambiental</strong><br><span style="color:var(--text-muted); font-size:13px;">Análise de ônus reais, restrições de zoneamento e histórico de permissões.</span></td>
+          <td class="num">USD 1.800</td>
+          <td>Por Projeto</td>
+          <td>~45% (líquido de taxas advocatícias)</td>
+        </tr>
+        <tr>
+          <td><strong>Taxa de Estruturação de Gestão (Setup)</strong><br><span style="color:var(--text-muted); font-size:13px;">Taxa administrativa inicial para ingresso no modelo de gestão de obras.</span></td>
+          <td class="num">USD 1.000</td>
+          <td>Por Projeto</td>
+          <td>~95%</td>
+        </tr>
+        <tr>
+          <td><strong>Participação nos Lucros do Ativo (Equity)</strong><br><span style="color:var(--text-muted); font-size:13px;">Participação sobre o lucro líquido apurado na venda do imóvel revitalizado.</span></td>
+          <td class="num">20% do lucro líquido</td>
+          <td>No Desinvestimento</td>
+          <td>~95%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Distribuição de Receita Estimada — Ano 1 (Cenário Realista)</h3>
+    <div class="revenue-stack">
+      <div class="revenue-row">
+        <div>Participação em Projetos (2 ativos)</div>
+        <div><div class="revenue-bar" style="width: 100%;"></div></div>
+        <div class="num">USD 22.000</div>
+      </div>
+      <div class="revenue-row">
+        <div>Assinaturas da Comunidade (15 membros)</div>
+        <div><div class="revenue-bar r2" style="width: 82%;"></div></div>
+        <div class="num">USD 18.000</div>
+      </div>
+      <div class="revenue-row">
+        <div>Serviços de Auditoria (5 contratações)</div>
+        <div><div class="revenue-bar r3" style="width: 32%;"></div></div>
+        <div class="num">USD 7.000</div>
+      </div>
+      <div class="revenue-row total" style="grid-template-columns: 200px 1fr 100px; padding-top: 12px; border-top: 1px solid var(--border-strong); font-weight: 600;">
+        <div>Total Estimado — Ano 1</div>
+        <div></div>
+        <div class="num">USD 47.000</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Lógica de Crescimento Estratégico</div>
+      <p style="margin: 0;">As assinaturas anuais provêm a sustentação financeira do negócio. Os serviços avulsos de auditoria operam como geradores de margem imediata. A participação em projetos representa a alavanca de valor expressivo (*upside*). O ecossistema se retroalimenta de forma sustentável.</p>
+    </div>
+  </section>
+
+  <!-- ===== 7. PROJEÇÃO FINANCEIRA ===== -->
+  <section id="projecao">
+    <span class="section-number">07</span>
+    <h2>Projeção Financeira (3 anos)</h2>
+    <p class="lead">Detalhamento de cenários baseados na taxa de conversão de estratégias comerciais e consolidação de parcerias institucionais.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Linha de Receita</th>
+          <th class="num">Ano 1 (Realista)</th>
+          <th class="num">Ano 2 (Realista)</th>
+          <th class="num">Ano 3 (Realista)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Assinaturas (Volume de Membros)</td>
+          <td class="num">USD 18k <span style="color:var(--text-muted); font-size:12px;">(15)</span></td>
+          <td class="num">USD 60k <span style="color:var(--text-muted); font-size:12px;">(50)</span></td>
+          <td class="num">USD 144k <span style="color:var(--text-muted); font-size:12px;">(120)</span></td>
+        </tr>
+        <tr>
+          <td>Auditorias e Due Diligence (Projetos)</td>
+          <td class="num">USD 7k <span style="color:var(--text-muted); font-size:12px;">(5)</span></td>
+          <td class="num">USD 35k <span style="color:var(--text-muted); font-size:12px;">(25)</span></td>
+          <td class="num">USD 84k <span style="color:var(--text-muted); font-size:12px;">(60)</span></td>
+        </tr>
+        <tr>
+          <td>Taxas de Setup e Equity (Ativos)</td>
+          <td class="num">USD 22k <span style="color:var(--text-muted); font-size:12px;">(2)</span></td>
+          <td class="num">USD 104k <span style="color:var(--text-muted); font-size:12px;">(8)</span></td>
+          <td class="num">USD 270k <span style="color:var(--text-muted); font-size:12px;">(18)</span></td>
+        </tr>
+        <tr class="total">
+          <td>Faturamento Anual Consolidado</td>
+          <td class="num">USD 47k</td>
+          <td class="num">USD 199k</td>
+          <td class="num">USD 498k</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Análise Comparativa de Cenários</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cenário Proposto</th>
+          <th class="num">Ano 1</th>
+          <th class="num">Ano 2</th>
+          <th class="num">Ano 3</th>
+          <th>Premissa Operacional Balizadora</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Conservador</td>
+          <td class="num">USD 28k</td>
+          <td class="num">USD 110k</td>
+          <td class="num">USD 270k</td>
+          <td>Crescimento focado estritamente na rede direta, sem ações de marketing.</td>
+        </tr>
+        <tr style="background: var(--accent-soft);">
+          <td><strong>Realista</strong></td>
+          <td class="num"><strong>USD 47k</strong></td>
+          <td class="num"><strong>USD 199k</strong></td>
+          <td class="num"><strong>USD 498k</strong></td>
+          <td>Ativação de rede de relacionamentos associada a estratégias de marketing orgânico institucional.</td>
+        </tr>
+        <tr>
+          <td>Agressivo</td>
+          <td class="num">USD 80k</td>
+          <td class="num">USD 320k</td>
+          <td class="num">USD 850k</td>
+          <td>Aquisição acelerada via tráfego pago e parcerias com influenciadores do setor financeiro.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Premissas Adotadas nos Cálculos</h3>
+    <ul>
+      <li>Valor médio de venda pós-revitalização: USD 380k a USD 450k (faixa de maior liquidez em Orlando).</li>
+      <li>Lucro líquido estimado por transação de flip: USD 75k a USD 90k.</li>
+      <li>Participação de 20% (Equity) equivalendo a USD 15k-18k por projeto, acrescido de USD 1k de setup administrativo.</li>
+      <li>Taxa de cancelamento de assinaturas (*churn*): fixada conservadoramente em 15% ao ano.</li>
+      <li>Custo operacional básico anual estimado: USD 8k a USD 12k (servidores, licenciamentos e softwares).</li>
+    </ul>
+  </section>
+
+  <!-- ===== 8. CASO REAL ===== -->
+  <section id="caso">
+    <span class="section-number">08</span>
+    <h2>Caso Real: 3120 Kissimmee Pkwy</h2>
+    <p class="lead">Simulação analítica de um ativo real contido em nosso banco de dados do MVP para demonstração do ciclo de avaliação.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-label">Localização</div>
+        <div class="stat-card-value" style="font-size:18px; font-weight:600; font-family: var(--font-body);">Kissimmee, FL</div>
+        <div class="stat-card-sub">ZIP Code 34744 (Short-Term Rental Permitido)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Configuração Espacial</div>
+        <div class="stat-card-value" style="font-size:18px; font-weight:600; font-family: var(--font-body);">4 Dormitórios / 2 Banheiros — 1.800 sqft</div>
+        <div class="stat-card-sub">Ano de Construção: 2005</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Preço de Listagem</div>
+        <div class="stat-card-value">USD 310k</div>
+        <div class="stat-card-sub">Tempo em Mercado (DOM): 8 dias</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-card-label">Classificação RealRisk</div>
+        <div class="stat-card-value">Nível 1</div>
+        <div class="stat-card-sub">Pontuação de Atratividade: 88 / 100</div>
+      </div>
+    </div>
+
+    <h3>Demonstrativo Financeiro do Ativo</h3>
+    <table>
+      <tbody>
+        <tr><td>Preço de Aquisição</td><td class="num">USD 310.000</td></tr>
+        <tr><td>Custos de Fechamento da Compra (*Closing Costs* ~5%)</td><td class="num">USD 15.500</td></tr>
+        <tr><td>CAPEX Estimado para Reforma (Auditoria Técnica)</td><td class="num">USD 28.000</td></tr>
+        <tr><td><strong>Capital Total Alocado (*All-In Investment*)</strong></td><td class="num"><strong>USD 353.500</strong></td></tr>
+        <tr><td>Valor de Mercado Pós-Reforma Estimado (ARV)</td><td class="num">USD 445.000</td></tr>
+        <tr style="background: var(--tier-2-bg);"><td><strong>Lucro Bruto Estimado</strong></td><td class="num"><strong>USD 91.500</strong></td></tr>
+        <tr><td>Retorno Esperado sobre o Projeto (ROI)</td><td class="num"><strong>25,9%</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Estrutura de Receitas da Plataforma no Ativo</h3>
+    <table>
+      <tbody>
+        <tr><td>Taxa de Estruturação de Gestão</td><td class="num">USD 1.000</td></tr>
+        <tr><td>Participação de Negócio (20% do Lucro Gerado)</td><td class="num">USD 18.300</td></tr>
+        <tr><td>Auditoria Técnica de Engenharia</td><td class="num">USD 950</td></tr>
+        <tr><td>Devido Zelo Jurídico</td><td class="num">USD 1.800</td></tr>
+        <tr class="total"><td><strong>Faturamento Total Capturado pela Plataforma</strong></td><td class="num"><strong>USD 22.050</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Mapeamento de Riscos (Camada de Engenharia Regional)</h3>
+    <ul>
+      <li><strong>Zonamento de Inundação:</strong> Classificação 'X' (área de risco mínimo, assegurando taxas reduzidas).</li>
+      <li><strong>Ciclo de Vida do Telhado:</strong> Substituição realizada há 2 anos, mitigando despesas de grande porte por cerca de duas décadas.</li>
+      <li><strong>Sistema de Climatização (HVAC):</strong> 7 anos de operação (meia-vida atingida, demandando monitoramento preventivo).</li>
+      <li><strong>Estratégia de Saída Alternativa:</strong> Zoneamento totalmente elegível para locação de curta temporada (*Short-Term Rental*), garantindo blindagem caso mude-se a tese de venda rápida para locação (*hold*).</li>
+    </ul>
+  </section>
+
+  <!-- ===== 9. TIME ===== -->
+  <section id="time">
+    <span class="section-number">09</span>
+    <h2>Por que Somos o Time Certo</h2>
+    <p class="lead">A sociedade estrutura-se através de duas frentes executivas com competências estritamente complementares e não redundantes.</p>
+
+    <div class="agent-pair">
+      <div class="agent-card">
+        <div class="agent-name">Jales Castro</div>
+        <div class="agent-role">Sócio-Fundador — Operações e Relações Institucionais</div>
+        <p style="font-size:14px; color:var(--text-muted);">Corretor devidamente licenciado no estado da Flórida com 40 anos de sólida atuação no mercado imobiliário e residente americano.</p>
+        <h4>Ativos e Contribuições Executivas</h4>
+        <ul>
+          <li>Rede de relacionamentos consolidada junto a corretores (*brokers*), empreiteiros (*contractors*), inspetores e advogados imobiliários.</li>
+          <li>Acesso direto e institucional ao sistema unificado de listagens (MLS).</li>
+          <li>Chancela de mercado e capacidade de originação de negócios fora de mercado (*off-market*).</li>
+          <li>Domínio empírico da dinâmica de valorização de microrregiões e bairros específicos.</li>
+          <li>Carteira ativa de projetos estruturados em andamento.</li>
+        </ul>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-name">Lucas Leite</div>
+        <div class="agent-role">Sócio-Fundador — Tecnologia e Engenharia de Risco</div>
+        <p style="font-size:14px; color:var(--text-muted);">Engenheiro especialista em gerenciamento de riscos, modelagem financeira corporativa e desenvolvimento de soluções de software e IA.</p>
+        <h4>Ativos e Contribuições Executivas</h4>
+        <ul>
+          <li>Propriedade e desenvolvimento integral da plataforma de software e algoritmos.</li>
+          <li>Aplicação de metodologias de engenharia de risco à auditoria imobiliária patrimonial.</li>
+          <li>Estruturação de modelos econométricos e painéis gerenciais de controle.</li>
+          <li>Desenvolvimento de parcerias técnicas para renderização e modelagem visual pós-reforma.</li>
+          <li>Dedicação operacional integral voltada à execução e desenvolvimento do negócio.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      "Sua rede de contatos, sem a minha infraestrutura tecnológica, possui um teto de escala limitante. Por outro lado, minha tecnologia isolada seria apenas mais um aplicativo genérico no mercado. A nossa união estabelece uma barreira competitiva intransponível (moat) para os concorrentes."
+    </div>
+  </section>
+
+  <!-- ===== 10. COMPETIÇÃO ===== -->
+  <section id="competicao">
+    <span class="section-number">10</span>
+    <h2>Vantagem Competitiva</h2>
+    <p class="lead">Análise comparativa detalhada demonstrando o posicionamento exclusivo da RealRisk diante dos players atuantes no setor.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Capacidades de Entrega</th>
+          <th>Roofstock</th>
+          <th>Norada</th>
+          <th>Corretores Solo</th>
+          <th>Plataformas BR</th>
+          <th style="background: var(--accent-soft); color: var(--accent);">RealRisk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Agregação de Dados da Flórida</td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Pontuação via Engenharia de Risco</td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Análise de Indicadores Regionais de Seguro</td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Projeção Visual Pós-Reforma</td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Auditoria Técnica Isenta de Vendas</td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Operação de Obras Vincular ao Sucesso</td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Comunidade Fechada de Investidores</td>
+          <td><span class="check">SIM</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+        <tr>
+          <td>Atendimento e Conteúdo em Português</td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="x">NÃO</span></td>
+          <td><span class="partial">PARCIAL</span></td>
+          <td><span class="check">SIM</span></td>
+          <td style="background:var(--accent-soft);"><span class="check">SIM</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== 11. ANÁLISE DE RISCOS ===== -->
+  <section id="riscos">
+    <span class="section-number">11</span>
+    <h2>Análise de Riscos</h2>
+    <p class="lead">Mapeamento proativo dos riscos operacionais e de mercado, acompanhados de suas respectivas estratégias de mitigação institucional.</p>
+
+    <div class="risk-row header">
+      <div>Fator de Risco Identificado</div>
+      <div>Estratégia de Mitigação Adotada</div>
+      <div>Probabilidade</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Mercado:</strong> Desaceleração econômica no setor de revitalizações imobiliárias.<span class="risk-level risk-med">Médio</span></div>
+      <div>Diversificação imediata do portfólio entre ativos para liquidação rápida (Nível 1) e ativos focados em locação de longo prazo (Nível 3), concentrando a atuação em submercados resilientes de Orlando.</div>
+      <div>Média</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Técnico:</strong> Restrições de acesso a dados públicos em plataformas imobiliárias.<span class="risk-level risk-med">Médio</span></div>
+      <div>Divergência e redundância de fontes de dados. A integração direta com o sistema MLS elimina o risco de dependência de portais secundários.</div>
+      <div>Média</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Comercial:</strong> Captação inferior à meta de assinaturas no primeiro ano.<span class="risk-level risk-med">Médio</span></div>
+      <div>Início dos trabalhos com foco em clientes sementes da rede de contatos existente, priorizando a geração de estudos de caso reais antes de iniciar investimentos em publicidade.</div>
+      <div>Média</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Legal:</strong> Emissão de relatórios técnicos sem conformidade regulatória.<span class="risk-level risk-high">Alto</span></div>
+      <div>Todos os laudos e pareceres serão emitidos em estrita parceria com escritórios de advocacia imobiliária e empresas de títulos devidamente licenciadas na Flórida.</div>
+      <div>Baixa (mitigado)</div>
+    </div>
+
+    <div class="risk-row">
+      <div><strong>Governança:</strong> Conflitos de alinhamento em tomadas de decisões futuras.<span class="risk-level risk-med">Médio</span></div>
+      <div>Celebração de um Acordo de Sócios completo desde a fundação da empresa, definindo papéis e governança corporativa clara.</div>
+      <div>Baixa (mitigado)</div>
+    </div>
+  </section>
+
+  <!-- ===== 12. ROADMAP ===== -->
+  <section id="roadmap">
+    <span class="section-number">12</span>
+    <h2>Roadmap de 12 Meses</h2>
+    <p class="lead">Planejamento focado no desenvolvimento em fases sequenciais conduzidas pela validação empírica de mercado.</p>
+
+    <div class="roadmap">
+      <div class="roadmap-block">
+        <div class="roadmap-phase">0 a 90 Dias<br>Validação</div>
+        <div class="roadmap-content">
+          <h4>Formalização Societária e Ativo Semente</h4>
+          <ul>
+            <li>Redação e assinatura do Acordo de Sócios e constituição jurídica da LLC.</li>
+            <li>Ajustes finos no ambiente do MVP de acordo com diretrizes de mercado.</li>
+            <li>Identificação, auditoria e estruturação do primeiro ativo imobiliário sob gestão.</li>
+            <li>Desenvolvimento de contratos padrões com inspetores e empresas de títulos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-block">
+        <div class="roadmap-phase">3 a 6 Meses<br>Tração</div>
+        <div class="roadmap-content">
+          <h4>Expansão Operacional e Primeiras Assinaturas</h4>
+          <ul>
+            <li>Estruturação e execução do segundo projeto imobiliário.</li>
+            <li>Abertura oficial do sistema de assinaturas para a carteira de contatos inicial.</li>
+            <li>Faturamento dos primeiros serviços avulsos de due diligence técnica.</li>
+            <li>Compilação dos dados de liquidação do primeiro ativo como estudo de caso oficial.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-block">
+        <div class="roadmap-phase">6 a 9 Meses<br>Escala</div>
+        <div class="roadmap-content">
+          <h4>Posicionamento Institucional e Atração de Demanda</h4>
+          <ul>
+            <li>Meta de consolidação de 15 a 25 assinantes ativos na plataforma.</li>
+            <li>Manutenção de um fluxo constante de ativos sob análise no painel gerencial.</li>
+            <li>Produção de conteúdo técnico focado no mercado internacional de investimentos.</li>
+            <li>Avaliação de demanda para contratação de equipe de apoio operacional.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-block">
+        <div class="roadmap-phase">9 a 12 Meses<br>Consolidação</div>
+        <div class="roadmap-content">
+          <h4>Maturação da Infraestrutura</h4>
+          <ul>
+            <li>Consolidação da meta de 30 a 50 membros assinantes ativos.</li>
+            <li>Equipe operacional interna estruturada para atendimento e suporte de campo.</li>
+            <li>Auditoria técnica e viabilidade de inclusão de empreendimentos de grande porte no portfólio.</li>
+            <li>Revisão estratégica de metas e governança para o planejamento do segundo ano.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 13. ESTRUTURA SOCIETÁRIA ===== -->
+  <section id="sociedade">
+    <span class="section-number">13</span>
+    <h2>Estrutura Societária Proposta</h2>
+    <p class="lead">A empresa iniciará suas atividades adotando uma estrutura jurídica enxuta e ágil, com governança corporativa corporativa e divisão igualitária entre os fundadores executivos.</p>
+
+    <h3>Fase 1 (Meses 0 a 12): Parceria Fundadora</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parâmetro Contratual</th>
+          <th>Detalhamento da Proposta</th>
+          <th>Fundamentação Estratégica</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Divisão de Capital (Equity)</td>
+          <td>50% Jales Castro / 50% Lucas Leite</td>
+          <td>Equivalência de valor entre o capital de relacionamento/originação e o ativo tecnológico. Decisões tomadas por consenso mútuo asseguram o alinhamento de longo prazo.</td>
+        </tr>
+        <tr>
+          <td>Arquitetura Jurídica</td>
+          <td>LLC sediada nos EUA e filial operacional no Brasil</td>
+          <td>A entidade americana concentrará o faturamento global e as participações nos imóveis, enquanto a estrutura brasileira gerenciará o desenvolvimento de sistemas.</td>
+        </tr>
+        <tr>
+          <td>Direitos de Aquisição (Vesting)</td>
+          <td>Prazo de 4 anos com carência (*cliff*) de 1 ano</td>
+          <td>Mecanismo de proteção societária mútuo padrão de mercado. Caso ocorra a saída antecipada de uma das partes, retém-se apenas a fração proporcional adquirida.</td>
+        </tr>
+        <tr>
+          <td>Aporte Inicial de Capital</td>
+          <td>USD 3k a USD 5k por sócio (Total: USD 6k a USD 10k)</td>
+          <td>Fundo direcionado estritamente para custeio de constituição jurídica da LLC, registros de marcas, licenciamentos de ferramentas e despesas operacionais do primeiro ano.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Fase 2 (Mês 12+): Alocação de Colaboradores Estratégicos</h3>
+    <p>Após a comprovação da sustentabilidade do modelo de negócios, viabilizaremos a integração de colaboradores estratégicos para a operação de campo e funções corporativas, mitigando conflitos e pautando o crescimento no mérito e na entrega de resultados:</p>
+    <ul>
+      <li><strong>Estevan (Operações de Campo):</strong> Escopo focado em suporte logístico, vistorias locais e acompanhamento físico de reformas de campo. Elegível a plano de incentivos de longo prazo.</li>
+      <li><strong>Samuel (Administração e Finanças):</strong> Escopo voltado para controle orçamentário, fluxos de caixa e rotinas administrativas internas de suporte.</li>
+      <li><strong>Saulinho (Apoio Operacional e Comercial):</strong> Atuação voltada ao suporte comercial e triagem inicial de leads, mantendo as atividades de desenvolvimento prático junto às operações de mercado.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">Diretriz de Governança Familiar</div>
+      <p style="margin: 0;">A inclusão imediata de múltiplos familiares na composição societária original gera travas burocráticas e diluições prematuras. A estrutura de colaboradores garante que a integração ocorra de maneira funcional, baseada no surgimento de interesses genuínos, no engajamento operacional comprovado e na geração de valor real ao negócio.</p>
+    </div>
+  </section>
+
+  <!-- ===== 14. O PEDIDO (THE ASK) ===== -->
+  <section id="ask">
+    <span class="section-number">14</span>
+    <h2>O Pedido (The Ask)</h2>
+    <p class="lead">Definição clara das contribuições operacionais e intelectuais requeridas de cada sócio-fundador para o início das atividades executivas.</p>
+
+    <div class="ask-grid">
+      <div class="ask-card">
+        <h3>Contrapartida esperada de Jales Castro</h3>
+        <ul>
+          <li><strong>Disponibilidade Operacional:</strong> Alocação estimada de 8 a 12 horas semanais voltadas para originação e validação de negócios.</li>
+          <li><strong>Infraestrutura de Dados:</strong> Conexão técnica ao sistema MLS imobiliário através de sua licença corporativa.</li>
+          <li><strong>Introduções Comerciais:</strong> Apresentação da plataforma a potenciais investidores qualificados para validação dos clientes sementes.</li>
+          <li><strong>Aporte de Capital Inicial:</strong> Integralização da quota fixada entre USD 3k e USD 5k para abertura da LLC.</li>
+          <li><strong>Originação Semente:</strong> Seleção de oportunidades imobiliárias ativas no pipeline atual para inauguração das análises.</li>
+        </ul>
+      </div>
+
+      <div class="ask-card">
+        <h3>Compromissos assumidos por Lucas Leite</h3>
+        <ul>
+          <li><strong>Foco Operacional Dedicado:</strong> Gerenciamento tecnológico e execução dos processos analíticos da plataforma.</li>
+          <li><strong>Entrega Tecnológica:</strong> Entrega e manutenção do ecossistema de software funcional desde o primeiro dia de operação.</li>
+          <li><strong>Auditoria Técnica de Riscos:</strong> Condução analítica independente sob metodologia de engenharia aplicada.</li>
+          <li><strong>Modelagem Visual Integrada:</strong> Gestão de fluxos visuais tridimensionais integrados às análises de CAPEX.</li>
+          <li><strong>Integralização Financeira:</strong> Aporte correspondente ao capital inicial fixado de forma paritária.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 15. PRÓXIMOS PASSOS ===== -->
+  <section id="proximos">
+    <span class="section-number">15</span>
+    <h2>Próximos Passos Imediatos</h2>
+    <p class="lead">Cronograma proposto para transição estratégica entre a fase de alinhamento conceitual e o início da execução jurídica.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Semana Operacional</th>
+          <th>Ação Estratégica Descrita</th>
+          <th>Responsabilidade Direta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Semana 1</td>
+          <td>Revisão final deste documento de proposta e consolidação de ajustes contratuais.</td>
+          <td>Ambos os Sócios</td>
+        </tr>
+        <tr>
+          <td>Semanas 1 e 2</td>
+          <td>Definição de escopos iniciais e metas comerciais de atendimento.</td>
+          <td>Jales Castro e Lucas Leite</td>
+        </tr>
+        <tr>
+          <td>Semanas 2 e 3</td>
+          <td>Intermediação com escritório jurídico especializado nos EUA para redação do Acordo de Sócios.</td>
+          <td>Lucas Leite (Condução)</td>
+        </tr>
+        <tr>
+          <td>Semanas 3 e 4</td>
+          <td>Constituição formal da LLC americana e assinatura digital das atas societárias.</td>
+          <td>Assessoria Jurídica Externa</td>
+        </tr>
+        <tr>
+          <td>Semana 4</td>
+          <td>Homologação do primeiro ativo imobiliário semente para listagem na plataforma.</td>
+          <td>Ambos os Sócios</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout accent">
+      <div class="callout-label">Diretriz para Tomada de Decisão</div>
+      <p style="margin: 0; font-family: var(--font-display); font-size: 18px; line-height: 1.5;">Diante do exposto, conseguimos enxergar juntos uma oportunidade de alta escalabilidade? O que precisamos alinhar para viabilizar a execução deste projeto?</p>
+    </div>
+
+    <p style="margin-top: 32px; color: var(--text-muted);">Havendo convergência de visões, iniciaremos os trâmites do cronograma operacional na próxima semana, agendando a reunião de alinhamento jurídico. Caso restem dúvidas técnicas, proponho uma reunião focada em dirimir pontos em aberto. Se o projeto não fizer sentido para o seu momento de negócios, agradeço sinceramente o feedback e manteremos nossos planos estritamente no âmbito familiar.</p>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>RealRisk — Análise de Negócio e Proposta de Sociedade</p>
+    <p>Documento de caráter confidencial corporativo. Maio de 2026.</p>
+  </div>
+</footer>
+
+</body>
+</html>
