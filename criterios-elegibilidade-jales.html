@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RealRisk — Critérios de Elegibilidade | Para preenchimento de Jales Castro</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #c96442;
+    --accent-soft: #f5ebe4;
+    --text: #1c1b18;
+    --text-muted: #6b6a65;
+    --border: #d4d2cc;
+    --surface: #ffffff;
+    --bg: #f7f6f3;
+    --green: #2e7d32;
+    --green-soft: #e8f5e9;
+    --orange: #e65100;
+    --orange-soft: #fff3e0;
+    --blue: #1565c0;
+    --blue-soft: #e3f2fd;
+    --brown: #5d4037;
+    --brown-soft: #efebe9;
+    --teal: #00695c;
+    --teal-soft: #e0f2f1;
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+    padding: 24px 16px;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--surface);
+    padding: 48px 56px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+
+  /* ===== HEADER ===== */
+  .doc-header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+
+  .doc-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .logo { font-size: 26pt; font-weight: 900; letter-spacing: -1px; color: var(--text); }
+  .logo span { color: var(--accent); }
+
+  .doc-meta { text-align: right; font-size: 9pt; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); }
+
+  .doc-title { font-size: 16pt; font-weight: 700; margin-bottom: 4px; }
+  .doc-subtitle { font-size: 10pt; color: var(--text-muted); }
+
+  /* ===== CALLOUT BOX ===== */
+  .callout {
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 10pt;
+  }
+
+  .callout.info { background: var(--blue-soft); border-left: 4px solid var(--blue); }
+  .callout.tip { background: var(--green-soft); border-left: 4px solid var(--green); }
+  .callout.warn { background: var(--orange-soft); border-left: 4px solid var(--orange); }
+  .callout.accent { background: var(--accent-soft); border-left: 4px solid var(--accent); }
+
+  .callout-label {
+    font-size: 8pt; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 5px;
+  }
+
+  .callout.info .callout-label { color: var(--blue); }
+  .callout.tip .callout-label { color: var(--green); }
+  .callout.warn .callout-label { color: var(--orange); }
+  .callout.accent .callout-label { color: var(--accent); }
+
+  .callout p { line-height: 1.6; }
+
+  /* ===== SECTION TITLES ===== */
+  h2 {
+    font-size: 14pt;
+    font-weight: 700;
+    margin: 32px 0 6px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--text);
+  }
+
+  h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 20px 0 8px;
+    color: var(--text);
+  }
+
+  h3.nicho {
+    font-size: 12pt;
+    padding: 10px 14px;
+    border-radius: 5px;
+    margin: 24px 0 12px;
+  }
+
+  h3.nicho-1 { background: #e8f5e9; color: var(--green); border-left: 4px solid var(--green); }
+  h3.nicho-2 { background: #e3f2fd; color: var(--blue); border-left: 4px solid var(--blue); }
+  h3.nicho-3 { background: var(--brown-soft); color: var(--brown); border-left: 4px solid var(--brown); }
+  h3.nicho-4 { background: var(--teal-soft); color: var(--teal); border-left: 4px solid var(--teal); }
+  h3.nicho-5 { background: var(--orange-soft); color: var(--orange); border-left: 4px solid var(--orange); }
+
+  /* ===== FORM FIELDS ===== */
+  .field-group { margin-bottom: 16px; }
+
+  .field-label {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .field-hint {
+    font-size: 9pt;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .fill-line {
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid var(--border);
+    padding: 4px 2px;
+    font-size: 11pt;
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    background: transparent;
+    outline: none;
+    margin-bottom: 2px;
+  }
+
+  .fill-line:focus { border-bottom-color: var(--accent); }
+
+  /* ===== SCORE BUILDER ===== */
+  .score-builder { margin: 12px 0; }
+
+  .score-total-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: var(--surface-2, #f5f4f1);
+    border: 1.5px solid var(--border);
+    margin-bottom: 10px;
+    font-size: 10pt;
+  }
+
+  .score-total-label { flex: 1; font-weight: 700; }
+
+  #score-total-display {
+    font-size: 16pt;
+    font-weight: 900;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  .score-total-ok   { color: var(--green); }
+  .score-total-over { color: #e53935; }
+  .score-total-low  { color: var(--orange); }
+
+  .score-total-msg { font-size: 9pt; font-style: italic; }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+    font-size: 10pt;
+  }
+
+  .score-label { flex: 1; }
+
+  .score-input {
+    width: 64px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 11pt;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    outline: none;
+  }
+
+  .score-input:focus { border-color: var(--accent); }
+  .score-unit { color: var(--text-muted); font-size: 9pt; white-space: nowrap; }
+
+  .score-bar-wrap {
+    width: 90px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.2s;
+  }
+
+  .score-remove {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ccc;
+    padding: 0 2px;
+    line-height: 1;
+  }
+
+  .score-remove:hover { color: #e53935; }
+
+  .add-factor-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: center;
+  }
+
+  .add-factor-input {
+    flex: 1;
+    border: 1.5px dashed var(--border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 10pt;
+    font-family: Arial, sans-serif;
+    outline: none;
+    background: #fafaf8;
+  }
+
+  .add-factor-input:focus { border-color: var(--accent); border-style: solid; }
+
+  .add-factor-btn {
+    padding: 6px 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 10pt;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    white-space: nowrap;
+  }
+
+  .add-factor-btn:hover { background: #a84f32; }
+
+  @media print {
+    .add-factor-row, .score-remove, .add-factor-btn { display: none !important; }
+    .score-bar-wrap { display: none; }
+    .mobile-share-bar { display: none !important; }
+  }
+
+  /* ===== MOBILE SHARE BAR ===== */
+  .mobile-share-bar {
+    display: none; /* só aparece via JS se for mobile */
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+    z-index: 999;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mobile-share-bar.show { display: flex; }
+
+  .share-btn-main {
+    flex: 1;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .share-btn-main:active { opacity: 0.85; }
+
+  /* Espaço extra no rodapé para o conteúdo não ficar atrás da barra */
+  @media (max-width: 768px) {
+    body { padding-bottom: 80px; }
+  }
+
+  /* contenteditable substitui textarea — cresce naturalmente e imprime sem cortar */
+  .fill-area {
+    display: block;
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 11pt;
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    background: #fafaf8;
+    outline: none;
+    min-height: 60px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .fill-area:empty::before {
+    content: attr(data-placeholder);
+    color: #aaa;
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  .fill-area:focus {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+
+  /* ===== CRITERIA TABLE ===== */
+  .crit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin: 12px 0;
+  }
+
+  .crit-table th {
+    background: var(--accent);
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid var(--accent);
+  }
+
+  .crit-table td {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .crit-table tr:nth-child(even) td { background: #fafaf8; }
+
+  .crit-table td.label-col {
+    font-weight: 700;
+    font-size: 10pt;
+    width: 28%;
+    color: var(--text);
+    background: #f5f4f0;
+  }
+
+  .crit-table td.sugest-col {
+    width: 28%;
+    color: var(--text-muted);
+    font-size: 10pt;
+    font-style: italic;
+  }
+
+  .crit-table td.fill-col {
+    width: 44%;
+  }
+
+  .crit-table .fill-line {
+    font-size: 10pt;
+    margin: 0;
+  }
+
+  /* ===== CHECKBOX GRID ===== */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 24px;
+    margin: 8px 0;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10pt;
+  }
+
+  .check-item input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* ===== RADIO GROUP ===== */
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 6px 0;
+  }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10pt;
+    cursor: pointer;
+  }
+
+  .radio-item input { accent-color: var(--accent); cursor: pointer; }
+
+  /* ===== SCORE VISUAL ===== */
+  .score-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 10pt;
+  }
+
+  .score-label { min-width: 180px; }
+
+  .score-input {
+    width: 60px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 10pt;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    outline: none;
+  }
+
+  .score-input:focus { border-color: var(--accent); }
+  .score-unit { color: var(--text-muted); font-size: 9pt; }
+
+  /* ===== SIGNATURE ===== */
+  .signature-block {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .sig-line {
+    border-top: 1.5px solid var(--text);
+    padding-top: 6px;
+    font-size: 10pt;
+    color: var(--text-muted);
+  }
+
+  .sig-name { font-weight: 700; color: var(--text); font-size: 11pt; }
+
+  /* ===== PAGE FOOTER ===== */
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 8pt;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; border: none; padding: 32px 40px; max-width: 100%; }
+    .no-print { display: none !important; }
+    h2 { page-break-after: avoid; }
+    .crit-table, .field-group { page-break-inside: avoid; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+
+    /* .fill-area é contenteditable — expande naturalmente, sem corte */
+    .fill-area {
+      border: 1px solid #ccc !important;
+      background: #fafaf8 !important;
+      min-height: 0 !important;
+    }
+
+    input.fill-line {
+      border-bottom: 1px solid #999 !important;
+    }
+  }
+
+  /* ===== PRINT BUTTON ===== */
+  .print-bar {
+    max-width: 780px;
+    margin: 0 auto 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 8px 18px;
+    border-radius: 5px;
+    border: none;
+    font-size: 10pt;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #a84f32; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  p { margin-bottom: 8px; }
+  ul { margin: 8px 0 8px 20px; }
+  ul li { margin-bottom: 4px; font-size: 10pt; }
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <button class="btn btn-outline" onclick="window.print()">🖨 Imprimir / Salvar PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-top">
+      <div class="logo">Real<span>Risk</span></div>
+      <div class="doc-meta">
+        <strong>Documento Interno</strong><br>
+        Versão 1.0 — Junho 2026<br>
+        Para preenchimento por: <strong>Jales Castro</strong>
+      </div>
+    </div>
+    <div class="doc-title">Definição de Critérios de Elegibilidade de Imóveis</div>
+    <div class="doc-subtitle">Este documento captura sua experiência de mercado para calibrar o sistema RealRisk. Preencha com base no que você, com 40 anos de mercado, sabe que funciona.</div>
+  </div>
+
+  <!-- COMO USAR -->
+  <div class="callout accent">
+    <div class="callout-label">Como usar este documento</div>
+    <p>Este é um formulário de trabalho — não existe resposta certa ou errada. O objetivo é capturar sua visão de mercado para programar os filtros do sistema. Onde você tiver dúvida sobre um número exato, use sua intuição de corretor: "normalmente quando eu vejo X, me interessa; quando vejo Y, desisto." Isso é exatamente o que precisamos.</p>
+  </div>
+
+  <!-- PARTE 1: CONTEXTO -->
+  <h2>Parte 1 — Contexto &amp; Foco Inicial</h2>
+
+  <div class="callout info">
+    <div class="callout-label">Por que definir nichos antes dos critérios</div>
+    <p>Critérios diferentes funcionam para tipos diferentes de imóvel. Um flip rápido tem lógica diferente de um imóvel para aluguel de curta temporada. Ao definir 2–3 nichos iniciais, conseguimos calibrar filtros específicos e mais precisos para cada estratégia — em vez de um filtro genérico que não serve bem para nenhuma.</p>
+  </div>
+
+  <h3>Quais nichos você quer focar inicialmente?</h3>
+
+  <p style="font-size:10pt; color:var(--text-muted); margin-bottom:10px">Marque os que fazem mais sentido para a sua rede de investidores atual:</p>
+
+  <div class="check-grid">
+    <label class="check-item"><input type="checkbox" checked> Fix &amp; Flip (comprar, reformar, vender)</label>
+    <label class="check-item"><input type="checkbox"> Short-Term Rental / Airbnb</label>
+    <label class="check-item"><input type="checkbox"> Buy &amp; Hold (aluguel de longo prazo)</label>
+    <label class="check-item"><input type="checkbox"> BRRRR (reformar, alugar, refinanciar)</label>
+    <label class="check-item"><input type="checkbox"> Oportunidades de Distress / Off-Market</label>
+    <label class="check-item"><input type="checkbox"> Outro:</label>
+  </div>
+
+  <div class="field-group" style="margin-top:14px">
+    <label class="field-label">Qual é o perfil do investidor que você imagina como cliente principal?</label>
+    <span class="field-hint">Ex: "brasileiro com $200–400k para investir, quer flip rápido, não quer se envolver na operação"</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Descreva o perfil típico..."></div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PARTE 2: NICHOS -->
+  <h2>Parte 2 — Definição por Nicho</h2>
+
+  <div class="callout tip">
+    <div class="callout-label">Como pensar nos critérios de cada nicho</div>
+    <p>Para cada nicho, pense em dois tipos de filtro: <strong>(1) Eliminatórios</strong> — o imóvel tem isso e eu já descarto sem nem olhar direito. <strong>(2) De qualidade</strong> — isso não elimina, mas me deixa mais ou menos confortável. Pense nos seus últimos 5–10 deals: o que todos os bons tinham em comum? O que os ruins tinham que deveria ter acendido um sinal?</p>
+  </div>
+
+  <!-- NICHO 1 -->
+  <h3 class="nicho nicho-1">Nicho 1 — Fix &amp; Flip</h3>
+
+  <p style="font-size:10pt; color:var(--text-muted); margin-bottom:12px"><em>Comprar um imóvel abaixo do mercado, reformar e vender com margem. Estratégia de capital ativo — retorno em 6–18 meses.</em></p>
+
+  <h3>Localização</h3>
+  <table class="crit-table">
+    <thead>
+      <tr>
+        <th>Critério</th>
+        <th>Sugestão inicial</th>
+        <th>Sua definição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Condados aceitos</td>
+        <td class="sugest-col">Orange, Osceola, Seminole, Polk</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Quais condados você conhece bem?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Bairros ou ZIPs preferidos</td>
+        <td class="sugest-col">Kissimmee, Winter Garden, Clermont...</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="ZIPs ou áreas de preferência"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Bairros ou ZIPs a evitar</td>
+        <td class="sugest-col">Áreas de crime alto, difícil revenda</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="O que você descartaria de imediato?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Financeiro</h3>
+  <table class="crit-table">
+    <thead>
+      <tr>
+        <th>Critério</th>
+        <th>Sugestão inicial</th>
+        <th>Sua definição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Faixa de preço de compra</td>
+        <td class="sugest-col">$150k – $550k</td>
+        <td class="fill-col">
+          Mín: <input class="fill-line" type="text" placeholder="$" style="width:120px; display:inline-block"/>
+          Máx: <input class="fill-line" type="text" placeholder="$" style="width:120px; display:inline-block"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">ROI mínimo aceitável</td>
+        <td class="sugest-col">15% (sobre all-in)</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="% mínimo de ROI que você aceita"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">CAPEX máximo tolerado</td>
+        <td class="sugest-col">$80k</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Acima de quanto o risco aumenta demais?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Desconto mínimo sobre ARV</td>
+        <td class="sugest-col">Preço de compra ≤ 75% do ARV</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Qual regra você usa para saber se tem margem?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">HOA máximo mensal</td>
+        <td class="sugest-col">$400/mês</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Acima de quanto passa a incomodar?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Características do Imóvel</h3>
+  <table class="crit-table">
+    <thead>
+      <tr>
+        <th>Critério</th>
+        <th>Sugestão inicial</th>
+        <th>Sua definição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Tipo de imóvel</td>
+        <td class="sugest-col">SFH preferível, Townhouse ok</td>
+        <td class="fill-col">
+          <label class="check-item" style="margin-bottom:4px"><input type="checkbox" checked> SFH (Single Family Home)</label>
+          <label class="check-item" style="margin-bottom:4px"><input type="checkbox"> Townhouse</label>
+          <label class="check-item"><input type="checkbox"> Condo</label>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Quartos mínimos</td>
+        <td class="sugest-col">3 quartos</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Mínimo de quartos que você aceita"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Tamanho mínimo (sqft)</td>
+        <td class="sugest-col">1.200 sqft</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Sqft mínimo"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Ano de construção</td>
+        <td class="sugest-col">Preferência pós-1990</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="A partir de qual ano você se sente confortável?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Idade do telhado (roof)</td>
+        <td class="sugest-col">≤ 15 anos preferível</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Telhado com mais de X anos te preocupa?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Flood Zone</td>
+        <td class="sugest-col">X obrigatório ou AE aceitável</td>
+        <td class="fill-col">
+          <label class="check-item" style="margin-bottom:3px"><input type="checkbox" checked> Zona X (sem risco)</label>
+          <label class="check-item" style="margin-bottom:3px"><input type="checkbox"> Zona AE (risco moderado, aceito)</label>
+          <label class="check-item"><input type="checkbox"> Zona VE (nunca)</label>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Days on Market máx.</td>
+        <td class="sugest-col">≤ 90 dias</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Acima de X dias começa a levantar dúvida?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="field-group" style="margin-top:14px">
+    <label class="field-label">No flip, o que MAIS TE INCOMODA e te faz desistir — independente de preço?</label>
+    <span class="field-hint">Pense nas histórias de horror: o que no imóvel ou no bairro te faz pular para o próximo?</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Ex: 'fundação ruim, bairro sem infraestrutura, condomínio com pendência judicial, imóvel muito irregular para reformar...'"></div>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">No flip, o que você VÊ e imediatamente sente que é uma boa oportunidade?</label>
+    <span class="field-hint">O instinto do corretor experiente — o que te faz ligar para o cliente na hora?</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Ex: 'preço muito abaixo dos comparáveis, vendedor motivado, bairro em valorização, telhado novo...'"></div>
+  </div>
+
+  <!-- NICHO 2 -->
+  <h3 class="nicho nicho-2">Nicho 2 — Short-Term Rental (Airbnb / VRBO)</h3>
+
+  <p style="font-size:10pt; color:var(--text-muted); margin-bottom:12px"><em>Imóvel para locação de curta temporada. Foco em regiões turísticas ou com alta demanda de viajantes. Renda passiva com yield mais alto que aluguel tradicional.</em></p>
+
+  <h3>Localização — STR</h3>
+  <table class="crit-table">
+    <thead>
+      <tr>
+        <th>Critério</th>
+        <th>Sugestão inicial</th>
+        <th>Sua definição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Distância dos parques</td>
+        <td class="sugest-col">≤ 20 minutos de Disney/Universal</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Qual distância máxima ainda tem demanda?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Bairros/regiões preferidos STR</td>
+        <td class="sugest-col">Kissimmee, Davenport, Clermont</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Onde você sabe que tem demanda turística forte?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">STR legalmente permitido</td>
+        <td class="sugest-col">Obrigatório — verificar zoneamento</td>
+        <td class="fill-col">
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="str_req" checked> Sim, obrigatório</label>
+            <label class="radio-item"><input type="radio" name="str_req"> Prefiro mas não obrigatório</label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Financeiro — STR</h3>
+  <table class="crit-table">
+    <thead>
+      <tr>
+        <th>Critério</th>
+        <th>Sugestão inicial</th>
+        <th>Sua definição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Faixa de preço de compra</td>
+        <td class="sugest-col">$250k – $600k</td>
+        <td class="fill-col">
+          Mín: <input class="fill-line" type="text" placeholder="$" style="width:120px; display:inline-block"/>
+          Máx: <input class="fill-line" type="text" placeholder="$" style="width:120px; display:inline-block"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Cap Rate mínimo esperado</td>
+        <td class="sugest-col">8% (sobre all-in com STR)</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Qual retorno mínimo você apresentaria ao investidor?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Quartos mínimos para STR</td>
+        <td class="sugest-col">3 quartos (ideal 4+)</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Menos de X quartos não faz sentido para Airbnb?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="field-group" style="margin-top:14px">
+    <label class="field-label">No STR, quais características do imóvel ou da área fazem a diferença real nas diárias?</label>
+    <span class="field-hint">O que você já viu que turbina a ocupação e o preço de diária?</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Ex: 'piscina privada, perto dos parques, comunidade com resort amenities, community pool...'"></div>
+  </div>
+
+  <!-- NICHO 3: FARMLAND -->
+  <h3 class="nicho nicho-3">Nicho 3 — Farmland (Terras Agrícolas)</h3>
+
+  <p style="font-size:10pt; color:var(--text-muted); margin-bottom:12px"><em>Aquisição de terras agrícolas para renda passiva via arrendamento, valorização de longo prazo, ou como ativo de preservação de capital. Inclui oportunidades de loteamento onde a legislação permitir.</em></p>
+
+  <div class="callout info" style="margin-bottom:14px">
+    <div class="callout-label">O que avaliar em Farmland</div>
+    <p>Em terras agrícolas, os fatores críticos são zoneamento (Agricultural / A-1 / A-5), aptidão do solo, acesso a água, proximidade de infraestrutura e — especialmente — se a área permite ou pode vir a permitir <strong>desmembramento e loteamento</strong>. Uma farmland próxima a áreas em expansão urbana pode se valorizar 3x–10x com uma mudança de zoneamento.</p>
+  </div>
+
+  <h3>Localização — Farmland</h3>
+  <table class="crit-table">
+    <thead>
+      <tr><th>Critério</th><th>Sugestão inicial</th><th>Sua definição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Condados / regiões alvo</td>
+        <td class="sugest-col">Polk, Osceola, Lake, Highlands, Okeechobee</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Onde você conhece terras com potencial?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Proximidade a área urbana em expansão</td>
+        <td class="sugest-col">≤ 30 milhas de polo urbano crescente</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Qual distância ainda mantém potencial de valorização?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Acesso rodoviário</td>
+        <td class="sugest-col">Acesso pavimentado ou no mínimo terra firme</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Acesso mínimo aceitável?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Financeiro — Farmland</h3>
+  <table class="crit-table">
+    <thead>
+      <tr><th>Critério</th><th>Sugestão inicial</th><th>Sua definição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Faixa de preço</td>
+        <td class="sugest-col">$200k – $3M (depende do tamanho)</td>
+        <td class="fill-col">
+          Mín: <input class="fill-line" type="text" placeholder="$" style="width:110px;display:inline-block"/>
+          Máx: <input class="fill-line" type="text" placeholder="$" style="width:110px;display:inline-block"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Preço por acre máximo</td>
+        <td class="sugest-col">Varia por região — referência do mercado local</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Acima de $X/acre você considera caro?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Tamanho mínimo</td>
+        <td class="sugest-col">10 acres</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Mínimo de acres que faz sentido?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Renda de arrendamento</td>
+        <td class="sugest-col">$50–$150/acre/ano (pastagem); $200–$500 (cultivo)</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Qual yield mínimo de arrendamento é aceitável?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Potencial de Loteamento e Desmembramento</h3>
+
+  <div class="callout warn" style="margin-bottom:12px">
+    <div class="callout-label">Atenção — Critério de Alto Valor</div>
+    <p>Farmlands com potencial de desmembramento (subdivision) são as oportunidades mais lucrativas desta categoria. Uma gleba de 50 acres em área de expansão pode ser subdividida em lotes de 1–5 acres e vendida por 3x–8x o valor original. O critério-chave é o zoneamento atual e a viabilidade de reclassificação.</p>
+  </div>
+
+  <table class="crit-table">
+    <thead>
+      <tr><th>Critério</th><th>Sugestão inicial</th><th>Sua definição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Zoneamento atual</td>
+        <td class="sugest-col">A-1, A-5, AG, Rural Residential</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Quais zoneamentos você aceita?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Desmembramento permitido?</td>
+        <td class="sugest-col">Verificar county zoning code</td>
+        <td class="fill-col">
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="farm_sub"> Obrigatório</label>
+            <label class="radio-item"><input type="radio" name="farm_sub" checked> Preferível mas não obrigatório</label>
+            <label class="radio-item"><input type="radio" name="farm_sub"> Não relevante</label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Tamanho mínimo do lote permitido</td>
+        <td class="sugest-col">1 acre (típico em A-1 da Flórida)</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Qual o min. lot size do zoneamento alvo?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Potencial de upzoning futuro</td>
+        <td class="sugest-col">Área próxima a master-planned communities</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Indicadores de que a área pode ser reclassificada?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Acesso a água / well / septic</td>
+        <td class="sugest-col">Well + septic já existente preferível</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Exige água da cidade ou aceita well?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="field-group" style="margin-top:14px">
+    <label class="field-label">Baseado na sua experiência, o que faz uma farmland ser uma boa oportunidade aqui na Flórida?</label>
+    <div class="fill-area" contenteditable="true" data-placeholder="Ex: 'terra plana, dreno bom, perto de Turnpike, em área que está recebendo aprovações de novos loteamentos ao redor...'"></div>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">O que te faria desistir de uma farmland sem nem continuar a análise?</label>
+    <div class="fill-area" contenteditable="true" data-placeholder="Ex: 'terra baixa com histórico de inundação, área tombada ambientalmente, sem acesso direto à via pública...'"></div>
+  </div>
+
+  <!-- NICHO 4: RANCH -->
+  <h3 class="nicho nicho-4">Nicho 4 — Ranch (Fazendas / Propriedades de Uso Misto)</h3>
+
+  <p style="font-size:10pt; color:var(--text-muted); margin-bottom:12px"><em>Propriedades rurais maiores com estrutura de moradia ou operação — criação de gado, cavalos, agriturismo, ou uso residencial de alto padrão em área rural. Perfil de comprador diferente: busca lifestyle + investimento.</em></p>
+
+  <div class="callout info" style="margin-bottom:14px">
+    <div class="callout-label">O comprador de Ranch é diferente</div>
+    <p>O investidor de ranch geralmente busca uma combinação de <strong>lifestyle</strong> (viver ou passar temporadas na propriedade) com <strong>geração de renda</strong> (arrendamento de pasto, agriturismo, eventos) e <strong>valorização de longo prazo</strong>. O critério emocional pesa mais aqui — localização cênica, estrutura bem mantida e acesso a amenidades rurais são tão importantes quanto o retorno financeiro.</p>
+  </div>
+
+  <h3>Localização — Ranch</h3>
+  <table class="crit-table">
+    <thead>
+      <tr><th>Critério</th><th>Sugestão inicial</th><th>Sua definição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Regiões alvo</td>
+        <td class="sugest-col">Central FL (Ocala, Gainesville, Lake County), Panhandle</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Quais regiões têm boa oferta de ranch?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Máx. distância de aeroporto / cidade</td>
+        <td class="sugest-col">≤ 2 horas de carro de aeroporto regional</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Comprador aceita ir até onde?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Paisagem / terraço</td>
+        <td class="sugest-col">Área elevada, sem risco de inundação</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Características de terreno que o comprador valoriza?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Financeiro — Ranch</h3>
+  <table class="crit-table">
+    <thead>
+      <tr><th>Critério</th><th>Sugestão inicial</th><th>Sua definição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Faixa de preço</td>
+        <td class="sugest-col">$500k – $5M</td>
+        <td class="fill-col">
+          Mín: <input class="fill-line" type="text" placeholder="$" style="width:110px;display:inline-block"/>
+          Máx: <input class="fill-line" type="text" placeholder="$" style="width:110px;display:inline-block"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Tamanho mínimo</td>
+        <td class="sugest-col">20–50 acres</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="Mínimo de acres para ser considerado ranch?"/></td>
+      </tr>
+      <tr>
+        <td class="label-col">Estrutura mínima exigida</td>
+        <td class="sugest-col">Casa principal habitável + curral ou barn</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="O que precisa ter estruturado na propriedade?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Uso e Potencial de Receita — Ranch</h3>
+  <table class="crit-table">
+    <thead>
+      <tr><th>Critério</th><th>Sugestão inicial</th><th>Sua definição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Uso atual da terra</td>
+        <td class="sugest-col">Pastagem, equestre, pomar</td>
+        <td class="fill-col">
+          <label class="check-item" style="margin-bottom:3px"><input type="checkbox" checked> Pastagem / gado</label>
+          <label class="check-item" style="margin-bottom:3px"><input type="checkbox" checked> Equestre (cavalos)</label>
+          <label class="check-item" style="margin-bottom:3px"><input type="checkbox"> Pomar / cultivo</label>
+          <label class="check-item"><input type="checkbox"> Sem uso definido (terra bruta)</label>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Potencial de agriturismo</td>
+        <td class="sugest-col">Eventos rurais, farm stays, trilhas</td>
+        <td class="fill-col">
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="ranch_agri" checked> Valoriza como diferencial</label>
+            <label class="radio-item"><input type="radio" name="ranch_agri"> Necessário</label>
+            <label class="radio-item"><input type="radio" name="ranch_agri"> Irrelevante</label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Potencial de loteamento parcial</td>
+        <td class="sugest-col">Subdividir parte da gleba sem perder o ranch</td>
+        <td class="fill-col">
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="ranch_sub" checked> Bônus se possível</label>
+            <label class="radio-item"><input type="radio" name="ranch_sub"> Critério importante</label>
+            <label class="radio-item"><input type="radio" name="ranch_sub"> Não relevante</label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Utilities e infraestrutura</td>
+        <td class="sugest-col">Energia elétrica + well + septic</td>
+        <td class="fill-col"><input class="fill-line" type="text" placeholder="O mínimo de infraestrutura que você exige?"/></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="field-group" style="margin-top:14px">
+    <label class="field-label">O investidor brasileiro que você imagina para ranch — o que ele está realmente buscando?</label>
+    <span class="field-hint">Lifestyle, status, renda, fuga do urbano? Isso vai moldar a forma como apresentamos o imóvel.</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Descreva o perfil e a motivação do comprador de ranch..."></div>
+  </div>
+
+  <!-- NICHO 5 -->
+  <h3 class="nicho nicho-5">Nicho 5 — Livre (caso queira adicionar outro)</h3>
+
+  <div class="field-group">
+    <label class="field-label">Nome do nicho</label>
+    <input class="fill-line" type="text" placeholder="Ex: Buy & Hold, BRRRR, Off-Market / Distress..."/>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">Critérios principais</label>
+    <div class="fill-area" contenteditable="true" data-placeholder="Descreva os critérios com suas palavras..."></div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PARTE 3: PESOS DE SCORE -->
+  <h2>Parte 3 — Pesos e Prioridades do Score</h2>
+
+  <div class="callout info">
+    <div class="callout-label">Como funciona o scoring do RealRisk</div>
+    <p>O sistema calcula dois scores: <strong>Score Financeiro</strong> (baseado em ROI estimado) e <strong>Score de Risco</strong> (baseado nos fatores que você definir abaixo). O score final combina os dois com o equilíbrio que você escolher. Você também pode adicionar novos fatores de risco — o sistema redistribui os pesos automaticamente ou você ajusta manualmente.</p>
+  </div>
+
+  <h3>Qual o equilíbrio padrão que você usaria para a maioria dos seus investidores?</h3>
+
+  <div class="radio-group" style="margin-bottom:8px; flex-wrap:wrap; gap:10px 20px">
+    <label class="radio-item"><input type="radio" name="score_bal"> 70% Financeiro / 30% Risco (arrojado)</label>
+    <label class="radio-item"><input type="radio" name="score_bal" checked> 60% Financeiro / 40% Risco (padrão)</label>
+    <label class="radio-item"><input type="radio" name="score_bal"> 50% Financeiro / 50% Risco (equilibrado)</label>
+    <label class="radio-item"><input type="radio" name="score_bal"> 40% Financeiro / 60% Risco (conservador)</label>
+  </div>
+
+  <div style="margin: 8px 0 16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+    <label class="radio-item"><input type="radio" name="score_bal"> Outro (defina):</label>
+    <span style="font-size:10pt">Financeiro</span>
+    <input type="number" min="0" max="100" value="" placeholder="%" id="bal-fin"
+      style="width:56px; border:1.5px solid var(--border); border-radius:4px; padding:4px 8px; font-size:10pt; text-align:center; font-family:Arial,sans-serif; outline:none;"
+      oninput="syncBal(this, 'fin')"/>
+    <span style="font-size:10pt">% + Risco</span>
+    <input type="number" min="0" max="100" value="" placeholder="%" id="bal-risk"
+      style="width:56px; border:1.5px solid var(--border); border-radius:4px; padding:4px 8px; font-size:10pt; text-align:center; font-family:Arial,sans-serif; outline:none;"
+      oninput="syncBal(this, 'risk')"/>
+    <span style="font-size:10pt">% = 100%</span>
+    <span id="bal-check" style="font-size:10pt; font-weight:700"></span>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">Justificativa para o equilíbrio escolhido</label>
+    <span class="field-hint">Por que esse balanço faz sentido para o perfil do seu investidor típico?</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Ex: 'Meus clientes são conservadores — preferem segurança a retorno máximo. Flood zone e telhado têm impacto imediato no custo de seguro...'"></div>
+  </div>
+
+  <h3 style="margin-top:24px">Fatores de risco e seus pesos <span style="font-weight:400; font-size:9pt; color:var(--text-muted)">(total deve somar 100)</span></h3>
+
+  <div class="callout tip" style="margin-bottom:14px">
+    <div class="callout-label">Como usar</div>
+    <p>Ajuste os pesos conforme o que mais importa para o seu mercado. Adicione novos fatores de risco que você considera relevantes — como condição da fundação, proximidade de escola, ou qualidade do bairro. O total é mostrado em tempo real.</p>
+  </div>
+
+  <!-- Total bar -->
+  <div class="score-total-bar">
+    <span class="score-total-label">Total dos pesos</span>
+    <span id="score-total-display" class="score-total-ok">100</span>
+    <span style="font-size:10pt; color:var(--text-muted)">/&nbsp;100</span>
+    <span class="score-total-msg" id="score-total-msg" style="color:var(--green)">✓ Balanceado</span>
+  </div>
+
+  <!-- Lista de fatores -->
+  <div class="score-builder" id="factors-list">
+
+    <div class="score-row" data-factor>
+      <span class="score-label">Flood Zone (inundação)</span>
+      <div class="score-bar-wrap"><div class="score-bar-fill" style="width:40%"></div></div>
+      <input class="score-input" type="number" min="0" max="100" value="40" oninput="updateTotal()"/>
+      <span class="score-unit">pts</span>
+      <button class="score-remove" type="button" onclick="removeFactor(this)" title="Remover">✕</button>
+    </div>
+
+    <div class="score-row" data-factor>
+      <span class="score-label">Idade do Telhado (roof)</span>
+      <div class="score-bar-wrap"><div class="score-bar-fill" style="width:30%"></div></div>
+      <input class="score-input" type="number" min="0" max="100" value="30" oninput="updateTotal()"/>
+      <span class="score-unit">pts</span>
+      <button class="score-remove" type="button" onclick="removeFactor(this)" title="Remover">✕</button>
+    </div>
+
+    <div class="score-row" data-factor>
+      <span class="score-label">Idade do HVAC (ar condicionado)</span>
+      <div class="score-bar-wrap"><div class="score-bar-fill" style="width:20%"></div></div>
+      <input class="score-input" type="number" min="0" max="100" value="20" oninput="updateTotal()"/>
+      <span class="score-unit">pts</span>
+      <button class="score-remove" type="button" onclick="removeFactor(this)" title="Remover">✕</button>
+    </div>
+
+    <div class="score-row" data-factor>
+      <span class="score-label">STR Permitido</span>
+      <div class="score-bar-wrap"><div class="score-bar-fill" style="width:10%"></div></div>
+      <input class="score-input" type="number" min="0" max="100" value="10" oninput="updateTotal()"/>
+      <span class="score-unit">pts</span>
+      <button class="score-remove" type="button" onclick="removeFactor(this)" title="Remover">✕</button>
+    </div>
+
+  </div>
+
+  <!-- Adicionar novo fator -->
+  <div class="add-factor-row">
+    <input class="add-factor-input" type="text" id="new-factor-name" placeholder="Nome do novo fator de risco (ex: Qualidade do bairro, Condição da fundação...)" />
+    <input type="number" min="0" max="100" value="10" id="new-factor-weight"
+      style="width:64px; border:1.5px solid var(--border); border-radius:4px; padding:6px 8px; font-size:10pt; text-align:center; font-family:Arial,sans-serif; outline:none;"/>
+    <span style="font-size:9pt; color:var(--text-muted); white-space:nowrap">pts</span>
+    <button class="add-factor-btn" type="button" onclick="addFactor()">+ Adicionar fator</button>
+  </div>
+
+  <!-- Botão redistribuir -->
+  <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+    <button type="button" onclick="redistributeEqual()"
+      style="padding:6px 14px; background:transparent; border:1.5px solid var(--accent); color:var(--accent); border-radius:4px; font-size:9.5pt; font-weight:700; cursor:pointer; font-family:Arial,sans-serif;">
+      ⟳ Redistribuir igualmente
+    </button>
+    <span style="font-size:9pt; color:var(--text-muted)">Divide 100 pts igualmente entre todos os fatores</span>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PARTE 4: RED FLAGS -->
+  <h2>Parte 4 — Red Flags Automáticos</h2>
+
+  <p style="margin-bottom:12px; font-size:10pt">Quais situações você quer que o sistema destaque automaticamente como "atenção" no card do imóvel, mesmo que não sejam eliminatórias?</p>
+
+  <div class="check-grid" style="margin-bottom:14px">
+    <label class="check-item"><input type="checkbox" checked> Days on Market &gt; 90 dias</label>
+    <label class="check-item"><input type="checkbox" checked> Flood Zone AE ou pior</label>
+    <label class="check-item"><input type="checkbox" checked> Telhado com mais de 15 anos</label>
+    <label class="check-item"><input type="checkbox" checked> HVAC com mais de 12 anos</label>
+    <label class="check-item"><input type="checkbox"> HOA acima de $500/mês</label>
+    <label class="check-item"><input type="checkbox"> Price reduction recente</label>
+    <label class="check-item"><input type="checkbox"> Imóvel pré-1985</label>
+    <label class="check-item"><input type="checkbox"> Condo sem permitir STR</label>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">Outros red flags que você adicionaria com base na sua experiência</label>
+    <span class="field-hint">Coisas que você, como corretor, sabe que são sinal de problema mas que não aparecem nos dados normalmente</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Ex: 'imóvel em inventário judicial, condomínio com processo na justiça, área com alta vacância de aluguel...'"></div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PARTE 5: GREEN FLAGS -->
+  <h2>Parte 5 — Green Flags (Diferenciais Positivos)</h2>
+
+  <p style="margin-bottom:12px; font-size:10pt">O que você quer que o sistema destaque como <strong>ponto positivo</strong> no card do imóvel?</p>
+
+  <p style="font-size:9pt; color:var(--text-muted); margin-bottom:10px; font-style:italic">Marque os que você quer que apareçam como destaque positivo nos cards do sistema:</p>
+
+  <h3 style="margin-top:10px; font-size:10pt; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Imóvel / Estrutura</h3>
+  <div class="check-grid" style="margin-bottom:12px">
+    <label class="check-item"><input type="checkbox" checked> Telhado com menos de 5 anos</label>
+    <label class="check-item"><input type="checkbox" checked> HVAC com menos de 5 anos</label>
+    <label class="check-item"><input type="checkbox" checked> Flood Zone X (risco mínimo)</label>
+    <label class="check-item"><input type="checkbox" checked> STR permitido (Airbnb/VRBO)</label>
+    <label class="check-item"><input type="checkbox"> Pool / piscina privada</label>
+    <label class="check-item"><input type="checkbox"> Gated community</label>
+    <label class="check-item"><input type="checkbox"> Imóvel pós-2010</label>
+    <label class="check-item"><input type="checkbox"> Sem HOA</label>
+  </div>
+
+  <h3 style="margin-top:10px; font-size:10pt; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Preço &amp; Oportunidade</h3>
+  <div class="check-grid" style="margin-bottom:12px">
+    <label class="check-item"><input type="checkbox" checked> Price reduction recente (vendedor motivado)</label>
+    <label class="check-item"><input type="checkbox" checked> Preço por sqft abaixo da média do ZIP code</label>
+    <label class="check-item"><input type="checkbox" checked> DOM baixo (&lt; 14 dias) — alta demanda</label>
+    <label class="check-item"><input type="checkbox"> Listagem nova (&lt; 7 dias no MLS)</label>
+    <label class="check-item"><input type="checkbox"> Abaixo da mediana do bairro em &gt; 10%</label>
+    <label class="check-item"><input type="checkbox"> Off-market ou pré-listagem</label>
+  </div>
+
+  <h3 style="margin-top:10px; font-size:10pt; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Mercado &amp; Localização</h3>
+  <div class="check-grid" style="margin-bottom:12px">
+    <label class="check-item"><input type="checkbox" checked> Região com valorização acima de 5% ao ano</label>
+    <label class="check-item"><input type="checkbox" checked> Alta velocidade de venda no ZIP (DOM médio &lt; 30 dias)</label>
+    <label class="check-item"><input type="checkbox"> Bairro com novos empreendimentos aprovados</label>
+    <label class="check-item"><input type="checkbox"> Próximo a nova escola, hospital ou polo comercial</label>
+    <label class="check-item"><input type="checkbox"> Expansão de infraestrutura urbana na área</label>
+    <label class="check-item"><input type="checkbox"> Área em processo de gentrificação documentada</label>
+  </div>
+
+  <h3 style="margin-top:10px; font-size:10pt; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Farmland &amp; Ranch (específico)</h3>
+  <div class="check-grid" style="margin-bottom:12px">
+    <label class="check-item"><input type="checkbox" checked> Zoneamento permite desmembramento (subdivision)</label>
+    <label class="check-item"><input type="checkbox" checked> Área próxima a expansão urbana — upzoning potencial</label>
+    <label class="check-item"><input type="checkbox"> Well + Septic já instalados</label>
+    <label class="check-item"><input type="checkbox"> Pastagem ativa com arrendatário existente</label>
+    <label class="check-item"><input type="checkbox"> Acesso a rodovia principal pavimentada</label>
+    <label class="check-item"><input type="checkbox"> Estrutura de moradia habitável na propriedade</label>
+    <label class="check-item"><input type="checkbox"> Potencial de agriturismo comprovado</label>
+    <label class="check-item"><input type="checkbox"> Lotes adjacentes já subdivididos como referência</label>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">Outros diferenciais positivos que você adicionaria?</label>
+    <span class="field-hint">Qualquer coisa que, quando você vê, pensa "isso vai valorizar" ou "o investidor vai gostar"</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Acrescente aqui qualquer diferencial que faltou nas listas acima..."></div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PARTE 6: VALIDAÇÃO FINAL -->
+  <h2>Parte 6 — Sua Visão Final</h2>
+
+  <div class="field-group">
+    <label class="field-label">Se você tivesse que descrever o imóvel perfeito para a RealRisk em 3–5 linhas, como seria?</label>
+    <span class="field-hint">A resposta para esta pergunta vai virar o texto de abertura da nossa plataforma — "o tipo de imóvel que a RealRisk cuida".</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Descreva o imóvel ideal com as suas palavras..."></div>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">Tem algo importante que não foi coberto neste formulário?</label>
+    <span class="field-hint">Qualquer conhecimento de mercado que você acha que deveria entrar nos critérios e ainda não está aqui.</span>
+    <div class="fill-area" contenteditable="true" data-placeholder="Observações adicionais, ajustes, contexto de mercado que você acha relevante..."></div>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label">Qual é a maior dúvida ou preocupação que você tem sobre o sistema de critérios?</label>
+    <div class="fill-area" contenteditable="true" data-placeholder="O que você acha que pode dar errado? Isso vai nos ajudar a prever problemas antes de automatizar."></div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ASSINATURA -->
+  <div class="signature-block">
+    <div>
+      <div style="height:40px"></div>
+      <div class="sig-line">
+        <div class="sig-name">Jales Castro</div>
+        <div>Sócio-Fundador — Operações &amp; Mercado</div>
+      </div>
+    </div>
+    <div>
+      <div style="height:40px"></div>
+      <div class="sig-line">
+        <div>Data de preenchimento</div>
+        <input class="fill-line" type="text" placeholder="_____ / _____ / 2026" style="margin-top:4px"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout tip" style="margin-top:28px">
+    <div class="callout-label">Próximo passo</div>
+    <p>Com este documento preenchido, Lucas vai programar os filtros no sistema e exportar os primeiros 50 imóveis do MLS para validação conjunta. A meta é ter o pipeline automatizado rodando dentro de 2–3 semanas após a aprovação dos critérios.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <span>RealRisk — Documento Interno Confidencial</span>
+    <span>Versão 1.0 — Junho 2026</span>
+  </div>
+
+</div><!-- /page -->
+
+<div class="print-bar no-print" style="margin-top:16px">
+  <button class="btn btn-outline" onclick="window.print()">🖨 Imprimir / Salvar PDF</button>
+</div>
+
+<!-- ===== MOBILE SHARE BAR ===== -->
+<div class="mobile-share-bar" id="mobileShareBar">
+  <button class="share-btn-main" onclick="window.print()">
+    📤 &nbsp;Salvar / Compartilhar PDF
+  </button>
+</div>
+
+<script>
+// ── Score builder ───────────────────────────────────────────────────────
+
+function getRows() {
+  return document.querySelectorAll('#factors-list .score-row[data-factor]');
+}
+
+function updateTotal() {
+  var rows  = getRows();
+  var total = 0;
+  rows.forEach(function(row) {
+    var v = parseInt(row.querySelector('.score-input').value) || 0;
+    total += v;
+    // Atualiza a barra visual
+    var bar = row.querySelector('.score-bar-fill');
+    if (bar) bar.style.width = Math.min(v, 100) + '%';
+  });
+
+  var display = document.getElementById('score-total-display');
+  var msg     = document.getElementById('score-total-msg');
+  if (!display) return;
+
+  display.textContent = total;
+  display.className   = total === 100 ? 'score-total-ok'
+                      : total > 100   ? 'score-total-over'
+                      :                 'score-total-low';
+  msg.style.color     = total === 100 ? 'var(--green)'
+                      : total > 100   ? '#e53935'
+                      :                 'var(--orange)';
+  msg.textContent     = total === 100 ? '✓ Balanceado'
+                      : total > 100   ? '⚠ Acima de 100 — reduza algum fator'
+                      :                 '⚠ Abaixo de 100 — faltam ' + (100 - total) + ' pts';
+}
+
+function addFactor() {
+  var nameInput   = document.getElementById('new-factor-name');
+  var weightInput = document.getElementById('new-factor-weight');
+  var name   = nameInput.value.trim();
+  var weight = parseInt(weightInput.value) || 10;
+  if (!name) { nameInput.focus(); return; }
+
+  var row = document.createElement('div');
+  row.className = 'score-row';
+  row.setAttribute('data-factor', '');
+  row.innerHTML =
+    '<span class="score-label">' + escHtml(name) + '</span>' +
+    '<div class="score-bar-wrap"><div class="score-bar-fill" style="width:' + Math.min(weight,100) + '%"></div></div>' +
+    '<input class="score-input" type="number" min="0" max="100" value="' + weight + '" oninput="updateTotal()"/>' +
+    '<span class="score-unit">pts</span>' +
+    '<button class="score-remove" type="button" onclick="removeFactor(this)" title="Remover">✕</button>';
+
+  document.getElementById('factors-list').appendChild(row);
+  nameInput.value   = '';
+  weightInput.value = 10;
+  nameInput.focus();
+  updateTotal();
+}
+
+function removeFactor(btn) {
+  var rows = getRows();
+  if (rows.length <= 1) return; // mantém pelo menos 1 fator
+  btn.closest('.score-row').remove();
+  updateTotal();
+}
+
+function redistributeEqual() {
+  var rows = getRows();
+  if (!rows.length) return;
+  var base  = Math.floor(100 / rows.length);
+  var extra = 100 - base * rows.length; // sobra de arredondamento vai pro primeiro
+  rows.forEach(function(row, i) {
+    var v = base + (i === 0 ? extra : 0);
+    row.querySelector('.score-input').value = v;
+  });
+  updateTotal();
+}
+
+// Sincroniza os inputs de equilíbrio Financeiro/Risco
+function syncBal(el, side) {
+  var other = document.getElementById(side === 'fin' ? 'bal-risk' : 'bal-fin');
+  var val   = parseInt(el.value);
+  if (!isNaN(val) && val >= 0 && val <= 100) {
+    other.value = 100 - val;
+  }
+  var fin  = parseInt(document.getElementById('bal-fin').value)  || 0;
+  var risk = parseInt(document.getElementById('bal-risk').value) || 0;
+  var chk  = document.getElementById('bal-check');
+  if (fin + risk === 100) {
+    chk.textContent = '✓';
+    chk.style.color = 'var(--green)';
+  } else {
+    chk.textContent = fin + risk + '/100';
+    chk.style.color = '#e53935';
+  }
+  // Desmarca os radios pré-definidos quando usa o campo livre
+  document.querySelectorAll('input[name="score_bal"]').forEach(function(r){ r.checked = false; });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Init
+updateTotal();
+
+// ── Mobile: mostra barra de compartilhar ────────────────────────────────
+if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  document.getElementById('mobileShareBar').classList.add('show');
+}
+</script>
+</body>
+</html>

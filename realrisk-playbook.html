@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RealRisk — Playbook Operacional Completo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --surface-2: #f5f4f1;
+    --surface-3: #ebe9e3;
+    --border: #e7e5e0;
+    --border-strong: #d4d2cc;
+    --text: #1c1b18;
+    --text-muted: #6b6a65;
+    --text-soft: #9b9a94;
+    --accent: #c96442;
+    --accent-soft: #f0e1d8;
+    --accent-dark: #8a4327;
+    --font-display: Georgia, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    /* Phase colors */
+    --p0: #37474f; --p0-soft: #eceff1;
+    --p1: #2e7d32; --p1-soft: #e8f5e9;
+    --p2: #1565c0; --p2-soft: #e3f2fd;
+    --p3: #6a1b9a; --p3-soft: #f3e5f5;
+    --p4: #e65100; --p4-soft: #fff3e0;
+    --p5: #b71c1c; --p5-soft: #ffebee;
+    --p6: #00695c; --p6-soft: #e0f2f1;
+    --p7: #4527a0; --p7-soft: #ede7f6;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { font-size: 12px; background: white; }
+    .no-print { display: none !important; }
+    .phase-section { page-break-inside: avoid; }
+    .hero { padding: 40px 0; }
+    .hero h1 { font-size: 36px; }
+  }
+
+  /* ===== LAYOUT ===== */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 80px 0 64px;
+    border-bottom: 2px solid var(--border-strong);
+    margin-bottom: 48px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 20px;
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    border-radius: 4px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 700px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-soft);
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-meta strong { color: var(--text); display: block; font-size: 13px; margin-bottom: 1px; }
+
+  /* ===== TOC ===== */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin-bottom: 56px;
+  }
+
+  .toc-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 16px;
+  }
+
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
+
+  .toc-item {
+    display: flex; align-items: baseline; gap: 10px;
+    font-size: 13px; padding: 5px 0;
+    border-bottom: 1px solid var(--border); text-decoration: none; color: var(--text);
+  }
+
+  .toc-item:hover { color: var(--accent); }
+
+  .toc-num {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--text-soft); flex-shrink: 0; min-width: 20px;
+  }
+
+  /* ===== SECTION HEADER ===== */
+  .section-header {
+    padding: 56px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .section-tag {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: 32px; font-weight: 400; line-height: 1.2; letter-spacing: -0.01em;
+  }
+
+  .section-header p {
+    font-size: 17px; color: var(--text-muted); line-height: 1.6; margin-top: 10px; max-width: 720px;
+  }
+
+  /* ===== ROADMAP VISUAL ===== */
+  .roadmap-visual {
+    display: flex;
+    gap: 0;
+    margin-bottom: 48px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .rm-phase {
+    flex: 1;
+    min-width: 110px;
+    position: relative;
+  }
+
+  .rm-phase:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -8px;
+    top: 18px;
+    font-size: 16px;
+    color: var(--text-soft);
+    z-index: 1;
+  }
+
+  .rm-box {
+    border-radius: 8px;
+    padding: 12px 10px 10px;
+    margin-right: 12px;
+    height: 100%;
+  }
+
+  .rm-num {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+    opacity: 0.6; margin-bottom: 4px;
+  }
+
+  .rm-title { font-size: 11px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; }
+  .rm-sub { font-size: 10px; opacity: 0.65; line-height: 1.4; }
+
+  .rm-current {
+    font-size: 9px; font-weight: 700; background: #1a1a1a; color: #fff;
+    padding: 2px 6px; border-radius: 3px; display: inline-block; margin-bottom: 4px;
+  }
+
+  /* ===== PHASE BLOCK ===== */
+  .phase-section { margin-bottom: 56px; }
+
+  .phase-header {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px 24px; border-radius: 10px 10px 0 0;
+    border: 2px solid; border-bottom: none;
+  }
+
+  .phase-badge {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 2px;
+  }
+
+  .phase-header-text {}
+  .phase-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; margin-bottom: 3px; }
+  .phase-name { font-size: 20px; font-weight: 700; line-height: 1.2; }
+  .phase-desc { font-size: 13px; opacity: 0.75; margin-top: 4px; line-height: 1.5; }
+
+  .phase-body {
+    border: 2px solid; border-top: none; border-radius: 0 0 10px 10px; padding: 24px;
+  }
+
+  /* ===== STEPS WITHIN PHASE ===== */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+
+  .step {
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+
+  .step-connector { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 32px; }
+  .step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .step-line { width: 2px; flex: 1; min-height: 16px; background: var(--border-strong); margin: 3px 0; }
+  .step-content { padding-bottom: 20px; flex: 1; }
+  .step-title { font-size: 14px; font-weight: 700; padding-top: 6px; margin-bottom: 4px; }
+  .step-body { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+  /* ===== GATE ===== */
+  .gate-box {
+    margin-top: 20px; border-radius: 8px; border: 2px solid #fb8c00;
+    background: #fff8e1; padding: 16px 20px;
+  }
+
+  .gate-label {
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+    color: #e65100; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+
+  .gate-label::before { content: '🔒'; font-size: 12px; }
+
+  .gate-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #1a1a1a; }
+
+  .gate-list { list-style: none; }
+
+  .gate-list li {
+    font-size: 13px; color: var(--text-muted); padding: 4px 0;
+    border-bottom: 1px solid #ffe082; display: flex; align-items: baseline; gap: 8px;
+    line-height: 1.5;
+  }
+
+  .gate-list li:last-child { border-bottom: none; }
+
+  .gate-list li::before { content: '→'; color: #fb8c00; font-weight: 700; flex-shrink: 0; }
+
+  /* ===== REVENUE TABLE ===== */
+  .revenue-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  .revenue-table th { background: var(--surface-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border-strong); color: var(--text-muted); }
+  .revenue-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .revenue-table tr:last-child td { border-bottom: none; }
+  .revenue-table .num { text-align: right; font-weight: 700; white-space: nowrap; }
+  .revenue-table .total td { background: var(--accent-soft); font-weight: 700; }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 20px; margin: 16px 0;
+  }
+
+  .callout.accent { background: var(--accent-soft); border-color: var(--accent); }
+  .callout.green { background: #e8f5e9; border-color: #43a047; }
+  .callout.blue { background: #e3f2fd; border-color: #1e88e5; }
+  .callout-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 6px; }
+  .callout p { font-size: 13px; margin: 0; color: var(--text-muted); line-height: 1.6; }
+
+  /* ===== CRITERIA GRID ===== */
+  .criteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .crit-card { border-radius: 6px; padding: 10px 12px; border-left: 3px solid; }
+  .crit-card.hard { background: #ffebee; border-color: #e53935; }
+  .crit-card.soft { background: #fff8e1; border-color: #fb8c00; }
+  .crit-card.bonus { background: #e3f2fd; border-color: #1e88e5; }
+  .crit-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6; margin-bottom: 3px; }
+  .crit-value { font-size: 12px; font-weight: 700; line-height: 1.35; }
+  .crit-note { font-size: 11px; opacity: 0.65; margin-top: 2px; line-height: 1.4; }
+
+  /* ===== PRODUCT CARDS ===== */
+  .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+  .product-card-num { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .product-card-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .product-card-price { font-size: 16px; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+  .product-card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .product-card-margin { font-size: 11px; color: var(--text-soft); margin-top: 6px; }
+
+  /* ===== METRIC CHIPS ===== */
+  .metrics-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+  .metric-chip {
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 14px; text-align: center;
+  }
+  .metric-chip-val { font-size: 18px; font-weight: 800; display: block; }
+  .metric-chip-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* ===== KPI TABLE ===== */
+  .kpi-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .kpi-table th { background: var(--surface-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 9px 12px; text-align: left; border-bottom: 2px solid var(--border-strong); color: var(--text-muted); }
+  .kpi-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .kpi-table .num { text-align: right; font-weight: 700; }
+  .kpi-table .total-row td { font-weight: 700; background: var(--surface-2); }
+  .kpi-table tr:last-child td { border-bottom: none; }
+
+  /* ===== TAGS ===== */
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; margin: 2px; }
+  .tag.green { background: #e8f5e9; color: #2e7d32; }
+  .tag.red { background: #ffebee; color: #c62828; }
+  .tag.orange { background: #fff3e0; color: #e65100; }
+  .tag.blue { background: #e3f2fd; color: #1565c0; }
+  .tag.purple { background: #f3e5f5; color: #6a1b9a; }
+
+  /* ===== PILL BADGE ===== */
+  .pill { display: inline-block; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* ===== DIVIDER ===== */
+  .divider { border: none; border-top: 2px solid var(--border-strong); margin: 48px 0; }
+
+  /* ===== FOOTER ===== */
+  footer { padding: 48px 0 32px; text-align: center; color: var(--text-soft); font-size: 12px; border-top: 1px solid var(--border); margin-top: 40px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 720px) {
+    .container { padding: 0 16px; }
+    .hero h1 { font-size: 32px; }
+    .criteria-grid, .product-grid { grid-template-columns: 1fr; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .roadmap-visual { flex-direction: column; }
+    .rm-phase::after { content: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-tag">Documento Interno Confidencial</div>
+  <h1>Real<span>Risk</span></h1>
+  <p class="hero-subtitle">Playbook Operacional Completo — da fase atual de estruturação ao negócio em plena escala. Este documento define cada etapa, os entregáveis, os gates de avanço e os critérios de sucesso do negócio.</p>
+  <div class="hero-meta">
+    <div><strong>Sócios</strong>Jales Castro &amp; Lucas Leite</div>
+    <div><strong>Versão</strong>1.0 — Junho 2026</div>
+    <div><strong>Status atual</strong>Fase 1 — Estruturação de Dados</div>
+    <div><strong>Mercado-alvo</strong>Flórida — Grande Orlando</div>
+  </div>
+</header>
+
+<!-- ===== TOC ===== -->
+<div class="toc">
+  <div class="toc-title">Índice do Playbook</div>
+  <div class="toc-grid">
+    <a class="toc-item" href="#visao"><span class="toc-num">01</span>Visão & Posicionamento</a>
+    <a class="toc-item" href="#receita"><span class="toc-num">05</span>Modelo de Receita</a>
+    <a class="toc-item" href="#roadmap"><span class="toc-num">02</span>Roadmap Macro</a>
+    <a class="toc-item" href="#projecao"><span class="toc-num">06</span>Projeção Financeira</a>
+    <a class="toc-item" href="#fase1"><span class="toc-num">03</span>Fase 1 — Critérios MLS</a>
+    <a class="toc-item" href="#metricas"><span class="toc-num">07</span>Métricas de Saúde</a>
+    <a class="toc-item" href="#fases"><span class="toc-num">04</span>Fases 2 a 7 — Detalhamento</a>
+    <a class="toc-item" href="#sociedade"><span class="toc-num">08</span>Estrutura Societária</a>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: VISÃO ===== -->
+<div id="visao" class="section-header">
+  <span class="section-tag">01 — Visão &amp; Posicionamento</span>
+  <h2>O que é a RealRisk</h2>
+  <p>Uma plataforma de inteligência de investimento imobiliário que une a rede de 40 anos de Jales Castro com engenharia de risco, dados e tecnologia. Não somos mais um app de listagem — somos o sistema operacional do investidor imobiliário brasileiro na Flórida.</p>
+</div>
+
+<div class="callout accent">
+  <div class="callout-label">Tese Central</div>
+  <p>O investidor brasileiro tem capital mas não tem presença local, análise técnica isenta nem gestão de execução. O corretor experiente tem rede mas não tem escala tecnológica. A RealRisk é a ponte entre os dois mundos — e essa combinação é extremamente difícil de replicar.</p>
+</div>
+
+<div class="product-grid" style="margin-top:20px">
+  <div class="product-card">
+    <div class="product-card-num">Pilar 1</div>
+    <div class="product-card-name">Camada de Dados</div>
+    <div class="product-card-desc">Ingestão automatizada do MLS (Multiple Listing Service — banco de dados compartilhado de imóveis à venda usado por corretores nos EUA) com filtros de elegibilidade. Apenas imóveis com potencial real entram no sistema. Enriquecimento com dados de flood zone (zona de risco de enchente), idade de telhado, HVAC (Heating, Ventilation and Air Conditioning — sistema de aquecimento, ventilação e ar condicionado), STR (Short-Term Rental — aluguel de curto prazo, ex: Airbnb).<br><br><em>Nota: STR não é critério de compra — entra apenas como informação enriquecida do imóvel, usada como bônus no score (ver Fase 1).</em></div>
+  </div>
+  <div class="product-card">
+    <div class="product-card-num">Pilar 2</div>
+    <div class="product-card-name">Engine de Scoring</div>
+    <div class="product-card-desc">Cálculo automático de ROI (Return on Investment — retorno sobre o investimento) estimado, score financeiro (0–100), score de risco (0–100) e classificação por tier (1, 2, 3). Pesos ajustáveis pelo usuário.<br><br><em>Nota: os thresholds de ROI poderão variar conforme o objetivo de capital de cada investidor — uma camada de perfil do investidor está no roadmap (questionário de perfil na Fase 3) para personalizar o scoring.</em></div>
+  </div>
+  <div class="product-card">
+    <div class="product-card-num">Pilar 3</div>
+    <div class="product-card-name">Plataforma &amp; Comunidade</div>
+    <div class="product-card-desc">Dashboard interativo, watchlist, alertas, bloqueio interno de exclusividade por 7 dias (válido apenas dentro da plataforma). Comunidade fechada (Circle) com fórum, conteúdo educativo e rede de investidores.<br><br><em>Nota: a plataforma reúne investidores com perfis e interesses diferentes — desde compra para reforma e revenda (flip) até compra de imóveis para revenda no atacado (wholesale). Membros da plataforma têm sempre primeira opção de compra nos imóveis disponíveis, antes de serem oferecidos a investidores externos.</em></div>
+  </div>
+  <div class="product-card">
+    <div class="product-card-num">Pilar 4</div>
+    <div class="product-card-name">Serviços de Valor</div>
+    <div class="product-card-desc">Inspeção técnica ($950), due diligence jurídica ($1.800), gestão de obras (modelo atual: taxa de $1.000 + equity de 20% do lucro líquido na venda). Suporte fiscal e migratório para investidores estrangeiros e mailbox para correspondência (ideias em avaliação — ver Modelo de Receita). Cursos e educação (Fase 6+).<br><br><em>Nota: alternativas de precificação para gestão de obras em discussão — 20% do valor total da obra, ou um percentual sobre o valor líquido do projeto (ver Modelo de Receita).</em></div>
+  </div>
+</div>
+
+<div class="callout" style="margin-top:16px">
+  <div class="callout-label">Notas — Questões Estratégicas em Aberto</div>
+  <p>Tópicos levantados pelos sócios que ainda precisam de definição e que vão impactar o produto e o modelo de receita:</p>
+  <p style="margin-top:8px"><strong>Tributação para investidores estrangeiros:</strong> quanto o investidor brasileiro paga de imposto no Brasil e nos EUA sobre o investimento? Vale manter o capital nos EUA ou repatriar para o Brasil? Como estruturar a remessa de valores entre os dois países? (responsável: Jales, com apoio de contador especializado).</p>
+  <p style="margin-top:8px"><strong>Conteúdo educativo planejado:</strong> vídeo com contador sobre contabilidade e impostos; vídeo com advogado de imigração sobre estrutura legal para investidores; vídeo explicando como enviar dinheiro para os EUA; fluxograma completo do processo de compra até o closing; vídeo sobre o processo de uma title company (estrutura burocrática da venda do imóvel) — ver Fase 6, Trilha 3.</p>
+  <p style="margin-top:8px"><strong>Perfil de investidores no atacado:</strong> mapear como público complementar dentro da plataforma os investidores que compram imóveis, fazem reparo/limpeza leve ("água e sabão") e revendem rapidamente — ver Curso Gestão de Obras na Fase 6.</p>
+</div>
+
+<hr class="divider" />
+
+<!-- ===== SECTION 2: ROADMAP MACRO ===== -->
+<div id="roadmap" class="section-header">
+  <span class="section-tag">02 — Roadmap Macro</span>
+  <h2>Visão Completa das Fases</h2>
+  <p>O negócio evolui em 7 fases sequenciais. Cada fase tem um gate de entrada que deve ser cumprido antes de avançar. Não se pula fase — cada etapa constrói a base da próxima.</p>
+</div>
+
+<div class="roadmap-visual">
+  <div class="rm-phase">
+    <div class="rm-box" style="background:var(--p0-soft); border:2px solid var(--p0)">
+      <div class="rm-current">Fase atual</div>
+      <div class="rm-num" style="color:var(--p0)">Fase 1</div>
+      <div class="rm-title">Critérios &amp; Pipeline MLS</div>
+      <div class="rm-sub">Filtros + automação de dados</div>
+    </div>
+  </div>
+  <div class="rm-phase">
+    <div class="rm-box" style="background:var(--p1-soft); border:1px solid var(--p1)">
+      <div class="rm-num" style="color:var(--p1)">Fase 2</div>
+      <div class="rm-title">Plataforma com Dados Reais</div>
+      <div class="rm-sub">MVP conectado ao MLS</div>
+    </div>
+  </div>
+  <div class="rm-phase">
+    <div class="rm-box" style="background:var(--p2-soft); border:1px solid var(--p2)">
+      <div class="rm-num" style="color:var(--p2)">Fase 3</div>
+      <div class="rm-title">Alpha Fechado</div>
+      <div class="rm-sub">10–20 usuários convidados</div>
+    </div>
+  </div>
+  <div class="rm-phase">
+    <div class="rm-box" style="background:var(--p3-soft); border:1px solid var(--p3)">
+      <div class="rm-num" style="color:var(--p3)">Fase 4</div>
+      <div class="rm-title">Beta &amp; Monetização</div>
+      <div class="rm-sub">Primeiros assinantes pagantes</div>
+    </div>
+  </div>
+  <div class="rm-phase">
+    <div class="rm-box" style="background:var(--p4-soft); border:1px solid var(--p4)">
+      <div class="rm-num" style="color:var(--p4)">Fase 5</div>
+      <div class="rm-title">Lançamento Oficial</div>
+      <div class="rm-sub">Circle + marketing + deal flow</div>
+    </div>
+  </div>
+  <div class="rm-phase">
+    <div class="rm-box" style="background:var(--p5-soft); border:1px solid var(--p5)">
+      <div class="rm-num" style="color:var(--p5)">Fase 6</div>
+      <div class="rm-title">Cursos &amp; Educação</div>
+      <div class="rm-sub">Gate: 100 assinantes ativos</div>
+    </div>
+  </div>
+  <div class="rm-phase">
+    <div class="rm-box" style="background:var(--p6-soft); border:1px solid var(--p6)">
+      <div class="rm-num" style="color:var(--p6)">Fase 7</div>
+      <div class="rm-title">Expansão de Mercado</div>
+      <div class="rm-sub">Tampa, Miami, fundo de equity</div>
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">Princípio de Avanço de Fase</div>
+  <p>Cada fase tem gates objetivos e mensuráveis. Nenhuma fase avança por prazo — avança por resultado. O gate precisa ser cumprido por consenso entre os dois sócios antes de qualquer movimento para a fase seguinte.</p>
+</div>
+
+<hr class="divider" />
+
+<!-- ===== SECTION 3: FASE 1 ===== -->
+<div id="fase1" class="section-header">
+  <span class="section-tag">03 — Fase Atual</span>
+  <h2>Fase 1 — Critérios de Entrada &amp; Pipeline de Dados</h2>
+  <p>O objetivo desta fase é definir com precisão quais imóveis entram no sistema e construir o pipeline que vai alimentar a plataforma com dados reais do MLS de forma contínua.</p>
+</div>
+
+<div class="phase-section">
+  <div class="phase-header" style="background:var(--p0-soft); border-color:var(--p0)">
+    <div class="phase-badge" style="background:var(--p0)">1</div>
+    <div class="phase-header-text">
+      <div class="phase-label">Fase atual · Em execução</div>
+      <div class="phase-name">Critérios MLS &amp; Automação do Pipeline</div>
+      <div class="phase-desc">Responsáveis: Lucas (técnico) + Jales (validação de mercado)</div>
+    </div>
+  </div>
+  <div class="phase-body" style="border-color:var(--p0)">
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-connector">
+          <div class="step-dot" style="background:var(--p0)">A</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Definir Critérios de Elegibilidade</div>
+          <div class="step-body">
+            <strong>Hard filters (exclusão automática — falhou em qualquer um = descartado):</strong>
+            <div class="criteria-grid" style="margin-top:10px">
+              <div class="crit-card hard">
+                <div class="crit-label">Tipo de imóvel</div>
+                <div class="crit-value">SFH (Single Family Home — casa unifamiliar), Townhouse ou Condo</div>
+                <div class="crit-note">Exclui terrenos, comercial, multi &gt; 4 unidades</div>
+              </div>
+              <div class="crit-card hard">
+                <div class="crit-label">Localização</div>
+                <div class="crit-value">Orange, Osceola, Seminole, Polk County</div>
+                <div class="crit-note">Foco inicial na Grande Orlando</div>
+              </div>
+              <div class="crit-card hard">
+                <div class="crit-label">Faixa de preço</div>
+                <div class="crit-value">$150.000 – $600.000</div>
+                <div class="crit-note">Faixa de maior liquidez e margem para flip</div>
+              </div>
+              <div class="crit-card hard">
+                <div class="crit-label">Status MLS</div>
+                <div class="crit-value">Active ou Active Under Contract</div>
+                <div class="crit-note">Exclui Pending, Closed, Withdrawn</div>
+              </div>
+              <div class="crit-card hard">
+                <div class="crit-label">Dados mínimos</div>
+                <div class="crit-value">Sqft (square feet — área em pés quadrados), Bedrooms, Year Built, Flood Zone</div>
+                <div class="crit-note">Sem esses dados o scoring não pode ser calculado</div>
+              </div>
+              <div class="crit-card hard">
+                <div class="crit-label">Flood Zone</div>
+                <div class="crit-value">Não pode ser zona VE</div>
+                <div class="crit-note">Zona VE (Velocity Zone — área costeira de risco extremo de inundação e ondas): risco catastrófico, seguro inviável economicamente</div>
+              </div>
+            </div>
+            <div style="margin-top:14px"><strong>Soft filters (impactam o score e tier, não excluem):</strong></div>
+            <div class="criteria-grid" style="margin-top:10px">
+              <div class="crit-card soft">
+                <div class="crit-label">Days on Market (DOM)</div>
+                <div class="crit-value">Preferência ≤ 60 dias</div>
+                <div class="crit-note">DOM &gt; 90 gera flag de alerta no card. Lógica inversa: DOM muito baixo (recém-listado, ex. ≤ 3 dias) combinado com score alto gera flag de urgência — "se é muito bom, tem que agir muito rápido", sinalizando que o membro deve sinalizar interesse imediatamente antes que o imóvel saia do mercado.</div>
+              </div>
+              <div class="crit-card soft">
+                <div class="crit-label">Idade do imóvel</div>
+                <div class="crit-value">Preferência pós-1990</div>
+                <div class="crit-note">Pré-1980 gera flag de risco adicional</div>
+              </div>
+              <div class="crit-card soft">
+                <div class="crit-label">HOA mensal</div>
+                <div class="crit-value">Preferência ≤ $500/mês</div>
+                <div class="crit-note">HOA (Homeowners Association — taxa mensal de associação de moradores) alto impacta cashflow e holding cost (custo de manutenção do imóvel)</div>
+              </div>
+              <div class="crit-card soft">
+                <div class="crit-label">Fotos disponíveis</div>
+                <div class="crit-value">Mínimo 6 fotos no MLS</div>
+                <div class="crit-note">Necessário para análise visual e futura IA</div>
+              </div>
+              <div class="crit-card bonus">
+                <div class="crit-label">STR Permitido</div>
+                <div class="crit-value">Bônus de +10 pts no score de risco</div>
+                <div class="crit-note">Airbnb/VRBO como exit strategy alternativa. Não é critério de compra — não exclui nem prioriza um imóvel, apenas soma pontos no score</div>
+              </div>
+              <div class="crit-card bonus">
+                <div class="crit-label">Price Reduction</div>
+                <div class="crit-value">Flag positiva automática</div>
+                <div class="crit-note">Sinal de vendedor motivado — oportunidade de negociação</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-connector">
+          <div class="step-dot" style="background:var(--p0)">B</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Validação Manual — Primeiros 50 Imóveis</div>
+          <div class="step-body">Aplicar os critérios manualmente via exportação do MLS em planilha. Analisar os 50 primeiros imóveis e verificar: quantos passam nos hard filters? Os thresholds de preço e localização fazem sentido na prática? Qual a taxa de aprovação esperada (meta: 15–25% dos imóveis pesquisados).<br><br>
+          <strong>Responsável:</strong> Jales aplica o olhar de mercado, Lucas aplica os critérios técnicos. Divergências são documentadas e resolvidas em conjunto.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-connector">
+          <div class="step-dot" style="background:var(--p0)">C</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Calibração dos Critérios</div>
+          <div class="step-body">Com base nos 50 imóveis analisados, ajustar thresholds que não estiverem corretos. Exemplos: a faixa de preço pode subir para $650k dependendo do mercado atual; o HOA limite pode variar por tipo de imóvel. Documentar qualquer ajuste e o motivo.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-connector">
+          <div class="step-dot" style="background:var(--p0)">D</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Automação do Pipeline (Script de Filtro Daily)</div>
+          <div class="step-body">Após critérios validados e estáveis: codificar o filtro em Python/Node conectado à API (Application Programming Interface — interface de programação que permite a comunicação automatizada com o MLS) do MLS (MFRMLS — Mid-Florida Regional MLS, provedor de dados do MLS para a região central da Flórida). O script roda diariamente, aplica os hard filters automaticamente, atribui flags dos soft filters e gera o arquivo de dados estruturado (JSON — JavaScript Object Notation, formato de arquivo de dados estruturado) que alimenta a plataforma. Meta: pipeline atualizado automaticamente todo dia às 7h.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-connector">
+          <div class="step-dot" style="background:var(--p0)">E</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Documento de Critérios Aprovado</div>
+          <div class="step-body">Entregável final da Fase 1: documento formal com todos os critérios de elegibilidade, aprovado e assinado por ambos os sócios. Este documento é o "spec" do sistema — qualquer mudança futura nos critérios passa por revisão conjunta e atualização do documento.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-box">
+      <div class="gate-label">Gate de Avanço — Fase 1 → 2</div>
+      <div class="gate-title">Todos os itens abaixo devem ser cumpridos para avançar:</div>
+      <ul class="gate-list">
+        <li>50+ imóveis analisados manualmente com critérios documentados</li>
+        <li>Critérios de elegibilidade aprovados por ambos os sócios (documento assinado)</li>
+        <li>Pipeline automatizado rodando e entregando imóveis elegíveis diariamente</li>
+        <li>Taxa de aprovação entre 10–30% dos imóveis pesquisados (prova que o filtro não é nem muito fechado nem muito amplo)</li>
+        <li>Pelo menos 20 imóveis reais com score calculado no sistema</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ===== SECTION 4: FASES 2 A 7 ===== -->
+<div id="fases" class="section-header">
+  <span class="section-tag">04 — Detalhamento das Fases</span>
+  <h2>Fases 2 a 7 — Roteiro Completo</h2>
+  <p>Cada fase tem entregáveis claros, responsabilidades definidas e um gate objetivo. Nenhuma fase começa sem o gate da fase anterior cumprido.</p>
+</div>
+
+<!-- FASE 2 -->
+<div class="phase-section">
+  <div class="phase-header" style="background:var(--p1-soft); border-color:var(--p1)">
+    <div class="phase-badge" style="background:var(--p1)">2</div>
+    <div class="phase-header-text">
+      <div class="phase-label">Fase 2 · Pós-Gate 1</div>
+      <div class="phase-name">Plataforma com Dados Reais</div>
+      <div class="phase-desc">Conectar o MVP (Minimum Viable Product — produto mínimo viável) funcional ao pipeline real do MLS. Substituir os 20 imóveis fictícios por dados reais, validar toda a lógica de scoring com dados verdadeiros e preparar o sistema para receber usuários externos.</div>
+    </div>
+  </div>
+  <div class="phase-body" style="border-color:var(--p1)">
+    <div class="steps">
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p1)">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Substituição dos Dados Ficticios</div>
+          <div class="step-body">Trocar o <code>data.js</code> estático por conexão com o pipeline do MLS. Sistema passa a exibir imóveis reais e atualizados diariamente. Verificar que todos os cálculos de ROI, score e tier funcionam corretamente com dados reais.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p1)">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Revisão e Calibração do Scoring Engine</div>
+          <div class="step-body">Com dados reais, revisar se os thresholds de ROI (25%, 20%, 15%, 10%) e os pesos de risco (flood zone, telhado, HVAC) estão bem calibrados para o mercado atual de Orlando. Ajustar conforme necessário com validação de Jales.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p1)">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Infraestrutura de Hospedagem &amp; Domínio</div>
+          <div class="step-body">Migrar de GitHub Pages para hospedagem profissional (Vercel ou Netlify com domínio próprio — ex: app.realrisk.com). Configurar HTTPS (HyperText Transfer Protocol Secure — protocolo de conexão segura), domínio e ambiente de produção separado do ambiente de desenvolvimento.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p1)">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Sistema de Autenticação Básico</div>
+          <div class="step-body">Implementar login simples (email + senha ou magic link) para proteger o acesso ao sistema. Nesta fase, apenas os dois sócios têm acesso. Preparar infraestrutura para gestão de múltiplos usuários com perfis de acesso diferentes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p1)">5</div></div>
+        <div class="step-content">
+          <div class="step-title">Testes Internos de Qualidade</div>
+          <div class="step-body">Os dois sócios usam o sistema durante 2–3 semanas intensamente para identificar bugs, inconsistências nos dados e melhorias de UX (User Experience — experiência do usuário) antes de qualquer usuário externo ter acesso. Criar lista de issues e resolver todas as críticas antes do Alpha.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-box">
+      <div class="gate-label">Gate de Avanço — Fase 2 → 3 (Alpha)</div>
+      <div class="gate-title">Pré-requisitos para abrir o Alpha:</div>
+      <ul class="gate-list">
+        <li>Sistema rodando com dados reais do MLS, atualizado automaticamente</li>
+        <li>Scoring validado e calibrado por Jales — "os números fazem sentido de mercado"</li>
+        <li>Zero bugs críticos (bugs que impeçam o uso do sistema)</li>
+        <li>Login e controle de acesso funcionando</li>
+        <li>Mínimo de 30 imóveis elegíveis na plataforma ao mesmo tempo</li>
+        <li>Ambos os sócios concordam que o sistema está pronto para ser apresentado a terceiros</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FASE 3 -->
+<div class="phase-section">
+  <div class="phase-header" style="background:var(--p2-soft); border-color:var(--p2)">
+    <div class="phase-badge" style="background:var(--p2)">3</div>
+    <div class="phase-header-text">
+      <div class="phase-label">Fase 3 · Alpha Fechado</div>
+      <div class="phase-name">Alpha — Validação com Usuários Reais</div>
+      <div class="phase-desc">Convidar 10 a 20 pessoas da rede de Jales para usar o sistema gratuitamente. O objetivo não é vender — é validar se a plataforma resolve o problema real, coletar feedback qualitativo e identificar o que melhorar antes do lançamento pago.</div>
+    </div>
+  </div>
+  <div class="phase-body" style="border-color:var(--p2)">
+    <div class="steps">
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p2)">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Seleção dos Alpha Testers</div>
+          <div class="step-body">Jales seleciona 10–20 contatos qualificados: investidores da rede pessoal que já têm interesse em imóveis na Flórida e podem dar feedback honesto. Critério de seleção: pessoas que de fato investiriam se o sistema funcionasse bem. Não são "amigos" — são potenciais clientes reais.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p2)">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Onboarding do Alpha</div>
+          <div class="step-body">Cada alpha tester recebe uma sessão de onboarding de 30 minutos (video call com Lucas ou Jales). Apresentar o sistema, explicar como usar, esclarecer que é uma versão em desenvolvimento. Acesso gratuito por 30 dias em troca de feedback estruturado. Durante o onboarding, aplicar também um questionário de perfil do investidor (capital disponível, objetivo do investimento, apetite a risco e estratégia preferida — flip, hold, STR) para mapear o perfil do cliente e, no futuro, personalizar o scoring (ver Pilar 2).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p2)">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Coleta de Feedback Estruturado</div>
+          <div class="step-body">Questionário semanal curto (5 perguntas) + entrevistas de 20 min com ao menos 5 alpha testers no fim do período. Perguntas-chave: "Você usaria isso no dia a dia?", "O que te impediria de assinar?", "Qual feature faz mais falta?", "Qual seria o preço justo?". Manter também um repositório vivo de comentários e ideias levantadas pelos sócios ao longo do processo, revisado periodicamente.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p2)">4</div></div>
+        <div class="step-content">
+          <div class="step-title">Iteração e Ajustes</div>
+          <div class="step-body">Implementar os ajustes de alta prioridade identificados no feedback. Documentar o que mudou e por quê. Preparar o sistema para a fase Beta com precificação e pagamento.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-box">
+      <div class="gate-label">Gate de Avanço — Fase 3 → 4 (Beta Pago)</div>
+      <ul class="gate-list">
+        <li>Mínimo 10 alpha testers ativos (usaram o sistema ao menos 3x na semana)</li>
+        <li>NPS (Net Promoter Score) médio ≥ 7 de 10 — "Você recomendaria isso para um amigo investidor?"</li>
+        <li>Pelo menos 3 alpha testers verbalizando intenção de assinar quando abrir</li>
+        <li>Nenhum feedback crítico sobre a confiabilidade dos dados — os números precisam parecer corretos para quem conhece o mercado</li>
+        <li>Ajustes prioritários do feedback implementados</li>
+        <li>Sistema de pagamento e assinatura testado internamente</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FASE 4 -->
+<div class="phase-section">
+  <div class="phase-header" style="background:var(--p3-soft); border-color:var(--p3)">
+    <div class="phase-badge" style="background:var(--p3)">4</div>
+    <div class="phase-header-text">
+      <div class="phase-label">Fase 4 · Beta Pago</div>
+      <div class="phase-name">Beta — Primeiros Assinantes &amp; Primeiro Deal</div>
+      <div class="phase-desc">Abrir o acesso para um grupo maior com assinatura paga. Ativar o modelo de receita completo (assinatura + serviços). Fechar o primeiro deal real através da plataforma. Esta fase prova que o modelo de negócio é real.</div>
+    </div>
+  </div>
+  <div class="phase-body" style="border-color:var(--p3)">
+    <div class="steps">
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p3)">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Ativação da Assinatura Paga</div>
+          <div class="step-body">Preço de lançamento Beta: <strong>$99/mês ou $900/ano</strong> (desconto de early adopter vs. preço final de $1.200/ano). Oferta limitada aos primeiros 30 assinantes — cria urgência e exclusividade. Alpha testers que quiserem continuar recebem 30% de desconto vitalício.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p3)">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Lançamento do Mecanismo de Sinalização de Deal</div>
+          <div class="step-body">Ativar o botão "Sinalizar Interesse" com lógica de bloqueio interno de exclusividade por 7 dias (válido apenas dentro da plataforma — não afeta o status do imóvel no MLS). Quando um membro sinaliza interesse em um imóvel, os outros veem o status como "em análise". Jales é notificado imediatamente para entrar em contato e iniciar o processo de oferta.<br><br>
+          <em>Nota: velocidade de comunicação é crítica nesse fluxo — o tempo entre a sinalização de interesse e o primeiro contato de Jales é um diferencial competitivo e deve ser tratado como SLA interno. Avaliar também um sistema de "like" / "salvo" no imóvel (favoritar para a watchlist sem disparar o bloqueio de exclusividade), permitindo ao membro organizar sua visualização e priorizar o que quer acompanhar de perto.</em></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p3)">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Ativação dos Serviços Avulsos</div>
+          <div class="step-body">Lançar formalmente o menu de serviços: Inspeção Técnica ($950), Due Diligence Jurídica ($1.800), Setup de Gestão de Obras ($1.000 + 20% equity). Cada serviço tem uma página de descrição dentro da plataforma e processo de contratação claro.<br><br>
+          <em>Nota: trabalhar a expectativa do investidor é um pilar dessa etapa — o melhor remédio contra a ilusão é a desilusão administrada com transparência (relatórios técnicos honestos desde o início, mesmo quando o resultado não é o esperado). Avaliar também a criação de uma "Due Diligence de Mercado" como novo produto/serviço: uma análise de viabilidade do negócio do investidor (não apenas do imóvel), que ajuda a validar a tese de investimento antes da compra.</em></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p3)">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Marketing Orgânico Inicial</div>
+          <div class="step-body">Ativação de canais de aquisição orgânicos: LinkedIn pessoal (Jales e Lucas), grupos de WhatsApp de investidores brasileiros, Instagram com conteúdo educativo sobre investimento imobiliário na Flórida. Foco em conteúdo educativo — "o que é flood zone e por que importa?", "como funciona um flip nos EUA?" — não em vender a plataforma diretamente.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p3)">5</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Primeiro Deal Fechado</div>
+          <div class="step-body">Meta da Fase 4: pelo menos 1 deal originado através da plataforma chegar ao fechamento. Seja um flip, seja uma compra para aluguel. Este primeiro deal é o proof of concept mais poderoso do negócio — gera case de sucesso, prova o modelo para futuros membros e gera receita de serviços (auditoria + equity).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p3)">6</div></div>
+        <div class="step-content">
+          <div class="step-title">Documentar Case de Sucesso &amp; Lições Aprendidas</div>
+          <div class="step-body">Registrar formalmente o primeiro deal fechado como case de sucesso (estrutura da operação, números reais, timeline, decisões-chave) para uso em marketing (Fase 5) e como material didático (Fase 6). Em paralelo, consolidar as lições aprendidas de toda a Fase 4 em cartilhas de troubleshoot — guias práticos para problemas recorrentes (ex.: atrasos de inspeção, negociação travada, imprevistos de obra) que servem de referência para os sócios e para futuros membros.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-box">
+      <div class="gate-label">Gate de Avanço — Fase 4 → 5 (Lançamento Oficial)</div>
+      <ul class="gate-list">
+        <li>Mínimo 30 assinantes pagantes ativos</li>
+        <li>Pelo menos 1 deal fechado ou em fase avançada de due diligence através da plataforma</li>
+        <li>Churn mensal abaixo de 10% (prova de retenção) — com estratégia de retenção definida e documentada (comunicação proativa, conteúdo exclusivo, suporte responsivo)</li>
+        <li>Pelo menos 2 depoimentos documentados de membros sobre o valor da plataforma</li>
+        <li>Receita mensal recorrente (MRR) de pelo menos $2.500/mês</li>
+        <li>Processos operacionais (onboarding, suporte, sinalização de deal) documentados e funcionando de forma previsível</li>
+        <li>Case de sucesso documentado, com lições aprendidas e cartilhas de troubleshoot consolidadas</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FASE 5 -->
+<div class="phase-section">
+  <div class="phase-header" style="background:var(--p4-soft); border-color:var(--p4)">
+    <div class="phase-badge" style="background:var(--p4)">5</div>
+    <div class="phase-header-text">
+      <div class="phase-label">Fase 5 · Lançamento Oficial</div>
+      <div class="phase-name">Go-Live — Circle, Marketing &amp; Deal Flow</div>
+      <div class="phase-desc">Lançamento público oficial. Ativação da comunidade Circle. Push de marketing com cases reais. Estruturação do deal flow regular. Meta: chegar a 100 assinantes e estar com a operação rodando de forma sustentável.</div>
+    </div>
+  </div>
+  <div class="phase-body" style="border-color:var(--p4)">
+    <div class="steps">
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p4)">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Ativação da Comunidade Circle</div>
+          <div class="step-body">
+            <strong>O Circle é o coração da comunidade RealRisk.</strong> Plataforma de comunidade (Circle.so ou similar) integrada à assinatura — quem é membro da plataforma tem acesso automático ao Circle.<br><br>
+            <strong>Estrutura do Circle:</strong><br>
+            — <strong>Canal Geral</strong>: discussões abertas de mercado, notícias da Flórida, dúvidas<br>
+            — <strong>Deals Ativos</strong>: imóveis selecionados pela curadoria RealRisk com análise publicada<br>
+            — <strong>Cases de Sucesso</strong>: documentação dos deals fechados pelos membros<br>
+            — <strong>Perguntas ao Jales</strong>: canal exclusivo para perguntas diretas ao especialista<br>
+            — <strong>Recursos &amp; Templates</strong>: modelos de contrato, checklist de due diligence, guias<br>
+            — <strong>Eventos ao Vivo</strong>: webinars mensais com Jales sobre mercado, oportunidades, tendências
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p4)">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Preço Final e Estrutura de Tiers</div>
+          <div class="step-body">
+            <div class="product-grid" style="margin-top:8px">
+              <div class="product-card">
+                <div class="product-card-num">Plano Essencial</div>
+                <div class="product-card-price">$97/mês · $897/ano</div>
+                <div class="product-card-desc">Acesso à plataforma de listagens, scoring, watchlist e alertas. Sem acesso ao Circle.</div>
+              </div>
+              <div class="product-card" style="border-color:var(--accent); border-width:2px">
+                <div class="product-card-num">Plano Comunidade ⭐</div>
+                <div class="product-card-price">$127/mês · $1.200/ano</div>
+                <div class="product-card-desc">Tudo do Essencial + acesso completo ao Circle, webinars mensais e prioridade na sinalização de deals.</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:13px;color:var(--text-muted)">Membros da plataforma têm sempre primeira opção de compra nos imóveis disponíveis — incluindo oportunidades de revenda no atacado (wholesale) — antes de serem oferecidos a investidores externos (ver Pilar 3).</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p4)">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Push de Marketing com Cases Reais</div>
+          <div class="step-body">Usar o(s) deal(s) fechado(s) na Fase 4 como âncora de credibilidade. Produzir: um case study detalhado em vídeo (antes/depois do imóvel + análise de ROI real), posts educativos sobre o processo de investimento, depoimento em vídeo do membro que fechou o deal. Distribuir nos canais da comunidade, LinkedIn, Instagram e YouTube.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p4)">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Estruturação do Deal Flow Regular</div>
+          <div class="step-body">Com a plataforma rodando e a comunidade ativa, estabelecer cadência operacional: toda segunda-feira, publicar no Circle os melhores Tier 1 da semana com análise curta do Jales. Uma vez por mês, sessão ao vivo "Análise da Semana" — Jales e Lucas analisando um imóvel específico em tempo real com os membros.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p4)">5</div></div>
+        <div class="step-content">
+          <div class="step-title">Meta: 100 Assinantes</div>
+          <div class="step-body">100 assinantes é o marco que destrava a Fase 6 (Cursos). Com 100 membros ativos a $1.200/ano, a base de receita recorrente é de $120k/ano apenas em assinaturas — operação financeiramente sustentável sem depender de deals específicos.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-box">
+      <div class="gate-label">Gate de Avanço — Fase 5 → 6 (Cursos)</div>
+      <ul class="gate-list">
+        <li><strong>100 assinantes pagantes ativos</strong> — gate inegociável para iniciar cursos</li>
+        <li>Circle ativo com pelo menos 60% dos membros participando mensalmente</li>
+        <li>Mínimo 3 deals fechados via plataforma documentados como cases</li>
+        <li>MRR ≥ $10.000/mês (receita recorrente de assinaturas)</li>
+        <li>Processo de deal flow estabelecido e rodando há pelo menos 2 meses sem falhas</li>
+        <li>NPS da comunidade ≥ 8 — membros satisfeitos suficiente para virar alunos de cursos</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FASE 6 -->
+<div class="phase-section">
+  <div class="phase-header" style="background:var(--p5-soft); border-color:var(--p5)">
+    <div class="phase-badge" style="background:var(--p5)">6</div>
+    <div class="phase-header-text">
+      <div class="phase-label">Fase 6 · Gate: 100 Assinantes</div>
+      <div class="phase-name">Cursos &amp; Educação — A Universidade do Investidor</div>
+      <div class="phase-desc">Com a comunidade estabelecida e 100+ membros, lançar trilhas de educação estruturadas. O conteúdo converte a autoridade do Jales em produto escalável — um curso gravado alcança mil pessoas com o mesmo esforço que uma consultoria individual.</div>
+    </div>
+  </div>
+  <div class="phase-body" style="border-color:var(--p5)">
+    <div class="steps">
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p5)">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Trilha 1 — Fundamentos: Investimento Imobiliário na Flórida</div>
+          <div class="step-body">
+            Curso introdutório para quem está começando. Preço: $497 (incluso no plano Comunidade ou avulso).<br>
+            <strong>Módulos:</strong> Como funciona o mercado de Orlando · Flood zones, seguros e o que impacta o valor real · O processo de compra americano (title, closing, earnest money) · Como ler um relatório de inspeção · Estrutura legal para estrangeiros comprar nos EUA · Seu primeiro flip: passo a passo
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p5)">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Trilha 2 — Avançado: Análise de Risco &amp; Deal Evaluation</div>
+          <div class="step-body">
+            Curso para quem já tem experiência e quer aprofundar a análise técnica. Preço: $797.<br>
+            <strong>Módulos:</strong> Como usar o RealRisk para analisar oportunidades · Modelagem financeira de um flip (planilha ao vivo) · Gestão de CAPEX (Capital Expenditure — investimento de capital em melhorias e reformas do imóvel) e empreiteiros · Due diligence jurídica: o que checar e o que evitar · Estratégias de saída: flip vs. hold vs. STR · Casos reais com Jales: análise post-mortem de deals
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p5)">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Trilha 3 — Burocracia &amp; Estrutura para Investidor Estrangeiro</div>
+          <div class="step-body">
+            Curso focado em desmistificar a parte burocrática, fiscal e migratória do investimento nos EUA para o investidor brasileiro. Preço: $597.<br>
+            <strong>Módulos:</strong> Vídeo com contador especializado sobre contabilidade e impostos (Brasil e EUA) · Vídeo com advogado de imigração sobre estrutura legal para investidores estrangeiros · Como enviar dinheiro para os EUA — opções e estrutura de remessa · Fluxograma completo do processo de compra até o closing · Como funciona uma title company (estrutura burocrática da venda do imóvel) · Curso de Gestão de Obras: fundamentos para investidores no atacado que compram, fazem reparo/limpeza leve ("água e sabão") e revendem
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p5)">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Programa Mentoria — Deal Junto com Jales</div>
+          <div class="step-body">
+            Produto premium: acompanhamento individual de um deal do início ao fim com Jales. Preço: $3.500 por projeto. Limitado a 5 vagas por trimestre. Inclui: análise personalizada do imóvel, acompanhamento das negociações, revisão da due diligence, suporte durante a reforma e estratégia de saída.<br><br>
+            <em>Nota: o programa também funciona como funil de qualificação e recrutamento — os cursos e trilhas da Fase 6 servem para qualificar os membros mais engajados e preparados, e a mentoria é o passo natural seguinte para identificar e recrutar os candidatos mais promissores para deals maiores ou parcerias de longo prazo.</em>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p5)">5</div></div>
+        <div class="step-content">
+          <div class="step-title">Funil de Conteúdo → Educação → Plataforma</div>
+          <div class="step-body">Os cursos também funcionam como canal de aquisição: novos alunos que compram cursos avulsos (sem ser membros) são expostos à plataforma durante o curso e têm oferta especial de assinatura ao final. Funil: conteúdo gratuito → curso pago → assinatura da comunidade → serviços de deal.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-box">
+      <div class="gate-label">Gate de Avanço — Fase 6 → 7 (Expansão)</div>
+      <ul class="gate-list">
+        <li>Pelo menos 2 trilhas de cursos lançadas e vendidas com feedback positivo</li>
+        <li>200+ assinantes ativos na comunidade</li>
+        <li>Receita total mensal (assinaturas + cursos + serviços) de pelo menos $30.000/mês</li>
+        <li>Time mínimo de suporte operacional (pelo menos 1 pessoa além dos sócios cuidando de operações)</li>
+        <li>Playbook de expansão de mercado documentado (critérios para entrar em novo mercado)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FASE 7 -->
+<div class="phase-section">
+  <div class="phase-header" style="background:var(--p6-soft); border-color:var(--p6)">
+    <div class="phase-badge" style="background:var(--p6)">7</div>
+    <div class="phase-header-text">
+      <div class="phase-label">Fase 7 · Visão de Longo Prazo</div>
+      <div class="phase-name">Expansão — Novos Mercados &amp; Fundo de Equity</div>
+      <div class="phase-desc">Com modelo validado em Orlando, expansão para outros mercados da Flórida (Tampa, Miami, Jacksonville) e estruturação de um fundo de co-investimento onde membros da comunidade podem investir juntos em deals maiores.</div>
+    </div>
+  </div>
+  <div class="phase-body" style="border-color:var(--p6)">
+    <div class="steps">
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p6)">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Expansão para Tampa Bay</div>
+          <div class="step-body">Segundo mercado: Hillsborough, Pinellas e Pasco Counties. Adaptar critérios de elegibilidade para o mercado de Tampa. Parcerias com corretores locais para manter a qualidade da curadoria. Tampa tem mercado de flip expressivo e forte demanda de STR próximo às praias.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p6)">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">Fundo de Co-Investimento</div>
+          <div class="step-body">Estrutura jurídica (LLC — Limited Liability Company, sociedade de responsabilidade limitada; ou SPE — Sociedade de Propósito Específico, criada por deal) que permite membros da comunidade investir em frações de deals maiores. A RealRisk atua como gestor e recebe taxa de administração + participação nos lucros. Permite acessar deals acima de $600k que um único investidor não cobriria sozinho.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-connector"><div class="step-dot" style="background:var(--p6)">3</div></div>
+        <div class="step-content">
+          <div class="step-title">Parcerias Institucionais</div>
+          <div class="step-body">Parcerias com family offices brasileiros, gestoras de investimentos no Brasil e grupos de investidores profissionais que queiram diversificar para imóveis nos EUA através de um operador local confiável com track record documentado.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ===== SECTION 5: MODELO DE RECEITA ===== -->
+<div id="receita" class="section-header">
+  <span class="section-tag">05 — Modelo de Receita</span>
+  <h2>Fontes de Receita &amp; Precificação</h2>
+  <p>Cinco fontes de receita complementares que se retroalimentam. A assinatura sustenta a operação, os serviços geram margem imediata, o equity cria o upside, e os cursos escalam sem custo marginal.</p>
+</div>
+
+<table class="revenue-table">
+  <thead>
+    <tr>
+      <th>Produto / Serviço</th>
+      <th>Preço</th>
+      <th>Modelo</th>
+      <th>Margem</th>
+      <th>Fase de Ativação</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Assinatura Essencial</strong><br><span style="color:var(--text-muted);font-size:12px">Acesso à plataforma de listagens e scoring</span></td>
+      <td class="num">$897/ano</td>
+      <td>Recorrente anual</td>
+      <td>~90%</td>
+      <td><span class="tag purple">Fase 4</span></td>
+    </tr>
+    <tr>
+      <td><strong>Assinatura Comunidade</strong><br><span style="color:var(--text-muted);font-size:12px">Plataforma + Circle + webinars mensais</span></td>
+      <td class="num">$1.200/ano</td>
+      <td>Recorrente anual</td>
+      <td>~90%</td>
+      <td><span class="tag orange">Fase 5</span></td>
+    </tr>
+    <tr>
+      <td><strong>Inspeção Técnica</strong><br><span style="color:var(--text-muted);font-size:12px">Vistoria, diagnóstico estrutural, CAPEX estimado</span></td>
+      <td class="num">$950</td>
+      <td>Por projeto</td>
+      <td>~50%</td>
+      <td><span class="tag purple">Fase 4</span></td>
+    </tr>
+    <tr>
+      <td><strong>Due Diligence Jurídica</strong><br><span style="color:var(--text-muted);font-size:12px">Análise de liens, zoneamento, histórico de permissões</span></td>
+      <td class="num">$1.800</td>
+      <td>Por projeto</td>
+      <td>~45%</td>
+      <td><span class="tag purple">Fase 4</span></td>
+    </tr>
+    <tr>
+      <td><strong>Setup de Gestão de Obras</strong><br><span style="color:var(--text-muted);font-size:12px">Taxa administrativa de entrada no modelo de gestão</span></td>
+      <td class="num">$1.000</td>
+      <td>Por projeto</td>
+      <td>~95%</td>
+      <td><span class="tag purple">Fase 4</span></td>
+    </tr>
+    <tr>
+      <td><strong>Participação nos Lucros (Equity)</strong><br><span style="color:var(--text-muted);font-size:12px">20% do lucro líquido na venda do imóvel reformado</span></td>
+      <td class="num">20% do lucro</td>
+      <td>No desinvestimento</td>
+      <td>~95%</td>
+      <td><span class="tag purple">Fase 4</span></td>
+    </tr>
+    <tr>
+      <td><strong>Suporte Fiscal &amp; Migratório</strong><br><span style="color:var(--text-muted);font-size:12px">Apoio com contador e advogado de imigração para investidores estrangeiros</span></td>
+      <td class="num">A definir</td>
+      <td>Por projeto / encaminhamento</td>
+      <td>—</td>
+      <td><span class="tag blue">Em avaliação</span></td>
+    </tr>
+    <tr>
+      <td><strong>Mailbox / Correspondência</strong><br><span style="color:var(--text-muted);font-size:12px">Endereço para recebimento de correspondência nos EUA</span></td>
+      <td class="num">A definir</td>
+      <td>Recorrente</td>
+      <td>—</td>
+      <td><span class="tag blue">Em avaliação</span></td>
+    </tr>
+    <tr>
+      <td><strong>Trilha 3 — Burocracia &amp; Estrutura</strong><br><span style="color:var(--text-muted);font-size:12px">Curso sobre fiscal, migratório, remessas e processo de closing</span></td>
+      <td class="num">$597</td>
+      <td>Por aluno</td>
+      <td>~85%</td>
+      <td><span class="tag red">Fase 6</span></td>
+    </tr>
+    <tr>
+      <td><strong>Curso Fundamentos</strong><br><span style="color:var(--text-muted);font-size:12px">Investimento imobiliário na Flórida — nível iniciante</span></td>
+      <td class="num">$497</td>
+      <td>Por aluno</td>
+      <td>~85%</td>
+      <td><span class="tag red">Fase 6</span></td>
+    </tr>
+    <tr>
+      <td><strong>Curso Avançado</strong><br><span style="color:var(--text-muted);font-size:12px">Análise de risco &amp; deal evaluation — nível avançado</span></td>
+      <td class="num">$797</td>
+      <td>Por aluno</td>
+      <td>~85%</td>
+      <td><span class="tag red">Fase 6</span></td>
+    </tr>
+    <tr>
+      <td><strong>Mentoria Individual — Deal junto com Jales</strong><br><span style="color:var(--text-muted);font-size:12px">Acompanhamento completo de um deal do início ao fim</span></td>
+      <td class="num">$3.500</td>
+      <td>Por projeto (5 vagas/trimestre)</td>
+      <td>~80%</td>
+      <td><span class="tag red">Fase 6</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout blue" style="margin-top:16px">
+  <div class="callout-label">Notas — Modelo de Receita em Definição</div>
+  <p><strong>Gestão de Obras — modelos alternativos de precificação:</strong> além do modelo atual (taxa de $1.000 + 20% do lucro líquido na venda), avaliar (1) cobrança de 20% do valor total da obra, ou (2) percentual sobre o lucro líquido do projeto como um todo. Decisão impacta diretamente as linhas "Setup de Gestão de Obras" e "Participação nos Lucros (Equity)" acima.</p>
+  <p style="margin-top:8px"><strong>Tributação para investidores estrangeiros:</strong> definir, com apoio de contador especializado, quanto o investidor brasileiro paga de imposto no Brasil e nos EUA, se vale manter capital nos EUA ou repatriar para o Brasil, e como estruturar a remessa de valores entre os dois países. Essa definição é pré-requisito para precificar a linha "Suporte Fiscal &amp; Migratório" (responsável: Jales).</p>
+</div>
+
+<hr class="divider" />
+
+<!-- ===== SECTION 6: PROJEÇÃO ===== -->
+<div id="projecao" class="section-header">
+  <span class="section-tag">06 — Projeção Financeira</span>
+  <h2>Receita por Ano — Cenário Realista</h2>
+  <p>Projeção baseada nas metas de assinantes por fase e no ritmo esperado de deals e serviços. Não inclui receita de cursos (ativados somente na Fase 6).</p>
+</div>
+
+<table class="kpi-table">
+  <thead>
+    <tr>
+      <th>Linha de Receita</th>
+      <th class="num">Ano 1</th>
+      <th class="num">Ano 2</th>
+      <th class="num">Ano 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Assinaturas <span style="color:var(--text-soft);font-size:12px">(membros)</span></td>
+      <td class="num">$18k <span style="color:var(--text-soft);font-size:11px">(15)</span></td>
+      <td class="num">$72k <span style="color:var(--text-soft);font-size:11px">(60)</span></td>
+      <td class="num">$168k <span style="color:var(--text-soft);font-size:11px">(140)</span></td>
+    </tr>
+    <tr>
+      <td>Inspeções &amp; Due Diligence <span style="color:var(--text-soft);font-size:12px">(projetos)</span></td>
+      <td class="num">$7k <span style="color:var(--text-soft);font-size:11px">(5)</span></td>
+      <td class="num">$35k <span style="color:var(--text-soft);font-size:11px">(25)</span></td>
+      <td class="num">$84k <span style="color:var(--text-soft);font-size:11px">(60)</span></td>
+    </tr>
+    <tr>
+      <td>Equity &amp; Setup de Obras <span style="color:var(--text-soft);font-size:12px">(deals)</span></td>
+      <td class="num">$22k <span style="color:var(--text-soft);font-size:11px">(2)</span></td>
+      <td class="num">$104k <span style="color:var(--text-soft);font-size:11px">(8)</span></td>
+      <td class="num">$270k <span style="color:var(--text-soft);font-size:11px">(18)</span></td>
+    </tr>
+    <tr>
+      <td>Cursos &amp; Mentoria <span style="color:var(--text-soft);font-size:12px">(Fase 6+)</span></td>
+      <td class="num">—</td>
+      <td class="num">$20k</td>
+      <td class="num">$75k</td>
+    </tr>
+    <tr class="total-row">
+      <td>Faturamento Anual Consolidado</td>
+      <td class="num">$47k</td>
+      <td class="num">$231k</td>
+      <td class="num">$597k</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="metrics-row" style="margin-top:20px">
+  <div class="metric-chip">
+    <span class="metric-chip-val">$47k</span>
+    <span class="metric-chip-label">Ano 1 (realista)</span>
+  </div>
+  <div class="metric-chip">
+    <span class="metric-chip-val">$231k</span>
+    <span class="metric-chip-label">Ano 2 (realista)</span>
+  </div>
+  <div class="metric-chip">
+    <span class="metric-chip-val">$597k</span>
+    <span class="metric-chip-label">Ano 3 (realista)</span>
+  </div>
+  <div class="metric-chip">
+    <span class="metric-chip-val">~$80-100k</span>
+    <span class="metric-chip-label">por deal de flip (equity)</span>
+  </div>
+  <div class="metric-chip">
+    <span class="metric-chip-val">15%</span>
+    <span class="metric-chip-label">churn anual estimado</span>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ===== SECTION 7: MÉTRICAS ===== -->
+<div id="metricas" class="section-header">
+  <span class="section-tag">07 — Métricas de Saúde</span>
+  <h2>KPIs (Key Performance Indicators — indicadores-chave de desempenho) Operacionais do Negócio</h2>
+  <p>Esses são os números que os dois sócios devem acompanhar mensalmente. Eles dizem se o negócio está saudável e crescendo ou se algo precisa de atenção.</p>
+</div>
+
+<table class="kpi-table">
+  <thead>
+    <tr>
+      <th>Métrica</th>
+      <th>O que mede</th>
+      <th>Meta — Fase 4</th>
+      <th>Meta — Fase 5</th>
+      <th>Alerta se...</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MRR</strong><br><span style="font-size:11px;color:var(--text-muted)">Receita Recorrente Mensal</span></td>
+      <td style="font-size:12px">Saúde financeira base</td>
+      <td class="num">$2.500</td>
+      <td class="num">$10.000</td>
+      <td style="font-size:12px;color:#c62828">Crescimento &lt; 10%/mês</td>
+    </tr>
+    <tr>
+      <td><strong>Assinantes Ativos</strong></td>
+      <td style="font-size:12px">Escala da comunidade</td>
+      <td class="num">30</td>
+      <td class="num">100</td>
+      <td style="font-size:12px;color:#c62828">Abaixo da meta por 2 meses</td>
+    </tr>
+    <tr>
+      <td><strong>Churn Mensal</strong></td>
+      <td style="font-size:12px">Retenção e satisfação</td>
+      <td class="num">&lt; 10%</td>
+      <td class="num">&lt; 5%</td>
+      <td style="font-size:12px;color:#c62828">Acima de 15% por 2 meses</td>
+    </tr>
+    <tr>
+      <td><strong>Deals Sinalizados</strong></td>
+      <td style="font-size:12px">Engajamento real da comunidade</td>
+      <td class="num">3/mês</td>
+      <td class="num">8/mês</td>
+      <td style="font-size:12px;color:#c62828">Zero por 3 semanas</td>
+    </tr>
+    <tr>
+      <td><strong>NPS da Comunidade</strong></td>
+      <td style="font-size:12px">Satisfação e recomendação</td>
+      <td class="num">≥ 7</td>
+      <td class="num">≥ 8</td>
+      <td style="font-size:12px;color:#c62828">Abaixo de 6</td>
+    </tr>
+    <tr>
+      <td><strong>Imóveis no Sistema</strong></td>
+      <td style="font-size:12px">Saúde do pipeline de dados</td>
+      <td class="num">30+ ativos</td>
+      <td class="num">50+ ativos</td>
+      <td style="font-size:12px;color:#c62828">Abaixo de 15 imóveis elegíveis</td>
+    </tr>
+    <tr>
+      <td><strong>Participação no Circle</strong></td>
+      <td style="font-size:12px">Engajamento da comunidade</td>
+      <td class="num">N/A</td>
+      <td class="num">≥ 60%/mês</td>
+      <td style="font-size:12px;color:#c62828">Abaixo de 40% por 2 meses</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr class="divider" />
+
+<!-- ===== SECTION 8: SOCIEDADE ===== -->
+<div id="sociedade" class="section-header">
+  <span class="section-tag">08 — Estrutura Societária</span>
+  <h2>Papéis, Responsabilidades e Splits</h2>
+</div>
+
+<div class="product-grid">
+  <div class="product-card">
+    <div class="product-card-num">Jales Castro — Operações &amp; Mercado</div>
+    <div class="product-card-desc" style="margin-top:8px">
+      <strong>Aporta:</strong> acesso ao MLS, rede de 40 anos, licença de corretor, credibilidade de mercado, validação dos critérios de scoring, originação de deals off-market, relacionamento com empreiteiros e inspetores.<br><br>
+      <strong>Responsabilidades operacionais:</strong> validar imóveis antes de publicar, conduzir negociações de compra, liderar a curadoria semanal do Circle, sessões ao vivo mensais, mentoria premium.
+    </div>
+  </div>
+  <div class="product-card">
+    <div class="product-card-num">Lucas Leite — Tecnologia &amp; Engenharia de Risco</div>
+    <div class="product-card-desc" style="margin-top:8px">
+      <strong>Aporta:</strong> plataforma completa (código, infraestrutura, domínio), engine de scoring, pipeline de dados do MLS, gestão do produto digital, automações, análise técnica de risco, produção de cursos.<br><br>
+      <strong>Responsabilidades operacionais:</strong> manutenção e evolução da plataforma, pipeline de dados rodando diariamente, suporte técnico aos membros, métricas e relatórios de saúde do negócio.
+    </div>
+  </div>
+</div>
+
+<div class="callout accent" style="margin-top:20px">
+  <div class="callout-label">Tomada de Decisão</div>
+  <p>Decisões de negócio são tomadas por consenso entre os dois sócios. Nenhuma fase avança, nenhum produto é lançado e nenhum critério de elegibilidade muda sem aprovação dos dois. Em caso de impasse, os sócios definem previamente um mecanismo de resolução (ex: consultar um especialista neutro do setor).</p>
+</div>
+
+<div class="callout green" style="margin-top:16px">
+  <div class="callout-label">Parcerias-Chave</div>
+  <p>Profissionais e empresas externas necessárias para sustentar a operação e o conteúdo educativo da plataforma:</p>
+  <p style="margin-top:8px"><strong>Contador especializado:</strong> apoio em contabilidade e tributação para investidores estrangeiros (Brasil e EUA), insumo para o vídeo educativo da Trilha 3 e para a linha de receita "Suporte Fiscal &amp; Migratório" (ver Modelo de Receita).</p>
+  <p style="margin-top:8px"><strong>Advogado de imigração:</strong> orientação sobre estrutura legal para investidores estrangeiros comprarem nos EUA, base para o vídeo educativo da Trilha 3.</p>
+  <p style="margin-top:8px"><strong>Title company:</strong> parceiro para o processo de closing, base para o vídeo explicativo sobre a estrutura burocrática da venda do imóvel (Trilha 3).</p>
+  <p style="margin-top:8px"><strong>Empreiteiros &amp; inspetores:</strong> rede de confiança do Jales para gestão de obras, CAPEX e inspeção técnica — sustenta os produtos de Inspeção Técnica e Gestão de Obras (ver Modelo de Receita).</p>
+  <p style="margin-top:8px"><strong>Provedor de mailbox / correspondência nos EUA:</strong> parceiro para viabilizar o serviço de mailbox para investidores estrangeiros (ideia em avaliação — ver Modelo de Receita).</p>
+  <p style="margin-top:8px"><strong>Incorporadoras &amp; desenvolvedores (developers):</strong> parcerias em nível de empreendedores/incorporadores locais, para acesso antecipado a oportunidades de pré-lançamento e novos empreendimentos antes de chegarem ao MLS — potencial fonte de deal flow exclusivo para os membros.</p>
+  <p style="margin-top:8px"><strong>Relacionamento com o County:</strong> construir e manter relacionamento direto com os departamentos do county (zoning, permits, registros de propriedade) para agilizar due diligence, validação de zoneamento e processos de permitting — reduz tempo e risco em deals que dependem de aprovações municipais.</p>
+</div>
+
+<hr class="divider" />
+
+<!-- ===== NEXT STEPS ===== -->
+<div class="section-header" style="padding-top:0">
+  <span class="section-tag">Próximos Passos Imediatos</span>
+  <h2>O que fazer agora</h2>
+</div>
+
+<div class="steps">
+  <div class="step">
+    <div class="step-connector"><div class="step-dot" style="background:var(--accent)">1</div><div class="step-line"></div></div>
+    <div class="step-content">
+      <div class="step-title">Revisar e aprovar os critérios de elegibilidade</div>
+      <div class="step-body">Jales revisa os critérios deste documento e valida com o olhar de mercado. Qualquer ajuste é documentado. Meta: critérios aprovados até o fim desta semana.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-connector"><div class="step-dot" style="background:var(--accent)">2</div><div class="step-line"></div></div>
+    <div class="step-content">
+      <div class="step-title">Exportar 50 imóveis do MLS e validar manualmente</div>
+      <div class="step-body">Aplicar os critérios em 50 imóveis reais. Documentar quantos passam, quais ficam de fora e por quê. Este exercício calibra os filtros antes de qualquer automação.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-connector"><div class="step-dot" style="background:var(--accent)">3</div><div class="step-line"></div></div>
+    <div class="step-content">
+      <div class="step-title">Lucas desenvolve o script de filtro automatizado</div>
+      <div class="step-body">Com critérios aprovados, construir o pipeline que conecta o MLS à plataforma. Prazo estimado: 2 semanas após aprovação dos critérios.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-connector"><div class="step-dot" style="background:var(--accent)">4</div></div>
+    <div class="step-content">
+      <div class="step-title">Reunião de revisão do Gate 1</div>
+      <div class="step-body">Quando os 5 itens do gate da Fase 1 estiverem cumpridos, os dois sócios se reúnem para formalizar o avanço para a Fase 2. Registrar a data e o que foi cumprido.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  <div style="font-weight:700; font-size:14px; color:var(--text); margin-bottom:6px">RealRisk — Playbook Operacional Completo</div>
+  <div>Confidencial · Uso restrito aos sócios · Versão 1.0 — Junho 2026</div>
+  <div style="margin-top:12px; font-size:11px">Documento vivo — deve ser revisado e atualizado a cada avanço de fase.</div>
+</footer>
+
+</body>
+</html>
