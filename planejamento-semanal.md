@@ -1,5 +1,5 @@
 # RealRisk — Planejamento de Implementação
-> Última atualização: 09/Jun/2026 · Fase atual: **Semana 1 — Critérios & Decisão MLS (09–13/Jun) 🔄**
+> Última atualização: 19/Jun/2026 · Fase atual: **Semana 2 — Plataforma com Dados Reais (16–20/Jun) 🔄**
 
 ---
 
@@ -20,26 +20,31 @@
 
 ---
 
-## STATUS ATUAL (09/Jun/2026)
+## STATUS ATUAL (19/Jun/2026)
 
 ### Já entregue ✅
 - Dashboard MVP (HTML/CSS/JS vanilla) com 20 imóveis mock
-- Scoring engine (`scoring.js`) — ROI, risco, tier 1/2/3
+- Scoring engine (`scoring.js`) — ROI, risco, tier 1/2/3, pesos recalibrados conforme formulário do Jales (Flood 40/Roof 30/HVAC 20/STR 10, 60% financeiro/40% risco)
 - Filtros funcionais (preço, flood zone, STR, cidade, ROI mínimo)
-- Mapa Leaflet com pins coloridos por tier
+- Mapa Leaflet com clustering, auto-zoom nos imóveis filtrados e popup rico (score, tier, flags)
 - Watchlist com localStorage
-- Formulário de critérios para Jales (`criterios-elegibilidade-jales.html`)
+- **Likes e comentários compartilhados** por oportunidade (Supabase) — código pronto, falta só configurar a conta (ver "Próximos passos")
+- Formulário de critérios do Jales preenchido e analisado (`..._rev1.pdf`) — foco real dele é Farmland/Ranch, não só Fix&Flip/STR
+- Pipeline de importação de dados reais: `import-csv.js` e `import-sheets.js`, com enriquecimento automático e gratuito (geocoding via Nominatim, flood zone via FEMA NFHL, tempo de carro até Disney/Universal via OSRM)
 - Playbook completo de negócio com 7 fases e gates objetivos
+- Repositório no GitHub (`lucasleite22/realrisk-mvp`) e deploy de produção no Vercel: **https://realrisk-mvp.vercel.app** (redeploy automático a cada push)
 
-### Semana 1 — Em andamento 🔄
+### Próximos passos (sessão de 19/Jun)
 | Tarefa | Responsável | Status |
 |--------|-------------|--------|
-| Preencher formulário de critérios | 🟢 Jales | ⏳ Hoje |
-| Revisar formulário + mapear thresholds | 🔵 Lucas | ⏳ Hoje |
-| Decisão de fonte de dados MLS | 🟡 Ambos | ⏳ Ter 10 |
+| Configurar Supabase (conta gratuita, SQL, colar key em `supabase-config.js`) — ver `SETUP-SUPABASE.md` | 🔵 Lucas | ⏳ |
+| Decidir se/quando habilitar Google Maps (exige billing — sem isso, ficamos no Leaflet, que já está bom) — ver `SETUP-GOOGLE.md` | 🟡 Ambos | ⏳ pausado |
+| Jales mandar export real (CSV ou planilha Google Sheets) com imóveis do MLS | 🟢 Jales | 🚨 bloqueador principal |
+| Rodar `import-csv.js` ou `import-sheets.js` com os dados reais do Jales | 🔵 Lucas | ⏳ depende do item acima |
+| Decidir se Farmland/Ranch entram no MVP agora ou ficam para depois — exigem schema, scoring e UI próprios (hoje só residencial/Fix&Flip/STR é suportado) | 🟡 Ambos | ⏳ decisão pendente |
 
 ### Próximo bloqueador imediato 🚨
-**Jales precisa preencher o formulário de critérios** → sem isso, Lucas não calibra os filtros com dados reais.
+**Jales precisa exportar os imóveis reais do MLS** (CSV ou planilha) → sem isso, a pipeline de importação fica sem dados pra processar, mesmo já estando pronta.
 
 ---
 
