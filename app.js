@@ -144,6 +144,15 @@ function renderCards() {
       });
     }
   });
+
+  if (isSocialEnabled()) {
+    getLikeCounts(items.map(p => p.id)).then(counts => {
+      items.forEach(p => {
+        const el = document.querySelector(`.card[data-id="${p.id}"] .card-like-count`);
+        if (el) el.textContent = counts[p.id] || 0;
+      });
+    });
+  }
 }
 
 function renderCardHTML(p) {
@@ -177,6 +186,12 @@ function renderCardHTML(p) {
       <div class="card-flags">
         ${flags.map(f => `<span class="flag flag-${f.level}">${f.label}</span>`).join("")}
       </div>
+      ${isSocialEnabled() ? `
+        <div class="card-social">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          <span class="card-like-count">-</span>
+        </div>
+      ` : ""}
     </div>
   `;
 }
@@ -332,6 +347,8 @@ function openDetail(id) {
         ${inWatchlist ? "Remover da watchlist" : "Adicionar a watchlist"}
       </button>
     </div>
+
+    <div class="modal-section" id="socialSection"></div>
   `;
 
   document.getElementById("detailModal").hidden = false;
@@ -345,6 +362,75 @@ function openDetail(id) {
   document.getElementById("modalContactBtn").addEventListener("click", () => {
     alert("Em producao, este botao bloqueia o deal para outros membros da comunidade (mecanica de exclusividade).");
   });
+
+  renderSocialSection(p.id);
+}
+
+// ---------- Likes & comentarios ----------
+async function renderSocialSection(propertyId) {
+  const container = document.getElementById("socialSection");
+  if (!container) return;
+
+  if (!isSocialEnabled()) {
+    container.innerHTML = `
+      <h3>Curtidas e comentarios</h3>
+      <p style="font-size:12px; color:var(--text-muted);">
+        Configure o Supabase (ver SETUP-SUPABASE.md) para habilitar curtidas e comentarios compartilhados entre usuarios.
+      </p>
+    `;
+    return;
+  }
+
+  container.innerHTML = `<h3>Curtidas e comentarios</h3><p style="font-size:12px; color:var(--text-muted);">Carregando...</p>`;
+
+  const [likeStatus, comments] = await Promise.all([
+    getLikeStatus(propertyId),
+    getComments(propertyId)
+  ]);
+
+  container.innerHTML = `
+    <h3>Curtidas e comentarios</h3>
+    <button class="btn-secondary like-btn ${likeStatus.likedByMe ? "on" : ""}" id="likeBtn" style="width:auto; padding:8px 16px;">
+      ${likeStatus.likedByMe ? "Curtido" : "Curtir"} (<span id="likeCount">${likeStatus.count}</span>)
+    </button>
+
+    <div class="comment-list" id="commentList">
+      ${comments.length === 0
+        ? `<p style="font-size:12px; color:var(--text-muted); margin-top:12px;">Nenhum comentario ainda. Seja o primeiro.</p>`
+        : comments.map(c => `
+          <div class="comment-item">
+            <div class="comment-meta"><strong>${escapeHtml(c.author_name)}</strong> · ${formatRelativeDate(c.created_at)}</div>
+            <div class="comment-text">${escapeHtml(c.comment_text)}</div>
+          </div>
+        `).join("")}
+    </div>
+
+    <form class="comment-form" id="commentForm">
+      <input type="text" id="commentAuthor" placeholder="Seu nome" required maxlength="60" />
+      <textarea id="commentText" placeholder="Escreva um comentario..." required maxlength="500"></textarea>
+      <button type="submit" class="btn-primary" style="width:auto; padding:8px 16px;">Comentar</button>
+    </form>
+  `;
+
+  document.getElementById("likeBtn").addEventListener("click", async () => {
+    await toggleLike(propertyId);
+    renderSocialSection(propertyId);
+  });
+
+  document.getElementById("commentForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const author = document.getElementById("commentAuthor").value.trim();
+    const text = document.getElementById("commentText").value.trim();
+    if (!author || !text) return;
+    await addComment(propertyId, author, text);
+    renderSocialSection(propertyId);
+  });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 function closeDetail() {
