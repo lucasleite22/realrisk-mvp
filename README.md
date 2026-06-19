@@ -103,12 +103,22 @@ Em ~1 minuto, o site estara em `https://SEU_USUARIO.github.io/realrisk-mvp/`
 
 ## Como importar dados reais (export MLS)
 
-1. Peca ao Jales (ou exporte do MLS/SimplyRETS) um CSV no formato de `template-residential.csv` (cabecalho fixo, uma linha por imovel).
+1. Peca ao Jales (ou exporte do MLS/SimplyRETS) um CSV no formato de `template-residential.csv` (cabecalho fixo, uma linha por imovel). `lat`, `lng` e `floodZone` podem ficar em branco — sao preenchidos automaticamente (ver abaixo).
 2. Rode: `node import-csv.js caminho/para/export.csv > data.js`
-3. Linhas com campos obrigatorios (address, city, zip, lat, lng, price, sqft) vazios sao puladas e reportadas no terminal — confira antes de commitar.
+3. Linhas com campos obrigatorios (address, city, zip, price, sqft) vazios sao puladas e reportadas no terminal — confira antes de commitar.
 4. Abra `index.html` (com servidor local) e valide visualmente os scores antes de subir para staging.
 
 Esse fluxo cobre apenas o nicho **residencial** (Fix & Flip / STR), que e o schema que o dashboard atual suporta. Os criterios de Farmland e Ranch que o Jales definiu (`RealRisk — Criterios de Elegibilidade..._rev1.pdf`) usam metricas completamente diferentes (acres, zoneamento, well/septic, potencial de desmembramento) e ainda nao tem schema, scoring nem UI no dashboard — e uma frente separada a ser planejada quando esses nichos entrarem em escopo.
+
+### Enriquecimento automatico (geocoding + flood zone)
+
+Por padrao, `import-csv.js` completa campos ausentes antes de gerar o `data.js`:
+- **lat/lng**: geocoding via Nominatim (OpenStreetMap), gratuito, sem API key. Respeita o limite de 1 requisicao/segundo do servico publico.
+- **floodZone**: lookup via FEMA NFHL (National Flood Hazard Layer), API publica gratuita, sem API key.
+
+Use `node import-csv.js export.csv --no-enrich > data.js` para pular esse enriquecimento (mais rapido, util para testes).
+
+> Nota: o lookup de FEMA NFHL (`hazards.fema.gov`) pode estar bloqueado em redes corporativas/sandboxes restritivas — teste localmente se receber erros de conexao. O geocoding via Nominatim foi validado e funciona normalmente.
 
 ## Como trocar os dados
 
