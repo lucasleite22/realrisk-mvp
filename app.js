@@ -22,7 +22,8 @@ const state = {
   view: "cards",
   watchlist: loadWatchlist(),
   map: null,
-  mapMarkers: []
+  mapMarkers: [],
+  mapClusterGroup: null
 };
 
 // ---------- LocalStorage helpers ----------
@@ -222,28 +223,34 @@ function initMap() {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap"
   }).addTo(state.map);
+  state.mapClusterGroup = L.markerClusterGroup({ maxClusterRadius: 50 });
+  state.map.addLayer(state.mapClusterGroup);
 }
 
 function renderMap() {
   if (!state.map) initMap();
-  // Clear existing markers
-  state.mapMarkers.forEach(m => state.map.removeLayer(m));
-  state.mapMarkers = [];
+  state.mapClusterGroup.clearLayers();
 
   const items = getFiltered();
-  items.forEach(p => {
+  const markers = items.map(p => {
     const icon = L.divIcon({
       className: "",
       html: `<div class="map-pin map-pin-${p.tier}"></div>`,
       iconSize: [24, 24],
       iconAnchor: [12, 12]
     });
-    const marker = L.marker([p.lat, p.lng], { icon }).addTo(state.map);
+    const flags = getRiskFlags(p).slice(0, 3);
+    const marker = L.marker([p.lat, p.lng], { icon });
     marker.bindPopup(`
-      <strong>${p.address}</strong><br/>
-      ${p.city} · ${p.zip}<br/>
-      ${formatCurrencyFull(p.price)} · ROI ${formatPercent(p.roi)}<br/>
-      <a href="#" data-detail-id="${p.id}" style="color:var(--accent);">Ver detalhes</a>
+      <div class="map-popup">
+        <span class="tier-badge tier-${p.tier}">Nivel ${p.tier}</span>
+        <strong>${p.address}</strong><br/>
+        ${p.city} · ${p.zip}<br/>
+        <div class="map-popup-price">${formatCurrencyFull(p.price)}</div>
+        ROI ${formatPercent(p.roi)} · Score ${Math.round(p.totalScore)}<br/>
+        <div class="card-flags">${flags.map(f => `<span class="flag flag-${f.level}">${f.label}</span>`).join("")}</div>
+        <a href="#" data-detail-id="${p.id}" style="color:var(--accent);">Ver detalhes</a>
+      </div>
     `);
     marker.on("popupopen", () => {
       setTimeout(() => {
@@ -256,10 +263,18 @@ function renderMap() {
         }
       }, 50);
     });
-    state.mapMarkers.push(marker);
+    return marker;
   });
 
-  setTimeout(() => state.map.invalidateSize(), 50);
+  state.mapClusterGroup.addLayers(markers);
+  state.mapMarkers = markers;
+
+  setTimeout(() => {
+    state.map.invalidateSize();
+    if (markers.length > 0) {
+      state.map.fitBounds(state.mapClusterGroup.getBounds(), { padding: [40, 40], maxZoom: 14 });
+    }
+  }, 50);
 }
 
 // ---------- Detail modal ----------

@@ -604,6 +604,9 @@ select {
 
 .leaflet-popup-content { font-family: var(--font); font-size: 12px; margin: 8px 12px; }
 .leaflet-popup-content strong { font-size: 13px; }
+.map-popup .tier-badge { margin-bottom: 4px; }
+.map-popup-price { font-size: 15px; font-weight: 700; margin: 4px 0; }
+.map-popup .card-flags { margin: 6px 0; gap: 4px; }
 
 .map-pin {
   width: 24px;
