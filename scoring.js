@@ -22,14 +22,15 @@ function enrichProperty(p, weights = { financial: 0.6, risk: 0.4 }) {
   else financialScore = 20;
 
   // Risk score (0-100) compound from Florida-specific factors
+  // Weights calibrated by Jales Castro (criterios-elegibilidade-jales, rev1, 17/Jun)
   let riskScore = 0;
 
-  // Flood zone (max 50 points)
+  // Flood zone (max 40 points)
   switch (p.floodZone) {
-    case "X": riskScore += 50; break;
+    case "X": riskScore += 40; break;
     case "A":
-    case "AE": riskScore += 30; break;
-    case "VE": riskScore += 10; break;
+    case "AE": riskScore += 24; break;
+    case "VE": riskScore += 8; break;
     default: riskScore += 0;
   }
 
@@ -38,11 +39,11 @@ function enrichProperty(p, weights = { financial: 0.6, risk: 0.4 }) {
   else if (p.roofAgeYears <= 10) riskScore += 20;
   else if (p.roofAgeYears <= 15) riskScore += 10;
 
-  // HVAC age (max 20 points - normalized so total of roof+hvac is ~50 max)
+  // HVAC age (max 20 points)
   if (p.hvacAgeYears <= 5) riskScore += 20;
   else if (p.hvacAgeYears <= 10) riskScore += 10;
 
-  // STR allowed bonus
+  // STR allowed bonus (max 10 points)
   if (p.strAllowed) riskScore += 10;
 
   // Cap at 100

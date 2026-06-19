@@ -1,0 +1,2 @@
+address,city,zip,lat,lng,price,sqft,bedrooms,bathrooms,yearBuilt,daysOnMarket,hoaMonthly,propertyTaxAnnual,capexEstimated,arvEstimated,floodZone,roofAgeYears,hvacAgeYears,strAllowed,description
+2841 Lake Nona Blvd,Orlando,32827,28.3744,-81.2469,285000,1650,3,2,2002,12,65,3200,35000,415000,X,3,5,true,"Exemplo de linha preenchida"

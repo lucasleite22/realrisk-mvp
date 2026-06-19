@@ -101,9 +101,18 @@ Em ~1 minuto, o site estara em `https://SEU_USUARIO.github.io/realrisk-mvp/`
 - Atualizam em tempo real conforme filtros
 - Total visivel, Nivel 1 count, ROI medio, $/sqft medio
 
+## Como importar dados reais (export MLS)
+
+1. Peca ao Jales (ou exporte do MLS/SimplyRETS) um CSV no formato de `template-residential.csv` (cabecalho fixo, uma linha por imovel).
+2. Rode: `node import-csv.js caminho/para/export.csv > data.js`
+3. Linhas com campos obrigatorios (address, city, zip, lat, lng, price, sqft) vazios sao puladas e reportadas no terminal — confira antes de commitar.
+4. Abra `index.html` (com servidor local) e valide visualmente os scores antes de subir para staging.
+
+Esse fluxo cobre apenas o nicho **residencial** (Fix & Flip / STR), que e o schema que o dashboard atual suporta. Os criterios de Farmland e Ranch que o Jales definiu (`RealRisk — Criterios de Elegibilidade..._rev1.pdf`) usam metricas completamente diferentes (acres, zoneamento, well/septic, potencial de desmembramento) e ainda nao tem schema, scoring nem UI no dashboard — e uma frente separada a ser planejada quando esses nichos entrarem em escopo.
+
 ## Como trocar os dados
 
-Edite `data.js`. Cada imovel tem o seguinte schema:
+Edite `data.js` manualmente, ou prefira o importador acima. Cada imovel tem o seguinte schema:
 
 ```javascript
 {
