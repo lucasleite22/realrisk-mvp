@@ -115,6 +115,7 @@ Esse fluxo cobre apenas o nicho **residencial** (Fix & Flip / STR), que e o sche
 Por padrao, `import-csv.js` completa campos ausentes antes de gerar o `data.js`:
 - **lat/lng**: geocoding via Nominatim (OpenStreetMap), gratuito, sem API key. Respeita o limite de 1 requisicao/segundo do servico publico.
 - **floodZone**: lookup via FEMA NFHL (National Flood Hazard Layer), API publica gratuita, sem API key.
+- **driveMinutesToParks / closestPark**: tempo de carro real (sem transito) até Disney World ou Universal Orlando, via OSRM (roteamento open-source, gratuito, sem API key). Usado para o criterio do Jales de elegibilidade STR (<=20min dos parques).
 
 Use `node import-csv.js export.csv --no-enrich > data.js` para pular esse enriquecimento (mais rapido, util para testes).
 

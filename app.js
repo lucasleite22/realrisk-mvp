@@ -290,6 +290,7 @@ function openDetail(id) {
         <div class="modal-stat"><div class="modal-stat-label">ROI</div><div class="modal-stat-value" style="color:var(--ok);">${formatPercent(p.roi)}</div></div>
         <div class="modal-stat"><div class="modal-stat-label">Holding/mes</div><div class="modal-stat-value">$${Math.round(p.monthlyHoldingCost)}</div></div>
         <div class="modal-stat"><div class="modal-stat-label">DOM</div><div class="modal-stat-value">${p.daysOnMarket}d</div></div>
+        ${p.driveMinutesToParks != null ? `<div class="modal-stat"><div class="modal-stat-label">Parques</div><div class="modal-stat-value">${p.driveMinutesToParks}min (${p.closestPark})</div></div>` : ""}
       </div>
     </div>
 

@@ -107,6 +107,15 @@ function getRiskFlags(p) {
     flags.push({ label: "STR ok", level: "ok" });
   }
 
+  // Distancia ate parques (criterio do Jales para STR: <=20min de Disney/Universal)
+  if (p.driveMinutesToParks != null) {
+    if (p.driveMinutesToParks <= 20) {
+      flags.push({ label: p.driveMinutesToParks + "min parques", level: "ok" });
+    } else {
+      flags.push({ label: p.driveMinutesToParks + "min parques", level: "neutral" });
+    }
+  }
+
   return flags;
 }
 
