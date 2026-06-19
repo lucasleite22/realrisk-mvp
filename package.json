@@ -1,0 +1,13 @@
+{
+  "name": "realrisk-mvp-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scripts de importacao de dados para o RealRisk MVP (o dashboard em si nao tem build step)",
+  "scripts": {
+    "import:csv": "node import-csv.js",
+    "import:sheets": "node import-sheets.js"
+  },
+  "dependencies": {
+    "google-auth-library": "^9.14.1"
+  }
+}
