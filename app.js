@@ -12,6 +12,7 @@ const state = {
     priceMin: null,
     priceMax: null,
     roiMin: 0,
+    county: "",
     city: "",
     floodFreeOnly: false,
     strOnly: false,
@@ -71,6 +72,7 @@ function getFiltered() {
     if (state.filters.priceMin != null && p.price < state.filters.priceMin) return false;
     if (state.filters.priceMax != null && p.price > state.filters.priceMax) return false;
     if (state.filters.roiMin > 0 && p.roi * 100 < state.filters.roiMin) return false;
+    if (state.filters.county && p.county !== state.filters.county) return false;
     if (state.filters.city && p.city !== state.filters.city) return false;
     if (state.filters.floodFreeOnly && p.floodZone !== "X") return false;
     if (state.filters.strOnly && !p.strAllowed) return false;
@@ -389,7 +391,7 @@ async function renderSocialSection(propertyId) {
     container.innerHTML = `
       <h3>Curtidas e comentarios</h3>
       <p style="font-size:12px; color:var(--text-muted);">
-        Configure o Supabase (ver SETUP-SUPABASE.md) para habilitar curtidas e comentarios compartilhados entre usuarios.
+        Curtidas e comentarios ficam disponiveis dentro do admin do 4Rivers (usuario logado).
       </p>
     `;
     return;
@@ -397,10 +399,9 @@ async function renderSocialSection(propertyId) {
 
   container.innerHTML = `<h3>Curtidas e comentarios</h3><p style="font-size:12px; color:var(--text-muted);">Carregando...</p>`;
 
-  const [likeStatus, comments] = await Promise.all([
-    getLikeStatus(propertyId),
-    getComments(propertyId)
-  ]);
+  const social = await getSocial(propertyId);
+  const likeStatus = { count: social.count, likedByMe: social.likedByMe };
+  const comments = social.comments;
 
   container.innerHTML = `
     <h3>Curtidas e comentarios</h3>
@@ -413,14 +414,13 @@ async function renderSocialSection(propertyId) {
         ? `<p style="font-size:12px; color:var(--text-muted); margin-top:12px;">Nenhum comentario ainda. Seja o primeiro.</p>`
         : comments.map(c => `
           <div class="comment-item">
-            <div class="comment-meta"><strong>${escapeHtml(c.author_name)}</strong> · ${formatRelativeDate(c.created_at)}</div>
-            <div class="comment-text">${escapeHtml(c.comment_text)}</div>
+            <div class="comment-meta"><strong>${escapeHtml(c.authorName)}</strong> · ${formatRelativeDate(c.createdAt)}</div>
+            <div class="comment-text">${escapeHtml(c.text)}</div>
           </div>
         `).join("")}
     </div>
 
     <form class="comment-form" id="commentForm">
-      <input type="text" id="commentAuthor" placeholder="Seu nome" required maxlength="60" />
       <textarea id="commentText" placeholder="Escreva um comentario..." required maxlength="500"></textarea>
       <button type="submit" class="btn-primary" style="width:auto; padding:8px 16px;">Comentar</button>
     </form>
@@ -433,10 +433,9 @@ async function renderSocialSection(propertyId) {
 
   document.getElementById("commentForm").addEventListener("submit", async e => {
     e.preventDefault();
-    const author = document.getElementById("commentAuthor").value.trim();
     const text = document.getElementById("commentText").value.trim();
-    if (!author || !text) return;
-    await addComment(propertyId, author, text);
+    if (!text) return;
+    await addComment(propertyId, text);
     renderSocialSection(propertyId);
   });
 }
@@ -496,6 +495,19 @@ function renderAll() {
 }
 
 // ---------- Filter handlers ----------
+// City options — only the cities of the selected county, when there is one.
+// Drops the current city filter if it isn't in the new list.
+function fillCityOptions() {
+  const citySelect = document.getElementById("cityFilter");
+  const cities = [...new Set(
+    PROPERTIES.filter(p => !state.filters.county || p.county === state.filters.county).map(p => p.city)
+  )].sort();
+  if (state.filters.city && !cities.includes(state.filters.city)) state.filters.city = "";
+  citySelect.innerHTML = '<option value="">Todas</option>' +
+    cities.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+  citySelect.value = state.filters.city;
+}
+
 function setupFilters() {
   // Tier chips
   document.querySelectorAll(".chip[data-tier]").forEach(chip => {
@@ -526,15 +538,29 @@ function setupFilters() {
     renderAll();
   });
 
+  // County (MLS data only — the sample data has no county, so the filter
+  // stays hidden there)
+  const countySelect = document.getElementById("countyFilter");
+  const counties = [...new Set(PROPERTIES.map(p => p.county).filter(Boolean))].sort();
+  if (counties.length > 0) {
+    document.getElementById("countyGroup").hidden = false;
+    counties.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c;
+      countySelect.appendChild(opt);
+    });
+  }
+  countySelect.addEventListener("change", e => {
+    state.filters.county = e.target.value;
+    // Keep the city filter consistent with the chosen county
+    fillCityOptions();
+    renderAll();
+  });
+
   // City
   const citySelect = document.getElementById("cityFilter");
-  const cities = [...new Set(PROPERTIES.map(p => p.city))].sort();
-  cities.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    citySelect.appendChild(opt);
-  });
+  fillCityOptions();
   citySelect.addEventListener("change", e => {
     state.filters.city = e.target.value;
     renderAll();
@@ -557,6 +583,7 @@ function setupFilters() {
       priceMin: null,
       priceMax: null,
       roiMin: 0,
+      county: "",
       city: "",
       floodFreeOnly: false,
       strOnly: false,
@@ -567,7 +594,8 @@ function setupFilters() {
     document.getElementById("priceMax").value = "";
     document.getElementById("roiMin").value = 0;
     document.getElementById("roiMinValue").textContent = "0%";
-    document.getElementById("cityFilter").value = "";
+    document.getElementById("countyFilter").value = "";
+    fillCityOptions();
     document.getElementById("floodFreeOnly").checked = false;
     document.getElementById("strOnly").checked = false;
     renderAll();

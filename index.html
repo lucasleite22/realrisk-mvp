@@ -92,6 +92,13 @@
             </div>
           </div>
 
+          <div class="filter-group" id="countyGroup" hidden>
+            <label class="filter-label">Condado</label>
+            <select id="countyFilter">
+              <option value="">Todos</option>
+            </select>
+          </div>
+
           <div class="filter-group">
             <label class="filter-label">Cidade</label>
             <select id="cityFilter">
@@ -209,12 +216,10 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-  <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <!-- data-mls.js: dados reais do MLS gerados localmente (gitignored, nunca publicar). Se não existir, usa a amostra de data.js. -->
   <script src="data-mls.js" onerror="void 0"></script>
   <script src="data.js"></script>
   <script src="scoring.js"></script>
-  <script src="supabase-config.js"></script>
   <script src="social.js"></script>
   <script src="app.js"></script>
 </body>
