@@ -4,3 +4,6 @@ node_modules/
 google-service-account*.json
 
 .vercel
+
+# Dados do Stellar MLS (gerados localmente) — nunca commitar/publicar
+data-mls.js

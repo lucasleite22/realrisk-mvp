@@ -3,7 +3,7 @@
 // Coordinates are real lat/lng of each neighborhood
 // Replace with real Zillow/MLS pulls in production
 
-const PROPERTIES = [
+const SAMPLE_PROPERTIES = [
   {
     id: 1,
     address: "2841 Lake Nona Blvd",
@@ -465,3 +465,7 @@ const PROPERTIES = [
     description: "Casa em Ocoee, bairro estavel. Telhado e HVAC entrando em fim de vida util. Margem decente com reforma media."
   }
 ];
+
+// Dados do MLS (data-mls.js, gerado pelo 4Rivers) quando presentes; senão a amostra acima.
+// Dentro do 4Rivers (/realrisk/), app.js substitui pelos dados de /api/realrisk/listings.
+let PROPERTIES = window.MLS_PROPERTIES || SAMPLE_PROPERTIES;

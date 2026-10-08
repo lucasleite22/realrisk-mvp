@@ -637,7 +637,30 @@ function setupWatchlistButton() {
 }
 
 // ---------- Init ----------
-document.addEventListener("DOMContentLoaded", () => {
+// Served by 4Rivers under /realrisk/ (admin area): MLS data comes from its
+// session-protected API. Standalone (realrisk-mvp), data.js is used as is.
+const REALRISK_API = location.pathname.startsWith("/realrisk/") ? "/api/realrisk/listings" : null;
+
+async function loadProperties() {
+  if (!REALRISK_API) return;
+  const res = await fetch(REALRISK_API, { credentials: "same-origin" });
+  if (res.status === 401 || res.status === 403) {
+    window.top.location.href = "/auth/login";
+    throw new Error("Sessao expirada");
+  }
+  if (!res.ok) throw new Error("Falha ao carregar imoveis do MLS (" + res.status + ")");
+  const data = await res.json();
+  PROPERTIES = data.properties;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    await loadProperties();
+  } catch (e) {
+    document.getElementById("cardsGrid").innerHTML =
+      `<p style="padding:40px; color:var(--text-muted);">${e.message}</p>`;
+    return;
+  }
   setupFilters();
   setupWeights();
   setupSort();

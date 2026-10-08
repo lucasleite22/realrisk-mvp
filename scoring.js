@@ -35,12 +35,15 @@ function enrichProperty(p, weights = { financial: 0.6, risk: 0.4 }) {
   }
 
   // Roof age (max 30 points)
-  if (p.roofAgeYears <= 5) riskScore += 30;
+  // MLS has no roof/HVAC age: unknown (null) scores mid-range instead of zero.
+  if (p.roofAgeYears == null) riskScore += 15;
+  else if (p.roofAgeYears <= 5) riskScore += 30;
   else if (p.roofAgeYears <= 10) riskScore += 20;
   else if (p.roofAgeYears <= 15) riskScore += 10;
 
   // HVAC age (max 20 points)
-  if (p.hvacAgeYears <= 5) riskScore += 20;
+  if (p.hvacAgeYears == null) riskScore += 10;
+  else if (p.hvacAgeYears <= 5) riskScore += 20;
   else if (p.hvacAgeYears <= 10) riskScore += 10;
 
   // STR allowed bonus (max 10 points)
@@ -87,7 +90,9 @@ function getRiskFlags(p) {
   }
 
   // Roof
-  if (p.roofAgeYears <= 5) {
+  if (p.roofAgeYears == null) {
+    flags.push({ label: "Roof ?", level: "neutral" });
+  } else if (p.roofAgeYears <= 5) {
     flags.push({ label: "Roof " + p.roofAgeYears + "a", level: "ok" });
   } else if (p.roofAgeYears <= 12) {
     flags.push({ label: "Roof " + p.roofAgeYears + "a", level: "neutral" });
@@ -96,7 +101,9 @@ function getRiskFlags(p) {
   }
 
   // HVAC
-  if (p.hvacAgeYears <= 7) {
+  if (p.hvacAgeYears == null) {
+    flags.push({ label: "HVAC ?", level: "neutral" });
+  } else if (p.hvacAgeYears <= 7) {
     flags.push({ label: "HVAC " + p.hvacAgeYears + "a", level: "neutral" });
   } else {
     flags.push({ label: "HVAC " + p.hvacAgeYears + "a", level: "warn" });
@@ -104,7 +111,8 @@ function getRiskFlags(p) {
 
   // STR
   if (p.strAllowed) {
-    flags.push({ label: "STR ok", level: "ok" });
+    // MLS listings: only the HOA lease rules were checked, not zoning
+    flags.push({ label: p.mlsId ? "STR ok? (HOA)" : "STR ok", level: "ok" });
   }
 
   // Distancia ate parques (criterio do Jales para STR: <=20min de Disney/Universal)
