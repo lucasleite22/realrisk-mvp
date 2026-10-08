@@ -155,11 +155,24 @@ function renderCards() {
   }
 }
 
+// MLS listings (inside 4Rivers) carry photoUrl: a cover photo reused from
+// the 4Rivers portal when the listing was synced there (Marion/Sumter), null
+// otherwise. The sample data has no photoUrl field, so no photo block at all.
+// The listing office is shown with the photo (MLS attribution rule).
+function renderPhotoHTML(p, cls, showEmpty) {
+  if (!("photoUrl" in p)) return "";
+  if (!p.photoUrl && !showEmpty) return "";
+  const office = p.listOfficeName ? `<small>Listado por ${escapeHtml(p.listOfficeName)}</small>` : "";
+  if (!p.photoUrl) return `<div class="${cls} photo-empty"><span>Sem foto</span>${office}</div>`;
+  return `<div class="${cls}"><img src="${escapeHtml(p.photoUrl)}" alt="" loading="lazy">${office}</div>`;
+}
+
 function renderCardHTML(p) {
   const flags = getRiskFlags(p);
   const inWatchlist = state.watchlist.has(p.id);
   return `
     <div class="card" data-id="${p.id}">
+      ${renderPhotoHTML(p, "card-photo", true)}
       <button class="card-fav ${inWatchlist ? "on" : ""}" aria-label="Adicionar a watchlist">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="${inWatchlist ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
       </button>
@@ -301,6 +314,7 @@ function openDetail(id) {
   const inWatchlist = state.watchlist.has(p.id);
 
   document.getElementById("modalBody").innerHTML = `
+    ${renderPhotoHTML(p, "modal-photo", false)}
     <div class="modal-header">
       <h2>${p.address}</h2>
       <div class="modal-sub">${p.city}, FL · ${p.zip} · ${p.bedrooms} quartos · ${p.bathrooms} banheiros · ${p.sqft.toLocaleString()} sqft</div>
