@@ -89,4 +89,4 @@ Fonte: `RealRisk — Critérios de Elegibilidade _ Para preenchimento de Jales C
 
 ### Pendências com o Jales (cabem numa mensagem)
 1. **Eliminatórios de Farmland:** o campo "o que te faria desistir" ficou em branco. Provisório até ele responder: flood zone A/AE na maior parte da área, sem acesso pela via pública, área de preservação.
-2. **Condado vs. cidade:** em Farmland ele escreveu "no condado e não na cidade facilita", e no Ranch, "na cidade não no condado". Confirmar qual vale (provavelmente a primeira).
+2. ~~Condado vs. cidade~~: resolvido em 09/Out. Era só sobre a facilidade de resolver a burocracia, e é **irrelevante por enquanto** (não entra no score).
