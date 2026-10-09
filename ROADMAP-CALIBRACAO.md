@@ -15,10 +15,10 @@ Por isso a ordem é **dado melhor primeiro, calibração depois**.
 
 ## Etapas
 
-### 1. Histórico de vendas fechadas: 🔄 em andamento
+### 1. Histórico de vendas fechadas: ✅ carga feita (09/Out)
 - Guardar no `mls_listings` as vendas **e locações** fechadas dos últimos 12 meses nos 5 condados, de todos os tipos (casa, Farm, Land, Residential Lease).
 - Branch `feat/realrisk-closed-sales` (4Rivers). Backfill único pela GitHub Action (`mode=closed`, cursor `mfrmls:realrisk-closed`). Depois do merge, o sync diário mantém o histórico em dia.
-- Teste de 10 páginas (09/Out): ~1,5 dia de dados a cada 10 páginas → **~2.400 páginas, ~2h30 de Action** para 12 meses.
+- Carga completa em 09/Out: **64.526 vendas e locações fechadas** (12 meses, 5 condados), 2.689 páginas em 74 min, numa execução só.
 - Ficou em 12 meses, não 6, porque venda de terra é rara e Farmland precisa de comparáveis.
 
 **O que isso destrava:**
