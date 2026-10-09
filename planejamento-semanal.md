@@ -1,4 +1,5 @@
 # RealRisk — Planejamento de Implementação
+> ⚠️ **Desatualizado desde 19/Jun.** Os próximos passos atuais estão em [`ROADMAP-CALIBRACAO.md`](ROADMAP-CALIBRACAO.md) (08/Out/2026).
 > Última atualização: 19/Jun/2026 · Fase atual: **Semana 2 — Plataforma com Dados Reais (16–20/Jun) 🔄**
 
 ---
